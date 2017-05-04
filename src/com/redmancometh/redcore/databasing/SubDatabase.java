@@ -11,6 +11,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.redmancometh.redcore.Defaultable;
 import com.redmancometh.redcore.RedCore;
+import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 
 /**
  * 
@@ -84,9 +85,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      * This is ONLY saved if the key is found in the cache!
      * @param e
      * @return
+     * @throws ObjectNotPresentException 
      */
-    public CompletableFuture<Void> saveFromKey(K e)
+    public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
     {
+        if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
         return CompletableFuture.runAsync(() ->
         {
             try (Session session = factory.openSession())
