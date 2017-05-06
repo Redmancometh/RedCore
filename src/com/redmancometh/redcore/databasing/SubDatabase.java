@@ -115,7 +115,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         }, RedCore.getInstance().getPool());
     }
 
-    public CompletableFuture<Void> saveAndPurge(K e)
+    public CompletableFuture<Void> saveAndPurge(K e) throws ObjectNotPresentException
     {
         return saveFromKey(e).thenRun(() -> cache.asMap().remove(e));
     }
