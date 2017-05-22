@@ -3,7 +3,7 @@ package com.redmancometh.redcore;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class SlicedList<T> extends ArrayList<T> implements Sliceable
+public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
 {
 
     private static final long serialVersionUID = -5221471063452246214L;
