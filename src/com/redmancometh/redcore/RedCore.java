@@ -2,6 +2,8 @@ package com.redmancometh.redcore;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -13,14 +15,12 @@ public class RedCore extends JavaPlugin
     private SessionFactory sessionFactory;
     private Executor pool = Executors.newFixedThreadPool(8, new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());
     private RedPlugins getPlugins;
-    private static RedCore instance;
     private MasterDatabase masterDB;
     private SlowPollerTask slowPoller;
 
     @Override
     public void onEnable()
     {
-        instance = this;
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());
         slowPoller = new SlowPollerTask();
@@ -51,7 +51,7 @@ public class RedCore extends JavaPlugin
 
     public static RedCore getInstance()
     {
-        return instance;
+        return (RedCore) Bukkit.getPluginManager().getPlugin("RedCore");
     }
 
     public MasterDatabase getMasterDB()

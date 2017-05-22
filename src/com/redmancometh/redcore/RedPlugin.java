@@ -3,6 +3,7 @@ package com.redmancometh.redcore;
 import java.io.File;
 import java.io.FileReader;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -97,6 +98,10 @@ public interface RedPlugin
         config.setProperty("hibernate.hikari.dataSource.user", dbConfig.get("user").toString());
         config.setProperty("hibernate.hikari.dataSource.password", dbConfig.get("password").toString());
         config.setProperty("hibernate.hikari.dataSource.url", dbConfig.get("url").toString());
+        for (int x = 0; x < 50; x++)
+            System.out.println("ADDED UUID");
+        config.addAnnotatedClass(String.class);
+        config.addAnnotatedClass(UUID.class);
         SessionFactory sessionFactory = config.buildSessionFactory();
         return sessionFactory;
     }
