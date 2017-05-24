@@ -11,6 +11,8 @@ import org.apache.commons.collections4.map.LinkedMap;
  * 
  * @author Redmancometh
  *
+ *  Temporarily ignoring this class. Don't use.
+ *
  *  This class provides a one-to-many batch relation. 
  *  
  */
@@ -21,6 +23,7 @@ public class SlicedMap<K, V> extends LinkedMap<K, V> implements SliceableMap<K, 
     private Consumer<V> action;
     private BiConsumer<K, V> keyValueAction;
     private boolean tailConsumer;
+    @SuppressWarnings("unused")
     private Map<Integer, Integer> indexMap = new HashMap();
     private Map<Integer, Boolean> tailConsumerMap = new HashMap();
 

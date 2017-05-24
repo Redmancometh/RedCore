@@ -1,0 +1,4 @@
+name: RedStats
+main: com.redmancometh.redstats.RedStats
+version: 1.0
+depend: [RedCore]

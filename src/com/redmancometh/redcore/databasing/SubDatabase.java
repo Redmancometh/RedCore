@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.databasing;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -35,16 +36,14 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                 try (Session session = factory.openSession())
                 {
                     V result = session.get(type, key);
-                    if (result == null)
-                    {
-                        System.out.println("RESULT IS NULL!");
-                        System.out.println(defaultObjectBuilder == null);
-                        System.out.println(defaultObjectBuilder.apply(key));
-                        return defaultObjectBuilder.apply(key);
-                    }
-                    System.out.println("GOT OUT?!");
+                    if (result == null) return defaultObjectBuilder.apply(key);
                     return result;
                 }
+                catch (SecurityException | IllegalArgumentException e)
+                {
+                    e.printStackTrace();
+                }
+                return null;
             });
         }
 
@@ -57,12 +56,9 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         this.type = type;
         this.defaultObjectBuilder = (key) ->
         {
-            System.out.println("KEY: " + key);
             try
             {
-                System.out.println("TYPE: " + type);
                 V v = type.newInstance();
-                System.out.println("V: " + v);
                 v.setDefaults(key);
                 return v;
             }
@@ -100,56 +96,59 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      */
     public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
     {
-        System.out.println("SAVING FROM KEY");
         if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
         return CompletableFuture.runAsync(() ->
         {
-            System.out.println("SAVING FROM KEY INSIDE ASYNC");
             try (Session session = factory.openSession())
             {
-                System.out.println("SESSION START");
                 session.beginTransaction();
-                System.out.println("TRANSACTION BEGAN");
                 try
                 {
-                    System.out.println("SAVE CALL");
-                    session.save(e);
-                    System.out.println("END SAVE CALL");
+                    cache.get(e).thenAccept((v) -> session.saveOrUpdate(v));
                 }
                 catch (Exception e2)
                 {
                     e2.printStackTrace();
-                    System.out.println("FAILED TO SAVE!");
                 }
-                System.out.println("SAVED ABOUT TO COMMIT!");
                 session.getTransaction().commit();
-                System.out.println("DONE COMMITTING");
+                session.flush();
+                session.close();
             }
-            System.out.println("AT END OF TRY");
         }, RedCore.getInstance().getPool());
 
     }
 
     public CompletableFuture<Void> saveObject(V e)
     {
-        System.out.println("SAVING: " + e);
         return CompletableFuture.runAsync(() ->
         {
-            System.out.println("INSIDE COMPLETABLEFUTURE");
             try (Session session = factory.openSession())
             {
-                System.out.println("SAVE THE SHIT?!");
                 session.beginTransaction();
                 session.saveOrUpdate(e);
-                session.persist(e);
                 session.getTransaction().commit();
+                session.flush();
             }
         }, RedCore.getInstance().getPool());
     }
 
-    public CompletableFuture<Void> saveAndPurge(K e) throws ObjectNotPresentException
+    public CompletableFuture<Void> saveAndPurge(V e) throws ObjectNotPresentException
     {
-        return saveFromKey(e).thenRun(() -> cache.asMap().remove(e));
+        System.out.println("SAVE PURGE: " + e);
+        for (Field f : e.getClass().getDeclaredFields())
+        {
+            System.out.println("Field: " + f.getName());
+            try
+            {
+                f.setAccessible(true);
+                System.out.println(f.get(e) == null);
+            }
+            catch (IllegalArgumentException | IllegalAccessException e1)
+            {
+                e1.printStackTrace();
+            }
+        }
+        return saveObject(e).thenRun(() -> cache.asMap().remove(e));
     }
 
     /**
