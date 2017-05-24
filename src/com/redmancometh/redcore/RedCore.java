@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.redmancometh.redcore.databasing.MasterDatabase;
+import com.redmancometh.redcore.menus.MenuManager;
 import com.redmancometh.redcore.tasks.SlowPollerTask;
 
 public class RedCore extends JavaPlugin
@@ -17,10 +18,12 @@ public class RedCore extends JavaPlugin
     private RedPlugins getPlugins;
     private MasterDatabase masterDB;
     private SlowPollerTask slowPoller;
+    private MenuManager menuManager;
 
     @Override
     public void onEnable()
     {
+        menuManager = new MenuManager();
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());
         slowPoller = new SlowPollerTask();
@@ -32,6 +35,16 @@ public class RedCore extends JavaPlugin
     {
         slowPoller.stopTask();
         super.onDisable();
+    }
+
+    public static MenuManager getMenuManagerInstance()
+    {
+        return getInstance().getMenuManager();
+    }
+
+    public static MenuManager getMenMan()
+    {
+        return getInstance().getMenuManager();
     }
 
     public SessionFactory getSessionFactory()
@@ -82,6 +95,16 @@ public class RedCore extends JavaPlugin
     public void setSlowPoller(SlowPollerTask slowPoller)
     {
         this.slowPoller = slowPoller;
+    }
+
+    public MenuManager getMenuManager()
+    {
+        return menuManager;
+    }
+
+    public void setMenuManager(MenuManager menuManager)
+    {
+        this.menuManager = menuManager;
     }
 
 }

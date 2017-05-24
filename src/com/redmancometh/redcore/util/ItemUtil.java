@@ -3,18 +3,56 @@ package com.redmancometh.redcore.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_11_R1.ItemArmor;
 
 public class ItemUtil
 {
     public static List<Material> swords = Arrays.asList(new Material[]
     { Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.STONE_SWORD, Material.WOOD_SWORD });
+
+    private static Map<EntityType, String> nameMap = new ConcurrentHashMap();
+    static
+    {
+        nameMap.put(EntityType.SKELETON, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Skeleton Spawner"));
+        nameMap.put(EntityType.SLIME, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Slime Spawner"));
+        nameMap.put(EntityType.BLAZE, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Blaze Spawner"));
+        nameMap.put(EntityType.PIG_ZOMBIE, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Zombie Pigman Spawner"));
+        nameMap.put(EntityType.SQUID, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Squid Spawner"));
+        nameMap.put(EntityType.MUSHROOM_COW, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Mooshroom Spawner"));
+        nameMap.put(EntityType.VILLAGER, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Villager Spawner"));
+        nameMap.put(EntityType.SPIDER, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Spider Spawner"));
+        nameMap.put(EntityType.CREEPER, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Creeper Spawner"));
+        nameMap.put(EntityType.ENDERMAN, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Enderman Spawner"));
+        nameMap.put(EntityType.IRON_GOLEM, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Iron Golem Spawner"));
+        nameMap.put(EntityType.ZOMBIE, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Zombie Spawner"));
+        nameMap.put(EntityType.COW, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Cow Spawner"));
+        nameMap.put(EntityType.CHICKEN, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Chicken Spawner"));
+        nameMap.put(EntityType.WOLF, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Wolf Spawner"));
+        nameMap.put(EntityType.PIG, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Pig Spawner"));
+        nameMap.put(EntityType.SHEEP, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Sheep Spawner"));
+        nameMap.put(EntityType.RABBIT, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Rabbit Spawner"));
+        nameMap.put(EntityType.WITCH, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Witch Spawner"));
+        nameMap.put(EntityType.CAVE_SPIDER, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Cave Spider Spawner"));
+        nameMap.put(EntityType.OCELOT, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Ocelot Spawner"));
+        nameMap.put(EntityType.HORSE, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Horse Spawner"));
+        nameMap.put(EntityType.SLIME, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Slime Spawner"));
+        nameMap.put(EntityType.SILVERFISH, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Silverfish Spawner"));
+        nameMap.put(EntityType.MUSHROOM_COW, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Mushroom Cow Spawner"));
+        nameMap.put(EntityType.GUARDIAN, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Guardian Spawner"));
+    }
 
     public static ItemStack buildItem(Material m, String itemName, String... lore)
     {
@@ -24,6 +62,11 @@ public class ItemUtil
         meta.setLore(Arrays.asList(lore));
         i.setItemMeta(meta);
         return i;
+    }
+
+    public static String getSpawnerNameForType(EntityType type)
+    {
+        return nameMap.get(type);
     }
 
     public static ItemStack constructItem(Material m, String displayName, int data, String... lore)
@@ -46,7 +89,7 @@ public class ItemUtil
         return i;
     }
 
-    public static ItemStack buildItem(Material m, String itemName, byte dataValue, List<String> lore)
+    public static ItemStack buildItem(Material m, String itemName, short dataValue, List<String> lore)
     {
         ItemStack i = new ItemStack(m, 1, dataValue);
         ItemMeta meta = i.getItemMeta();
@@ -56,7 +99,7 @@ public class ItemUtil
         return i;
     }
 
-    public static ItemStack buildItem(Material m, String itemName, byte dataValue, String... lore)
+    public static ItemStack buildItem(Material m, String itemName, short dataValue, String... lore)
     {
         ItemStack i = new ItemStack(m, 1, dataValue);
         ItemMeta meta = i.getItemMeta();
@@ -114,6 +157,22 @@ public class ItemUtil
             i.setAmount(i.getAmount() - 1);
         }
         p.updateInventory();
+    }
+
+    public static ItemStack getSpawnerItem(EntityType type)
+    {
+        ItemStack spawnerItem = new ItemStack(Material.MOB_SPAWNER);
+        ItemMeta meta = spawnerItem.getItemMeta();
+        if (meta instanceof BlockStateMeta && ((BlockStateMeta) meta).getBlockState() instanceof CreatureSpawner)
+        {
+            BlockState bs = ((CreatureSpawner) ((BlockStateMeta) meta).getBlockState());
+            ((CreatureSpawner) bs).setSpawnedType(type);
+            ((BlockStateMeta) meta).setBlockState(bs);
+        }
+        meta.setDisplayName(nameMap.get(type));
+        spawnerItem.setAmount(1);
+        spawnerItem.setItemMeta(meta);
+        return spawnerItem;
     }
 
     public static void takeOne(ItemStack i, Player p)
