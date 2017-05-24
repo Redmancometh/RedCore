@@ -14,10 +14,12 @@ public class MenuListeners implements Listener
     {
         if (e.getClickedInventory() != null && e.getClickedInventory().getTitle() != null)
         {
-            if (RedCore.getInstance().getMenuManagerInstance().hasMenuWithTitle(e.getClickedInventory().getTitle()))
+            RedCore.getInstance();
+            if (RedCore.getMenuManagerInstance().hasMenuWithTitle(e.getClickedInventory().getTitle()))
             {
                 e.setCancelled(true);
-                Menu m = RedCore.getInstance().getMenuManagerInstance().getMenuFromTitle(e.getClickedInventory().getTitle());
+                RedCore.getInstance();
+                Menu m = RedCore.getMenuManagerInstance().getMenuFromTitle(e.getClickedInventory().getTitle());
                 if (m != null && m.hasActionAt(e.getRawSlot()))
                 {
                     Player p = (Player) e.getWhoClicked();
@@ -52,9 +54,11 @@ public class MenuListeners implements Listener
     {
         if (e.getInventory() != null && e.getInventory().getTitle() != null)
         {
-            if (RedCore.getInstance().getMenuManagerInstance().hasMenuWithTitle(e.getInventory().getTitle()))
+            RedCore.getInstance();
+            if (RedCore.getMenuManagerInstance().hasMenuWithTitle(e.getInventory().getTitle()))
             {
-                Menu m = RedCore.getInstance().getMenuManagerInstance().getMenuFromTitle(e.getInventory().getTitle());
+                RedCore.getInstance();
+                Menu m = RedCore.getMenuManagerInstance().getMenuFromTitle(e.getInventory().getTitle());
                 if (m instanceof SubMenu && (!e.getPlayer().hasMetadata("lowermenu")))
                 {
                     ((SubMenu) m).closeMenu((Player) e.getPlayer());
@@ -70,10 +74,12 @@ public class MenuListeners implements Listener
     {
         if (e.getInventory() != null && e.getInventory().getTitle() != null)
         {
-            if (RedCore.getInstance().getMenuManagerInstance().hasMenuWithTitle(e.getInventory().getTitle()))
+            RedCore.getInstance();
+            if (RedCore.getMenuManagerInstance().hasMenuWithTitle(e.getInventory().getTitle()))
             {
                 e.setCancelled(true);
-                Menu m = RedCore.getInstance().getMenuManagerInstance().getMenuFromTitle(e.getInventory().getTitle());
+                RedCore.getInstance();
+                Menu m = RedCore.getMenuManagerInstance().getMenuFromTitle(e.getInventory().getTitle());
                 //Player p = (Player) e.getWhoClicked();
                 if (!m.allowsClickLower())
                 {
