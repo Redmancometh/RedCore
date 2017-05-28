@@ -1,14 +1,14 @@
-package com.redmancometh.redcore;
+package com.redmancometh.redcore.sliceable;
 
 import java.util.function.Consumer;
 
-public class BatchedSlicedCollection<T> extends SlicedList<T>
+public class BatchedSlicedList<T> extends SlicedList<T>
 {
 
     private static final long serialVersionUID = -313112658500611493L;
     private int batchSize;
 
-    public BatchedSlicedCollection(Consumer<T> action, boolean tailConsumer, int batchSize)
+    public BatchedSlicedList(Consumer<T> action, boolean tailConsumer, int batchSize)
     {
         super(action, tailConsumer);
         this.batchSize = batchSize;

@@ -23,6 +23,7 @@ public class RedCore extends JavaPlugin
     @Override
     public void onEnable()
     {
+
         menuManager = new MenuManager();
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());

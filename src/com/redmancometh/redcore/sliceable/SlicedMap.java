@@ -1,4 +1,4 @@
-package com.redmancometh.redcore;
+package com.redmancometh.redcore.sliceable;
 
 import java.util.HashMap;
 import java.util.Map;

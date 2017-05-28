@@ -18,14 +18,6 @@
     <directory>RedCore</directory>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.4.3</version>
         <executions>
@@ -51,11 +43,22 @@
                   <include>org.jboss.logging:*</include>
                   <includes>org.hibernate.javax.persistence:*</includes>
                   <includes>com.fasterxml:*</includes>
+                  <include>javax.servlet:*</include>
+                  <include>com.sparkjava:*</include>
+                  <include>org.eclipse.jetty</include>
                 </includes>
               </artifactSet>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -113,5 +116,9 @@
       <systemPath>${basedir}/lib/spigot.jar</systemPath>
     </dependency>
   </dependencies>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 </project>
 
