@@ -11,7 +11,6 @@ public class RedPlugins implements Iterable<RedPlugin>
 
     public void loadPlugin(RedPlugin plugin)
     {
-        System.out.println("LOADED PLUGIN: " + plugin);
         if (loadedMap.containsKey(plugin.getClass())) throw new IllegalStateException("Tried to load plugin with class: " + plugin.getClass() + " while already loaded!");
         plugin.initialize();
         loadedMap.put(plugin.getClass(), plugin);

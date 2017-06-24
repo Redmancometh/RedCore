@@ -1,12 +1,19 @@
 package com.redmancometh.redcore.databasing;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -26,6 +33,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
     private SessionFactory factory;
     private final Class<V> type;
     public Function<K, V> defaultObjectBuilder;
+    private boolean criteriaClass = false;
+    private List<Criterion> criteria;
     LoadingCache<K, CompletableFuture<V>> cache = CacheBuilder.newBuilder().build(new CacheLoader<K, CompletableFuture<V>>()
     {
         @Override
@@ -35,6 +44,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
             {
                 try (Session session = factory.openSession())
                 {
+                    if (criteriaClass)
+                    {
+                        Criteria c = session.createCriteria(type);
+                        criteria.forEach((criterion) -> c.add(criterion));
+                    }
                     V result = session.get(type, key);
                     if (result == null) return defaultObjectBuilder.apply(key);
                     return result;
@@ -44,10 +58,23 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                     e.printStackTrace();
                 }
                 return null;
-            });
+            }, RedCore.getInstance().getPool());
         }
-
     });
+
+    public void insertObject(K key, V value)
+    {
+        try
+        {
+            System.out.println("Inserting: " + value + " AT: " + key);
+            cache.asMap().put(key, CompletableFuture.supplyAsync(() -> value));
+            System.out.println(cache.asMap().get(key).get() + " GET");
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public SubDatabase(Class<V> type, SessionFactory factory)
     {
@@ -75,6 +102,25 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return this.type;
     }
 
+    public CompletableFuture<V> getWithCriteria(K e, Criteria... criteria)
+    {
+        try
+        {
+            return cache.get(e);
+        }
+        catch (ExecutionException e1)
+        {
+            e1.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Get an object from the db async using CompletableFuture.
+     * Call this with .thenAccept or something.
+     * @param e
+     * @return
+     */
     public CompletableFuture<V> getObject(K e)
     {
         try
@@ -101,23 +147,28 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         {
             try (Session session = factory.openSession())
             {
-                session.beginTransaction();
                 try
                 {
+                    session.beginTransaction();
                     cache.get(e).thenAccept((v) -> session.saveOrUpdate(v));
+                    session.getTransaction().commit();
+                    session.flush();
                 }
                 catch (Exception e2)
                 {
                     e2.printStackTrace();
                 }
-                session.getTransaction().commit();
-                session.flush();
-                session.close();
+
             }
         }, RedCore.getInstance().getPool());
 
     }
 
+    /**
+     * Save an object without purging it
+     * @param e
+     * @return
+     */
     public CompletableFuture<Void> saveObject(V e)
     {
         return CompletableFuture.runAsync(() ->
@@ -127,28 +178,45 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                 session.beginTransaction();
                 session.saveOrUpdate(e);
                 session.getTransaction().commit();
-                session.flush();
+
             }
         }, RedCore.getInstance().getPool());
     }
 
-    public CompletableFuture<Void> saveAndPurge(V e) throws ObjectNotPresentException
+    /**
+     * Save a value and purge it from the cache.
+     * @param e
+     * @return
+     * @throws ObjectNotPresentException
+     */
+    public CompletableFuture<Void> saveAndPurge(V e, UUID uuid) throws ObjectNotPresentException
     {
-        System.out.println("SAVE PURGE: " + e);
-        for (Field f : e.getClass().getDeclaredFields())
+        return saveObject(e).thenRun(() -> cache.asMap().remove(uuid)).exceptionally((throwable) ->
         {
-            System.out.println("Field: " + f.getName());
-            try
-            {
-                f.setAccessible(true);
-                System.out.println(f.get(e) == null);
-            }
-            catch (IllegalArgumentException | IllegalAccessException e1)
-            {
-                e1.printStackTrace();
-            }
+            throwable.printStackTrace();
+            return null;
+        });
+    }
+
+    /**
+     * This method is an insta-return which assumes the value
+     * is already loaded into the cache.
+     * @param e
+     * @return
+     */
+    public V get(K e)
+    {
+        try
+        {
+            CompletableFuture<V> future = cache.asMap().get(e);
+            if (future == null) System.out.println("DAFUQ");
+            return future.get(10, TimeUnit.MILLISECONDS);
         }
-        return saveObject(e).thenRun(() -> cache.asMap().remove(e));
+        catch (InterruptedException | ExecutionException | TimeoutException e1)
+        {
+            e1.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -164,6 +232,26 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
     public SessionFactory getFactory()
     {
         return factory;
+    }
+
+    public List<Criterion> getCriteria()
+    {
+        return criteria;
+    }
+
+    public void setCriteria(List<Criterion> criteria)
+    {
+        this.criteria = criteria;
+    }
+
+    public boolean isCriteriaClass()
+    {
+        return criteriaClass;
+    }
+
+    public void setCriteriaClass(boolean criteriaClass)
+    {
+        this.criteriaClass = criteriaClass;
     }
 
 }

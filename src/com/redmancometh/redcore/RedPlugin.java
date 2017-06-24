@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,12 +15,13 @@ import org.json.simple.parser.JSONParser;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.redmancometh.redcore.mediators.ObjectManager;
 
 public interface RedPlugin
 {
     static JSONParser parser = new JSONParser();
     //Automatically rebuild the 
-    static LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build(new CacheLoader<String, JSONObject>()
+    static LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().build(new CacheLoader<String, JSONObject>()
     {
         @Override
         public JSONObject load(String javaPlugin) throws Exception
@@ -32,10 +32,19 @@ public interface RedPlugin
 
     public abstract String getName();
 
+    public default boolean loginFetch()
+    {
+        return true;
+    }
+
+    public default boolean logoutSave()
+    {
+        return true;
+    }
+
     public default void enable()
     {
         RedCore.getInstance().getPluginManager().loadPlugin(this);
-        initialize();
     }
 
     public default void disable()
@@ -50,9 +59,12 @@ public interface RedPlugin
 
     default void initialize()
     {
-        SessionFactory factory = buildSessionFactory(getBukkitPlugin());
-        setInternalFactory(factory);
-        getMappedClasses().forEach((mappingClass) -> RedCore.getInstance().getMasterDB().registerDatabase(mappingClass, factory));
+        if (!(this instanceof MenuPlugin))
+        {
+            SessionFactory factory = buildSessionFactory(getBukkitPlugin());
+            setInternalFactory(factory);
+            getMappedClasses().forEach((mappingClass) -> RedCore.getInstance().getMasterDB().registerDatabase(mappingClass, factory));
+        }
     }
 
     public abstract List<Class> getMappedClasses();
@@ -99,6 +111,18 @@ public interface RedPlugin
         SessionFactory sessionFactory = config.buildSessionFactory();
         return sessionFactory;
     }
+
+    public default void registerMenus()
+    {
+
+    }
+
+    public default void unRegisterMenus()
+    {
+
+    }
+
+    public abstract ObjectManager getManager();
 
     public abstract SessionFactory getInternalFactory();
 

@@ -7,8 +7,11 @@ import java.util.function.Consumer;
 
 import org.hibernate.SessionFactory;
 
+import lombok.Getter;
+
 public class MasterDatabase implements Iterable<SubDatabase>
 {
+    @Getter
     private Map<Class, SubDatabase> subDBMap = new HashMap();
 
     public SubDatabase getSubDBForType(Class clazz)
@@ -18,6 +21,8 @@ public class MasterDatabase implements Iterable<SubDatabase>
 
     public void registerDatabase(Class ofType, SessionFactory factory)
     {
+        System.out.println("REGISTERED FOR: " + ofType);
+        System.out.println("WITH FACTORY: " + factory);
         this.subDBMap.put(ofType, new SubDatabase(ofType, factory));
     }
 

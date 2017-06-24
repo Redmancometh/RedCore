@@ -16,6 +16,7 @@
       </resource>
     </resources>
     <directory>RedCore</directory>
+    <finalName>RedCore</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -45,7 +46,10 @@
                   <includes>com.fasterxml:*</includes>
                   <include>javax.servlet:*</include>
                   <include>com.sparkjava:*</include>
-                  <include>org.eclipse.jetty</include>
+                  <include>org.eclipse.jetty:*</include>
+                  <include>org.projectlombok:*</include>
+                  <include>com.google.code.gson:*</include>
+                  <include>com.hazelcast:*</include>
                 </includes>
               </artifactSet>
             </configuration>
@@ -64,7 +68,8 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <outputDirectory>C:\Users\Redmancometh\Desktop\mazeupdate\hibertest\plugins</outputDirectory>
+          <stripVersion>true</stripVersion>
+          <outputDirectory>${user.home}/arkdev/plugins</outputDirectory>
         </configuration>
       </plugin>
     </plugins>
@@ -76,9 +81,7 @@
     </repository>
     <repository>
       <releases />
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
+      <snapshots />
       <id>mvnrepository</id>
       <url>http://repo1.maven.org/maven2</url>
     </repository>
@@ -97,16 +100,17 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.12.1.GA</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>me.iscoelho</groupId>
+      <artifactId>lilypad</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/Bukkit-Connect.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>com.redmancometh</groupId>
