@@ -12,7 +12,7 @@ public class Icon
     private Short dataValue = 0;
     private String displayName;
     private List<String> lore;
-
+    
     public ItemStack getIcon()
     {
         return ItemUtil.buildItem(material, displayName, dataValue, lore);

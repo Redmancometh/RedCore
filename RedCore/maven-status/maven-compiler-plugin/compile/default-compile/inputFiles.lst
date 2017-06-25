@@ -1,4 +1,5 @@
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\exceptions\ObjectNotPresentException.java
+C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\TriFunction.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\RedPlugins.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\ReflectUtil.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\InventoryUtil.java
@@ -8,6 +9,7 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\MenuPlugin.jav
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\CooldownUtil.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SliceableMap.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\config\ConfigManager.java
+C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\TestableDefaultable.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\SkullUtil.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\WeightedChooser.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\tasks\SlowPollerTask.java
