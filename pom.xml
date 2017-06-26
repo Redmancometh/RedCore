@@ -8,6 +8,12 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>releases</id>
+			<url>http://http://149.56.14.60:8081/nexus/content/repositories/releases</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<finalName>RedCore</finalName>
 		<directory>RedCore</directory>
@@ -68,6 +74,31 @@
 					<outputDirectory>${user.home}/arkdev/plugins</outputDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<serverId>arkham</serverId>
+					<nexusUrl>http://149.56.14.60:8081/nexus/</nexusUrl>
+					<stagingProfileId>admin</stagingProfileId>
+				</configuration>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -80,6 +111,10 @@
 		</resources>
 	</build>
 	<repositories>
+		<repository>
+			<id>releases</id>
+			<url>http://149.56.14.60:8081/nexus/content/repositories/releases</url>
+		</repository>
 		<repository>
 			<id>JBoss repository</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
@@ -102,18 +137,14 @@
 			<version>3.8.2</version>
 		</dependency>
 		<dependency>
-			<groupId>me.iscoelho</groupId>
-			<artifactId>lilypad</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/Bukkit-Connect.jar</systemPath>
+			<groupId>org.arkhamnetwork</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.8.ark</version>
 		</dependency>
 		<dependency>
-			<groupId>com.redmancometh</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/spigot.jar</systemPath>
+			<groupId>me.iscoelho</groupId>
+			<artifactId>Bukkit-Connect</artifactId>
+			<version>1.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
