@@ -68,6 +68,29 @@
 					<outputDirectory>${user.home}/arkdev/plugins</outputDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.6</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>arkham</serverId>
+					<nexusUrl>http://sonatyperepo:8081/nexus/</nexusUrl>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.1</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -80,6 +103,10 @@
 		</resources>
 	</build>
 	<repositories>
+		<repository>
+			<id>releases</id>
+			<url>http://149.56.14.60:8081/nexus/content/repositories/releases</url>
+		</repository>
 		<repository>
 			<id>JBoss repository</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
@@ -102,18 +129,14 @@
 			<version>3.8.2</version>
 		</dependency>
 		<dependency>
-			<groupId>me.iscoelho</groupId>
-			<artifactId>lilypad</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/Bukkit-Connect.jar</systemPath>
+			<groupId>org.arkhamnetwork</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.8.ark</version>
 		</dependency>
 		<dependency>
-			<groupId>com.redmancometh</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/spigot.jar</systemPath>
+			<groupId>me.iscoelho</groupId>
+			<artifactId>Bukkit-Connect</artifactId>
+			<version>1.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
