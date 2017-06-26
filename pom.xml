@@ -140,6 +140,7 @@
 			<groupId>org.arkhamnetwork</groupId>
 			<artifactId>spigot</artifactId>
 			<version>1.8.ark</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>me.iscoelho</groupId>
