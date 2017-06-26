@@ -145,6 +145,29 @@
       <version>3.12.1.GA</version>
       <scope>compile</scope>
     </dependency>
+<<<<<<< HEAD
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.14.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>me.iscoelho</groupId>
+      <artifactId>lilypad</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/Bukkit-Connect.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.redmancometh</groupId>
+      <artifactId>spigot</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/spigot.jar</systemPath>
+    </dependency>
+=======
+>>>>>>> origin/master
   </dependencies>
   <distributionManagement>
     <snapshotRepository>
