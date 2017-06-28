@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import org.bukkit.Material;
@@ -15,6 +18,8 @@ import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonToken;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.redmancometh.redcore.RedPlugin;
 
 public class ConfigManager<T>
 {
@@ -65,6 +70,56 @@ public class ConfigManager<T>
     public void setCurrentConfig(T currentConfig)
     {
         this.currentConfig = currentConfig;
+    }
+
+    public static ConfigManager tryDebugPrint(RedPlugin plugin)
+    {
+        try
+        {
+            Method m = plugin.getClass().getDeclaredMethod("getCfg");
+            m.setAccessible(true);
+            Object config = m.invoke(null, new Object[0]);
+            return (ConfigManager) config;
+        }
+        catch (SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        {
+            System.out.println("Need a static or instanced getCfg() method attached to this object to use this!");
+            System.out.println("Or you fucked up something else.");
+        }
+        return null;
+    }
+
+    /**
+     * put your gson config here.
+     * total dirty typeless print be careful
+     * @param object
+     */
+    public static void debugPrint(Object object)
+    {
+        Class c = object.getClass();
+        for (Field f : c.getDeclaredFields())
+        {
+            try
+            {
+                Object fieldValue = f.get(object);
+                System.out.println(f.getName() + " is null?");
+                System.out.println("\n" + fieldValue == null);
+                System.out.println("Attempting to retrieve value for field...");
+                try
+                {
+                    System.out.println("\nValue: " + fieldValue);
+                }
+                catch (Throwable t)
+                {
+                    System.out.println("Field: " + f.getName() + " was unable to be retrieved!");
+                    continue;
+                }
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static class MaterialAdapter extends TypeAdapter<Material>

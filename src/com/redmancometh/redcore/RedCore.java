@@ -17,7 +17,7 @@ public class RedCore extends JavaPlugin
     private RedPlugins getPlugins;
     private MasterDatabase masterDB;
     private SlowPollerTask slowPoller;
-
+    
     @Override
     public void onEnable()
     {
