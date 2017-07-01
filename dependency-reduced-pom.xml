@@ -119,7 +119,7 @@
       <groupId>org.arkhamnetwork</groupId>
       <artifactId>spigot</artifactId>
       <version>1.8.ark</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>me.iscoelho</groupId>
@@ -145,34 +145,17 @@
       <version>3.12.1.GA</version>
       <scope>compile</scope>
     </dependency>
-<<<<<<< HEAD
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.14.4</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>me.iscoelho</groupId>
-      <artifactId>lilypad</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/Bukkit-Connect.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>com.redmancometh</groupId>
-      <artifactId>spigot</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/spigot.jar</systemPath>
-    </dependency>
-=======
->>>>>>> origin/master
   </dependencies>
   <distributionManagement>
     <snapshotRepository>
       <id>releases</id>
-      <url>http://http://149.56.14.60:8081/nexus/content/repositories/releases</url>
+      <url>http://149.56.14.60:8081/nexus/content/repositories/releases</url>
     </snapshotRepository>
   </distributionManagement>
   <properties>
