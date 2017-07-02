@@ -9,7 +9,7 @@ import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.databasing.SubDatabase;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 
-public class ObjectManager<T extends Defaultable>
+public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T>
 {
     private final Class<T> type;
 
@@ -33,7 +33,7 @@ public class ObjectManager<T extends Defaultable>
         return getSubDB().get(key);
     }
 
-    private SubDatabase<UUID, T> getSubDB()
+    public SubDatabase<UUID, T> getSubDB()
     {
         return RedCore.getInstance().getMasterDB().getSubDBForType(type);
     }
@@ -86,4 +86,10 @@ public class ObjectManager<T extends Defaultable>
             }
         });
     }
+
+	@Override
+	public ObjectManager<T> getThis() 
+	{
+		return this;
+	}
 }
