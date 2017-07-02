@@ -166,7 +166,7 @@
   <distributionManagement>
     <snapshotRepository>
       <id>releases</id>
-      <url>http://http://149.56.14.60:8081/nexus/content/repositories/releases</url>
+      <url>http://149.56.14.60:8081/nexus/content/repositories/releases</url>
     </snapshotRepository>
   </distributionManagement>
   <properties>
