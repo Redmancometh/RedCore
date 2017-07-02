@@ -51,7 +51,6 @@
 									<include>org.eclipse.jetty:*</include>
 									<include>org.projectlombok:*</include>
 									<include>com.google.code.gson:*</include>
-									<include>com.hazelcast:*</include>
 								</includes>
 							</artifactSet>
 						</configuration>

@@ -16,9 +16,9 @@ public class Pane implements Iterable<Integer>
 	}
 
 	public short getColor()
-	{
-		return color;
-	}
+    {
+        return color;
+    }
 
 	public void setIndexes(List<Integer> indexes)
 	{

@@ -102,6 +102,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return this.type;
     }
 
+    public Session newSession()
+    {
+        return factory.openSession();
+    }
+
     public CompletableFuture<V> getWithCriteria(K e, Criteria... criteria)
     {
         try
