@@ -33,13 +33,10 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return getSubDB().get(key);
     }
 
-<<<<<<< HEAD
     /**
      * Don't use this if you can avoid.
      * @return
      */
-=======
->>>>>>> origin/master
     public SubDatabase<UUID, T> getSubDB()
     {
         return RedCore.getInstance().getMasterDB().getSubDBForType(type);
