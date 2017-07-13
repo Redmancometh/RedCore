@@ -17,12 +17,14 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\Slic
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\config\MenuTemplate.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\databasing\MasterDatabase.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\Defaultable.java
+C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\SortableObjectManager.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\testing\MockPlayerInventory.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\DefaultableString.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\NulledObjectManager.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\SextFunction.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\RedCore.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\QuintConsumer.java
+C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\BaseObjectManager.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\BatchedSlicedList.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\exceptions\ObjectNotPresentException.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\TriFunction.java
