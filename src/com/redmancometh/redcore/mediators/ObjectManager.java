@@ -75,6 +75,11 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return null;
     }
 
+    public void delete(T e)
+    {
+        getSubDB().deleteObject(e);
+    }
+
     public CompletableFuture<Void> saveAndPurge(Player p)
     {
         UUID uuid = p.getUniqueId();
@@ -91,9 +96,9 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         });
     }
 
-	@Override
-	public ObjectManager<T> getThis() 
-	{
-		return this;
-	}
+    @Override
+    public ObjectManager<T> getThis()
+    {
+        return this;
+    }
 }
