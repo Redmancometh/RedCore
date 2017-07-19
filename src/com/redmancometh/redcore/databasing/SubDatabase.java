@@ -224,6 +224,14 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return null;
     }
 
+    public void deleteObject(V e)
+    {
+        try (Session s = factory.openSession())
+        {
+            s.delete(e);
+        }
+    }
+
     /**
      * Purge an object by using it's KEY object.
      * Warning: This is unchecked, and the object will not be saved.
