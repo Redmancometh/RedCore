@@ -285,4 +285,10 @@ public class ItemUtil
         meta.setLore(loreList);
         i.setItemMeta(meta);
     }
+    
+    public static ItemStack addGlow(ItemStack is) 
+    {
+    	//TODO FIXME
+    	return is;
+    }
 }
