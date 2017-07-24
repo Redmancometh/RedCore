@@ -6,7 +6,6 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\config\ConfigM
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\SextConsumer.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\tasks\SlowPollerTask.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\commands\ServerCommand.java
-C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\testing\PlayerStats.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\ItemUtil.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\TriConsumer.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SlicedMultiMap.java
@@ -18,7 +17,6 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\config\MenuTem
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\databasing\MasterDatabase.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\Defaultable.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\SortableObjectManager.java
-C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\testing\MockPlayerInventory.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\DefaultableString.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\NulledObjectManager.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\SextFunction.java
@@ -31,7 +29,6 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\TriFuncti
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\RedPlugins.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\ReflectUtil.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\mediators\ObjectManager.java
-C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\testing\MockPlayer.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SliceableMaps.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SliceableMap.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\TestableDefaultable.java
@@ -48,7 +45,6 @@ C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\config\Icon.ja
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SlicedMap.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\commands\DebugConfig.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\BatchedSlicedCollection.java
-C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\testing\MVTestLogFormatter.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\sliceable\SlicedCollection.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\databasing\SubDatabase.java
 C:\Users\Redmancometh\arkham\RedCore\src\com\redmancometh\redcore\util\MetaUtil.java
