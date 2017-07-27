@@ -9,8 +9,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -22,18 +20,16 @@ import com.google.common.base.Function;
 import com.redmancometh.redcore.RedCore;
 
 public class SpecialFuture<T> {
-	private static ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
+	private static ScheduledExecutorService pool = Executors.newScheduledThreadPool(500);
 
 	private Plugin plugin = RedCore.getPlugin(RedCore.class);
 	private BukkitScheduler sync = Bukkit.getScheduler();
-	private Lock waiting = new ReentrantLock();
 	private AtomicReference<T> cache = new AtomicReference<>();
 	private AtomicReference<Exception> exception = new AtomicReference<Exception>();
 	private List<Consumer<T>> tasks = new CopyOnWriteArrayList<>();
 	private List<Consumer<Exception>> exHandlers = new CopyOnWriteArrayList<>();
 
 	public SpecialFuture(Supplier<T> s) {
-		waiting.lock();
 		Future<?> handler = pool.submit(() -> {
 			try {
 				T t = s.get();
@@ -48,10 +44,8 @@ public class SpecialFuture<T> {
 						}
 					});
 				}
-				waiting.unlock();
 			} catch (Exception e) {
 				exception.set(e);
-				waiting.unlock();
 				sync.scheduleSyncDelayedTask(plugin, () -> {
 					if (exHandlers.size() == 0) {
 						e.printStackTrace();
@@ -96,34 +90,24 @@ public class SpecialFuture<T> {
 
 	public <U> SpecialFuture<U> thenApply(Function<T, U> func) {
 		return SpecialFuture.supplyAsync(() -> {
-			waiting.lock();
-			waiting.unlock();
-			T t = cache.get();
-			if (t == null) {
-				RuntimeException ex = new RuntimeException("Lock released without value, cann't apply! Look for other errors above!");
+			BlockingQueue<U> queue = new ArrayBlockingQueue<>(1);
+			SpecialFuture.this.thenAccept((t) -> {
+				queue.add(func.apply(t));
+			});
+			U u = null;
+			try {
+				u = queue.poll(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (u == null) {
+				RuntimeException ex = new RuntimeException("Function could not apply because the previous future timed out! Check above for errors");
 				sync.scheduleSyncDelayedTask(plugin, () -> {
 					ex.printStackTrace();
 				});
 				throw ex;
 			}
-			BlockingQueue<U> queue = new ArrayBlockingQueue<>(1);
-			sync.scheduleSyncDelayedTask(plugin, () -> {
-				queue.add(func.apply(t));
-			});
-			U result;
-			try {
-				result = queue.poll(10, TimeUnit.SECONDS);
-				if (result == null) {
-					RuntimeException ex = new RuntimeException("Your function isn't done after 10 seconds? Wtf are you doing in there...?");
-					sync.scheduleSyncDelayedTask(plugin, () -> {
-						ex.printStackTrace();
-					});
-					throw ex;
-				}
-				return result;
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e); // This can't happen I hope
-			}
+			return u;
 		});
 	}
 
