@@ -56,8 +56,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                 catch (SecurityException | IllegalArgumentException e)
                 {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-                return null;
             }, RedCore.getInstance().getPool());
         }
     });
