@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -20,6 +21,7 @@ import com.google.common.cache.LoadingCache;
 import com.redmancometh.redcore.Defaultable;
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
+import com.redmancometh.redcore.util.SpecialFuture;
 
 /**
  * 
@@ -35,12 +37,12 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
     public Function<K, V> defaultObjectBuilder;
     private boolean criteriaClass = false;
     private List<Criterion> criteria;
-    LoadingCache<K, CompletableFuture<V>> cache = CacheBuilder.newBuilder().build(new CacheLoader<K, CompletableFuture<V>>()
+    LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>()
     {
         @Override
-        public CompletableFuture<V> load(K key)
+        public SpecialFuture<V> load(K key)
         {
-            return (CompletableFuture<V>) CompletableFuture.supplyAsync(() ->
+            return (SpecialFuture<V>) SpecialFuture.supplyAsync(() ->
             {
                 try (Session session = factory.openSession())
                 {
@@ -58,22 +60,14 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
-            }, RedCore.getInstance().getPool());
+            });
         }
     });
 
     public void insertObject(K key, V value)
     {
-        try
-        {
-            System.out.println("Inserting: " + value + " AT: " + key);
-            cache.asMap().put(key, CompletableFuture.supplyAsync(() -> value));
-            System.out.println(cache.asMap().get(key).get() + " GET");
-        }
-        catch (InterruptedException | ExecutionException e)
-        {
-            e.printStackTrace();
-        }
+        System.out.println("Inserting: " + value + " AT: " + key);
+        cache.asMap().put(key, SpecialFuture.supplyAsync(() -> value));
     }
 
     public SubDatabase(Class<V> type, SessionFactory factory)
@@ -107,7 +101,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return factory.openSession();
     }
 
-    public CompletableFuture<V> getWithCriteria(K e, Criteria... criteria)
+    public SpecialFuture<V> getWithCriteria(K e, Criteria... criteria)
     {
         try
         {
@@ -126,7 +120,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      * @param e
      * @return
      */
-    public CompletableFuture<V> getObject(K e)
+    public SpecialFuture<V> getObject(K e)
     {
         try
         {
@@ -213,7 +207,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
     {
         try
         {
-            CompletableFuture<V> future = cache.asMap().get(e);
+            SpecialFuture<V> future = cache.asMap().get(e);
             if (future == null) System.out.println("DAFUQ");
             return future.get(10, TimeUnit.MILLISECONDS);
         }
