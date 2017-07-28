@@ -109,6 +109,28 @@ public class SpecialFuture<T>
         c.accept(cache.get());
         return this;
     }
+    
+    public T getBocking() 
+    {
+    	T t = cache.get();
+    	if(t != null) 
+    	{
+    		return t;
+    	}
+    	BlockingQueue<T> queue = new ArrayBlockingQueue<>(1);
+    	thenAccept(c -> queue.add(c));
+    	try 
+    	{
+			t = queue.poll(10, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+    	if(t == null)
+    	{
+    		throw new RuntimeException("Blocking task timed out!");
+    	}
+    	return t;
+    }
 
     public <U> SpecialFuture<U> thenApply(Function<T, U> func)
     {
