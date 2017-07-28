@@ -98,6 +98,11 @@ public class SpecialFuture<T>
     {
         return new SpecialFuture<>(s);
     }
+    
+    public static SpecialFuture<?> runAsync(Runnable r) 
+    {
+    	return supplyAsync(() -> {r.run(); return void.class;});
+    }
 
     public SpecialFuture<T> thenAccept(Consumer<T> c)
     {
