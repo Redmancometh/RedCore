@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 import org.hibernate.Criteria;
@@ -205,17 +203,10 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      */
     public V get(K e)
     {
-        try
-        {
-            SpecialFuture<V> future = cache.asMap().get(e);
-            if (future == null) System.out.println("DAFUQ");
-            return future.get(10, TimeUnit.MILLISECONDS);
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e1)
-        {
-            e1.printStackTrace();
-        }
-        return null;
+
+        SpecialFuture<V> future = cache.asMap().get(e);
+        if (future == null) System.out.println("DAFUQ");
+        return future.get();
     }
 
     public void deleteObject(V e)

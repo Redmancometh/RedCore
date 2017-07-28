@@ -8,6 +8,7 @@ import com.redmancometh.redcore.Defaultable;
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.databasing.SubDatabase;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
+import com.redmancometh.redcore.util.SpecialFuture;
 
 public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T>
 {
@@ -42,7 +43,7 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return RedCore.getInstance().getMasterDB().getSubDBForType(type);
     }
 
-    public CompletableFuture<T> getRecord(UUID uuid)
+    public SpecialFuture<T> getRecord(UUID uuid)
     {
         return getSubDB().getObject(uuid);
     }
@@ -52,12 +53,12 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return RedCore.getInstance().getMasterDB().getSubDBForType(type).saveObject(e);
     }
 
-    public CompletableFuture<Void> save(Player p)
+    public SpecialFuture<T> save(Player p)
     {
         return save(p.getUniqueId());
     }
 
-    public CompletableFuture<Void> save(UUID uuid)
+    public SpecialFuture<T> save(UUID uuid)
     {
         return getSubDB().getObject(uuid).thenAccept((record) -> getSubDB().saveObject(record));
     }
@@ -80,7 +81,7 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         getSubDB().deleteObject(e);
     }
 
-    public CompletableFuture<Void> saveAndPurge(Player p)
+    public SpecialFuture<T> saveAndPurge(Player p)
     {
         UUID uuid = p.getUniqueId();
         return getSubDB().getObject(uuid).thenAccept((record) ->

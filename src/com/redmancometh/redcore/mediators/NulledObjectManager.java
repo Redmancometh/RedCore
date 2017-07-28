@@ -1,11 +1,11 @@
 package com.redmancometh.redcore.mediators;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.bukkit.entity.Player;
 
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.mediators.ObjectManager;
+import com.redmancometh.redcore.util.SpecialFuture;
 
 public class NulledObjectManager extends ObjectManager
 {
@@ -16,26 +16,28 @@ public class NulledObjectManager extends ObjectManager
     }
 
     @Override
-    public CompletableFuture getRecord(UUID uuid)
+    public SpecialFuture<?> getRecord(UUID uuid)
     {
-        return CompletableFuture.runAsync(() ->
+        return SpecialFuture.runAsync(() ->
         {
         });
     }
 
     @Override
-    public CompletableFuture save(Player p)
+    public SpecialFuture save(Player p)
     {
-        return CompletableFuture.runAsync(() ->
+        return new SpecialFuture(() ->
         {
+            return null;
         });
     }
 
     @Override
-    public CompletableFuture saveAndPurge(Player p)
+    public SpecialFuture saveAndPurge(Player p)
     {
-        return CompletableFuture.runAsync(() ->
+        return new SpecialFuture(() ->
         {
+            return null;
         });
     }
 }

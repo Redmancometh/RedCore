@@ -94,6 +94,11 @@ public class SpecialFuture<T>
         }, 10000, TimeUnit.MILLISECONDS);
     }
 
+    public static SpecialFuture<?> runAsync(Runnable r)
+    {
+        return supplyAsync(() -> void.class);
+    }
+
     public static <T> SpecialFuture<T> supplyAsync(Supplier<T> s)
     {
         return new SpecialFuture<>(s);
@@ -114,27 +119,33 @@ public class SpecialFuture<T>
         c.accept(cache.get());
         return this;
     }
-    
-    public T getBocking() 
+
+    /**
+     * This is a blocking task that will wait on the result of the object.
+     * @return
+     */
+    public T get()
     {
-    	T t = cache.get();
-    	if(t != null) 
-    	{
-    		return t;
-    	}
-    	BlockingQueue<T> queue = new ArrayBlockingQueue<>(1);
-    	thenAccept(c -> queue.add(c));
-    	try 
-    	{
-			t = queue.poll(10, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-    	if(t == null)
-    	{
-    		throw new RuntimeException("Blocking task timed out!");
-    	}
-    	return t;
+        T t = cache.get();
+        if (t != null)
+        {
+            return t;
+        }
+        BlockingQueue<T> queue = new ArrayBlockingQueue<>(1);
+        thenAccept(c -> queue.add(c));
+        try
+        {
+            t = queue.poll(10, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException e)
+        {
+            throw new RuntimeException(e);
+        }
+        if (t == null)
+        {
+            throw new RuntimeException("Blocking task timed out!");
+        }
+        return t;
     }
 
     public <U> SpecialFuture<U> thenApply(Function<T, U> func)
