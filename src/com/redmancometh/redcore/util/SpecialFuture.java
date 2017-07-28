@@ -28,6 +28,7 @@ public class SpecialFuture<T>
     private AtomicReference<T> cache = new AtomicReference<>();
     private AtomicReference<Exception> exception = new AtomicReference<Exception>();
     private List<Consumer<T>> tasks = new CopyOnWriteArrayList<>();
+    private List<Consumer<T>> asyncTasks = new CopyOnWriteArrayList<>();
     private List<Consumer<Exception>> exHandlers = new CopyOnWriteArrayList<>();
 
     public SpecialFuture(Supplier<T> s)
@@ -38,6 +39,10 @@ public class SpecialFuture<T>
             {
                 T t = s.get();
                 cache.set(t);
+                for (Consumer<T> task : asyncTasks) 
+                {
+                	pool.submit(() -> task.accept(t));
+                }
                 for (Consumer<T> task : tasks)
                 {
                     sync.scheduleSyncDelayedTask(plugin, () ->
@@ -117,6 +122,17 @@ public class SpecialFuture<T>
             return this;
         }
         c.accept(cache.get());
+        return this;
+    }
+    
+    public SpecialFuture<T> thenAcceptAsync(Consumer<T> c)
+    {
+        if (cache.get() == null)
+        {
+            asyncTasks.add(c);
+            return this;
+        }
+        pool.submit(() -> c.accept(cache.get()));
         return this;
     }
     
