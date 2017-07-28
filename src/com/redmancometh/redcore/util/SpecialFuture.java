@@ -103,6 +103,11 @@ public class SpecialFuture<T>
     {
     	return supplyAsync(() -> {r.run(); return void.class;});
     }
+    
+    public static void runSync(Runnable r) 
+    {
+    	runAsync(() -> {}).thenRun(r);
+    }
 
     public SpecialFuture<T> thenAccept(Consumer<T> c)
     {
@@ -113,6 +118,12 @@ public class SpecialFuture<T>
         }
         c.accept(cache.get());
         return this;
+    }
+    
+    public SpecialFuture<T> thenRun(Runnable r)
+    {
+    	thenAccept(c -> r.run());
+    	return this;
     }
     
     public T getBocking() 
