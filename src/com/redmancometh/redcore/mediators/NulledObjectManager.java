@@ -14,7 +14,7 @@ public class NulledObjectManager extends ObjectManager
     {
         super(RedCore.class);
     }
-
+        
     @Override
     public SpecialFuture<?> getRecord(UUID uuid)
     {

@@ -9,7 +9,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.libs.com.google.gson.FieldNamingPolicy;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
@@ -23,7 +26,7 @@ import com.redmancometh.redcore.RedPlugin;
 
 public class ConfigManager<T>
 {
-    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).create();
+    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).create();
 
     private String configName;
     private T currentConfig;
@@ -119,6 +122,43 @@ public class ConfigManager<T>
             {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static class LocationAdapter extends TypeAdapter<Location>
+    {
+
+        @Override
+        public void write(JsonWriter jsonWriter, Location location) throws IOException
+        {
+            jsonWriter.value(location.toString());
+        }
+
+        @Override
+        public Location read(JsonReader jsonReader) throws IOException
+        {
+            int x = 0, y = 0, z = 0;
+            World w = null;
+            jsonReader.beginObject();
+            while (jsonReader.hasNext())
+            {
+                switch (jsonReader.nextName())
+                {
+                    case "world":
+                        w = Bukkit.getWorld(jsonReader.nextString());
+                    case "x":
+                        x = Integer.parseInt(jsonReader.nextString());
+                        break;
+                    case "y":
+                        y = Integer.parseInt(jsonReader.nextString());
+                        break;
+                    case "z":
+                        z = Integer.parseInt(jsonReader.nextString());
+                        break;
+                }
+            }
+            jsonReader.endObject();
+            return new Location(w, x, y, z);
         }
     }
 
