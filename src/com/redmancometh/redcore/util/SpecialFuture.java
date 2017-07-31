@@ -31,9 +31,19 @@ public class SpecialFuture<T>
     private List<Consumer<T>> asyncTasks = new CopyOnWriteArrayList<>();
     private List<Consumer<Exception>> exHandlers = new CopyOnWriteArrayList<>();
 
-    public SpecialFuture(Supplier<T> s)
+    private SpecialFuture(Supplier<T> s)
     {
-        Future<?> handler = pool.submit(() ->
+    	supply(s);
+    }
+    
+    private SpecialFuture()
+    {
+    	
+    }
+    
+    private void supply(Supplier<T> s)
+    {
+    	Future<?> handler = pool.submit(() ->
         {
             try
             {
@@ -109,9 +119,53 @@ public class SpecialFuture<T>
     	return supplyAsync(() -> {r.run(); return void.class;});
     }
     
-    public static void runSync(Runnable r) 
+    public static SpecialFuture<?> runSync(Runnable r) 
     {
-    	runAsync(() -> {}).thenRun(r);
+    	return runAsync(() -> {}).thenRun(r);
+    }
+    
+    public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u) 
+    {
+    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+		pool.schedule(() ->
+		{
+			r.run();
+			sf.supply(() -> void.class);
+		}, t, u);
+		return sf;
+	}
+    
+    public static SpecialFuture<?> delayAsync(Runnable r, long ticks)
+    {
+    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+    	Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> 
+    	{
+    		runAsync(r);
+    		sf.supply(() -> void.class);
+    	}, ticks);
+    	return sf;
+    }
+    
+    public static SpecialFuture<?> delaySync(Runnable r, long t, TimeUnit u) 
+    {
+    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+		delayAsync(() -> 
+		{
+			SpecialFuture.runSync(r);
+			sf.supply(() -> void.class);
+		}, t, u);
+		return sf;
+	}
+    
+    public static SpecialFuture<?> delaySync(Runnable r, long ticks)
+    {
+    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+    	Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> 
+    	{
+    		r.run();
+    		sf.supply(() -> void.class);
+    	}, ticks);
+    	return sf;
     }
 
     public SpecialFuture<T> thenAccept(Consumer<T> c)
