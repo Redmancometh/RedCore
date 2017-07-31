@@ -31,7 +31,7 @@ public class SpecialFuture<T>
     private List<Consumer<T>> asyncTasks = new CopyOnWriteArrayList<>();
     private List<Consumer<Exception>> exHandlers = new CopyOnWriteArrayList<>();
 
-    private SpecialFuture(Supplier<T> s)
+    public SpecialFuture(Supplier<T> s)
     {
     	supply(s);
     }
@@ -151,7 +151,7 @@ public class SpecialFuture<T>
     	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
 		delayAsync(() -> 
 		{
-			SpecialFuture.runSync(r);
+			runSync(r);
 			sf.supply(() -> void.class);
 		}, t, u);
 		return sf;
