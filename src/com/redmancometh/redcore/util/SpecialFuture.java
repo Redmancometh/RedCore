@@ -21,7 +21,7 @@ import com.redmancometh.redcore.RedCore;
 
 public class SpecialFuture<T>
 {
-    private static ScheduledExecutorService pool = Executors.newScheduledThreadPool(500);
+    private static ScheduledExecutorService pool = Executors.newScheduledThreadPool(7);
 
     private Plugin plugin = RedCore.getPlugin(RedCore.class);
     private BukkitScheduler sync = Bukkit.getScheduler();
@@ -33,25 +33,25 @@ public class SpecialFuture<T>
 
     public SpecialFuture(Supplier<T> s)
     {
-    	supply(s);
+        supply(s);
     }
-    
+
     private SpecialFuture()
     {
-    	
+
     }
-    
+
     private void supply(Supplier<T> s)
     {
-    	Future<?> handler = pool.submit(() ->
+        Future<?> handler = pool.submit(() ->
         {
             try
             {
                 T t = s.get();
                 cache.set(t);
-                for (Consumer<T> task : asyncTasks) 
+                for (Consumer<T> task : asyncTasks)
                 {
-                	pool.submit(() -> task.accept(t));
+                    pool.submit(() -> task.accept(t));
                 }
                 for (Consumer<T> task : tasks)
                 {
@@ -113,59 +113,65 @@ public class SpecialFuture<T>
     {
         return new SpecialFuture<>(s);
     }
-    
-    public static SpecialFuture<?> runAsync(Runnable r) 
+
+    public static SpecialFuture<?> runAsync(Runnable r)
     {
-    	return supplyAsync(() -> {r.run(); return void.class;});
+        return supplyAsync(() ->
+        {
+            r.run();
+            return void.class;
+        });
     }
-    
-    public static SpecialFuture<?> runSync(Runnable r) 
+
+    public static SpecialFuture<?> runSync(Runnable r)
     {
-    	return runAsync(() -> {}).thenRun(r);
+        return runAsync(() ->
+        {
+        }).thenRun(r);
     }
-    
-    public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u) 
+
+    public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u)
     {
-    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		pool.schedule(() ->
-		{
-			r.run();
-			sf.supply(() -> void.class);
-		}, t, u);
-		return sf;
-	}
-    
+        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+        pool.schedule(() ->
+        {
+            r.run();
+            sf.supply(() -> void.class);
+        }, t, u);
+        return sf;
+    }
+
     public static SpecialFuture<?> delayAsync(Runnable r, long ticks)
     {
-    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-    	Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> 
-    	{
-    		runAsync(r);
-    		sf.supply(() -> void.class);
-    	}, ticks);
-    	return sf;
+        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () ->
+        {
+            runAsync(r);
+            sf.supply(() -> void.class);
+        }, ticks);
+        return sf;
     }
-    
-    public static SpecialFuture<?> delaySync(Runnable r, long t, TimeUnit u) 
+
+    public static SpecialFuture<?> delaySync(Runnable r, long t, TimeUnit u)
     {
-    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		delayAsync(() -> 
-		{
-			runSync(r);
-			sf.supply(() -> void.class);
-		}, t, u);
-		return sf;
-	}
-    
+        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+        delayAsync(() ->
+        {
+            runSync(r);
+            sf.supply(() -> void.class);
+        }, t, u);
+        return sf;
+    }
+
     public static SpecialFuture<?> delaySync(Runnable r, long ticks)
     {
-    	SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-    	Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> 
-    	{
-    		r.run();
-    		sf.supply(() -> void.class);
-    	}, ticks);
-    	return sf;
+        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () ->
+        {
+            r.run();
+            sf.supply(() -> void.class);
+        }, ticks);
+        return sf;
     }
 
     public SpecialFuture<T> thenAccept(Consumer<T> c)
@@ -178,7 +184,7 @@ public class SpecialFuture<T>
         c.accept(cache.get());
         return this;
     }
-    
+
     public SpecialFuture<T> thenAcceptAsync(Consumer<T> c)
     {
         if (cache.get() == null)
@@ -189,13 +195,13 @@ public class SpecialFuture<T>
         pool.submit(() -> c.accept(cache.get()));
         return this;
     }
-    
+
     public SpecialFuture<T> thenRun(Runnable r)
     {
-    	thenAccept(c -> r.run());
-    	return this;
+        thenAccept(c -> r.run());
+        return this;
     }
-    
+
     /**
      * This is a blocking task that will wait on the result of the object.
      * @return
