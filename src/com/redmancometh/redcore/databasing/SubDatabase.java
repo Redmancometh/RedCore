@@ -166,18 +166,17 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      * @param e
      * @return
      */
-    public CompletableFuture<Void> saveObject(V e)
+    public SpecialFuture<?> saveObject(V e)
     {
-        return CompletableFuture.runAsync(() ->
+        return SpecialFuture.runAsync(() ->
         {
             try (Session session = factory.openSession())
             {
                 session.beginTransaction();
                 session.saveOrUpdate(e);
                 session.getTransaction().commit();
-
             }
-        }, RedCore.getInstance().getPool());
+        });
     }
 
     /**
@@ -186,13 +185,9 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      * @return
      * @throws ObjectNotPresentException
      */
-    public CompletableFuture<Void> saveAndPurge(V e, UUID uuid) throws ObjectNotPresentException
+    public SpecialFuture<?> saveAndPurge(V e, UUID uuid) throws ObjectNotPresentException
     {
-        return saveObject(e).thenRun(() -> cache.asMap().remove(uuid)).exceptionally((throwable) ->
-        {
-            throwable.printStackTrace();
-            return null;
-        });
+        return saveObject(e).thenRun(() -> cache.asMap().remove(uuid));
     }
 
     /**

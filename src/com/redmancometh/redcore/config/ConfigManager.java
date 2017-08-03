@@ -20,13 +20,14 @@ import org.bukkit.craftbukkit.libs.com.google.gson.TypeAdapter;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonReader;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonToken;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redmancometh.redcore.RedPlugin;
 
 public class ConfigManager<T>
 {
-    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).create();
+    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter()).create();
 
     private String configName;
     private T currentConfig;
@@ -162,9 +163,33 @@ public class ConfigManager<T>
         }
     }
 
+    private static class EntityTypeAdapter extends TypeAdapter<EntityType>
+    {
+        @Override
+        public void write(JsonWriter jsonWriter, EntityType material) throws IOException
+        {
+            if (material == null)
+            {
+                jsonWriter.nullValue();
+                return;
+            }
+            jsonWriter.value(material.toString());
+        }
+
+        @Override
+        public EntityType read(JsonReader jsonReader) throws IOException
+        {
+            if (jsonReader.peek() == JsonToken.NULL)
+            {
+                jsonReader.nextNull();
+                return null;
+            }
+            return EntityType.valueOf(jsonReader.nextString().toUpperCase().replace(" ", "_"));
+        }
+    }
+
     private static class MaterialAdapter extends TypeAdapter<Material>
     {
-
         @Override
         public void write(JsonWriter jsonWriter, Material material) throws IOException
         {
@@ -184,9 +209,10 @@ public class ConfigManager<T>
                 jsonReader.nextNull();
                 return null;
             }
-            return Material.valueOf(jsonReader.nextString().toUpperCase().replace(" ", "_"));
+            Material m = Material.getMaterial(jsonReader.nextString().toUpperCase().replace(" ", "_"));
+            if (m == null) m = Material.getMaterial(Integer.parseInt(jsonReader.nextString()));
+            return m;
         }
-
     }
 
 }

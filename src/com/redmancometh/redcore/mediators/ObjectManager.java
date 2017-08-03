@@ -1,7 +1,6 @@
 package com.redmancometh.redcore.mediators;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.bukkit.entity.Player;
 
 import com.redmancometh.redcore.Defaultable;
@@ -48,7 +47,7 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return getSubDB().getObject(uuid);
     }
 
-    public CompletableFuture<Void> save(T e)
+    public SpecialFuture<Void> save(T e)
     {
         return RedCore.getInstance().getMasterDB().getSubDBForType(type).saveObject(e);
     }
@@ -63,7 +62,7 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return getSubDB().getObject(uuid).thenAccept((record) -> getSubDB().saveObject(record));
     }
 
-    public CompletableFuture<Void> saveAndPurge(T e, UUID uuid)
+    public SpecialFuture<?> saveAndPurge(T e, UUID uuid)
     {
         try
         {
