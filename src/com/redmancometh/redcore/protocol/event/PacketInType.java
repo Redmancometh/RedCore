@@ -190,7 +190,7 @@ public enum PacketInType {
             wp.loadVanillaPacket(nmsPacket);
             return wp;
         } catch (Throwable e) {
-            SU.log(SU.pl, "§4[§cPacketAPI§4] §eError on wrapping §c" + name() + "§e out packet.");
+            SU.log(SU.pl(), "§4[§cPacketAPI§4] §eError on wrapping §c" + name() + "§e out packet.");
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }

@@ -139,7 +139,7 @@ public final class ProtocolImpl extends Protocol {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(final PlayerQuitEvent e) {
         final String pln = e.getPlayer().getName();
-        SU.sch.scheduleSyncDelayedTask(pl, () -> {
+        SU.sch.scheduleSyncDelayedTask(pl(), () -> {
             Player p = Bukkit.getPlayer(pln);
             if (p == null)
                 channelLookup.remove(pln);

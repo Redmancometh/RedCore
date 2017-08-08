@@ -56,7 +56,7 @@ public class SignGUI implements PacketInListener {
         tp.sendPacket(plr, new PacketPlayOutUpdateSign(bl, new ChatTag[]{
                 fromColoredText(initialLines[0]), fromColoredText(initialLines[1]),
                 fromColoredText(initialLines[2]), fromColoredText(initialLines[3])}));
-        tp.registerIncomingListener(pl, this, PacketInType.UpdateSign);
+        tp.registerIncomingListener(pl(), this, PacketInType.UpdateSign);
         tp.sendPacket(plr, new PacketPlayOutOpenSignEditor(bl));
     }
 
@@ -68,7 +68,7 @@ public class SignGUI implements PacketInListener {
             e.setCancelled(true);
             for (int i = 0; i < 4; ++i)
                 result[i] = packet.lines[i].toColoredString();
-            SU.sch.scheduleSyncDelayedTask(pl, () -> {
+            SU.sch.scheduleSyncDelayedTask(pl(), () -> {
                 try {
                     cancel();
                     Block b = plr.getWorld().getBlockAt(bl.x, bl.y, bl.z);

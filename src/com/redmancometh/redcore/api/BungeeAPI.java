@@ -29,7 +29,7 @@ public class BungeeAPI implements PluginMessageListener {
         out.writeUTF("BungeeCommand");
         out.writeUTF(StringUtils.join(players, ","));
         out.writeUTF(json);
-        p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         return true;
     }
 
@@ -38,6 +38,30 @@ public class BungeeAPI implements PluginMessageListener {
             return false;
         String json = JsonAPI.serialize(commands);
         return forwardToPlayer("CommandExecution", json.getBytes(), players);
+    }
+
+    public static boolean forwardToAllServer(String channel, byte[] message) {
+        if (!enabled)
+            return false;
+        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
+        if (pc.isEmpty())
+            return false;
+        Player p = pc.iterator().next();
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("Forward");
+        out.writeUTF("ALL");
+        out.writeUTF(channel);
+        out.writeShort(message.length);
+        out.write(message);
+        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
+        return true;
+    }
+
+    public static boolean executeServerCommands(String[] commands, String... servers) {
+        if (!enabled)
+            return false;
+        String json = JsonAPI.serialize(commands);
+        return forwardToServer("CommandExecution", json.getBytes(), servers);
     }
 
     public static boolean forwardToPlayer(String channel, byte[] message, String... players) {
@@ -54,33 +78,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF(channel);
             out.writeShort(message.length);
             out.write(message);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
-        }
-        return true;
-    }
-
-    public static boolean executeServerCommands(String[] commands, String... servers) {
-        if (!enabled)
-            return false;
-        String json = JsonAPI.serialize(commands);
-        return forwardToServer("CommandExecution", json.getBytes(), servers);
-    }
-
-    public static boolean forwardToServer(String channel, byte[] message, String... servers) {
-        if (!enabled)
-            return false;
-        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
-        if (pc.isEmpty())
-            return false;
-        Player p = pc.iterator().next();
-        for (String s : servers) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Forward");
-            out.writeUTF(s);
-            out.writeUTF(channel);
-            out.writeShort(message.length);
-            out.write(message);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -90,23 +88,6 @@ public class BungeeAPI implements PluginMessageListener {
             return false;
         String json = JsonAPI.serialize(commands);
         return forwardToServer("CommandExecution", json.getBytes(), servers);
-    }
-
-    public static boolean forwardToAllServer(String channel, byte[] message) {
-        if (!enabled)
-            return false;
-        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
-        if (pc.isEmpty())
-            return false;
-        Player p = pc.iterator().next();
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Forward");
-        out.writeUTF("ALL");
-        out.writeUTF(channel);
-        out.writeShort(message.length);
-        out.write(message);
-        p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
-        return true;
     }
 
     public static boolean forwardToPlayer(String channel, byte[] message, Iterable<String> players) {
@@ -123,7 +104,26 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF(channel);
             out.writeShort(message.length);
             out.write(message);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
+        }
+        return true;
+    }
+
+    public static boolean forwardToServer(String channel, byte[] message, String... servers) {
+        if (!enabled)
+            return false;
+        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
+        if (pc.isEmpty())
+            return false;
+        Player p = pc.iterator().next();
+        for (String s : servers) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("Forward");
+            out.writeUTF(s);
+            out.writeUTF(channel);
+            out.writeShort(message.length);
+            out.write(message);
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -140,7 +140,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("KickPlayer");
             out.writeUTF(s);
             out.writeUTF(message);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -157,7 +157,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("KickPlayer");
             out.writeUTF(s);
             out.writeUTF(message);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -171,7 +171,7 @@ public class BungeeAPI implements PluginMessageListener {
         Player p = pls.iterator().next();
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
-        p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
 
         return true;
     }
@@ -181,7 +181,7 @@ public class BungeeAPI implements PluginMessageListener {
         out.writeUTF("IP");
         byte[] data = out.toByteArray();
         for (Player p : players) {
-            p.sendPluginMessage(SU.pl, "BungeeCord", data);
+            p.sendPluginMessage(SU.pl(), "BungeeCord", data);
         }
     }
 
@@ -190,7 +190,7 @@ public class BungeeAPI implements PluginMessageListener {
         out.writeUTF("IP");
         byte[] data = out.toByteArray();
         for (Player p : players) {
-            p.sendPluginMessage(SU.pl, "BungeeCord", data);
+            p.sendPluginMessage(SU.pl(), "BungeeCord", data);
         }
     }
 
@@ -205,7 +205,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("PlayerCount");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -221,7 +221,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("PlayerCount");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -237,7 +237,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("PlayerList");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -253,7 +253,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("PlayerList");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -269,7 +269,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("ServerIP");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -285,7 +285,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("ServerIP");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -299,7 +299,7 @@ public class BungeeAPI implements PluginMessageListener {
         Player p = pls.iterator().next();
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServers");
-        p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
 
         return true;
     }
@@ -315,7 +315,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("UUIDOther");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -331,7 +331,7 @@ public class BungeeAPI implements PluginMessageListener {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("UUIDOther");
             out.writeUTF(s);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -341,7 +341,7 @@ public class BungeeAPI implements PluginMessageListener {
         out.writeUTF("Connect");
         out.writeUTF(server);
         for (Player p : players) {
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
     }
 
@@ -350,7 +350,7 @@ public class BungeeAPI implements PluginMessageListener {
         out.writeUTF("Connect");
         out.writeUTF(server);
         for (Player p : players) {
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
     }
 
@@ -366,7 +366,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("ConnectOther");
             out.writeUTF(s);
             out.writeUTF(server);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -383,7 +383,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("ConnectOther");
             out.writeUTF(s);
             out.writeUTF(server);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -400,7 +400,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("Message");
             out.writeUTF(s);
             out.writeUTF(msg);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -417,7 +417,7 @@ public class BungeeAPI implements PluginMessageListener {
             out.writeUTF("Message");
             out.writeUTF(s);
             out.writeUTF(msg);
-            p.sendPluginMessage(SU.pl, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
         }
         return true;
     }
@@ -433,7 +433,7 @@ public class BungeeAPI implements PluginMessageListener {
             switch (sub) {
                 case "CommandExecution":
                     final Command[] commands = JsonAPI.deserialize(in.readUTF(), Command[].class);
-                    SU.sch.scheduleSyncDelayedTask(SU.pl, () -> {
+                    SU.sch.scheduleSyncDelayedTask(SU.pl(), () -> {
                         for (Command c : commands) {
                             c.execute(player);
                         }

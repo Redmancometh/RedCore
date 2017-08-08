@@ -6,7 +6,7 @@ import com.redmancometh.redcore.api.VariableAPI;
 import com.redmancometh.redcore.commands.CustomCommandMap;
 import com.redmancometh.redcore.scoreboard.*;
 import com.redmancometh.redcore.sign.SignGUI;
-import com.redmancometh.redcore.spigotutils.TPSMeter;
+import com.redmancometh.redcore.spigotutils.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -18,7 +18,6 @@ import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.*;
 import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -26,12 +25,56 @@ import java.util.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.redmancometh.redcore.spigotutils.SU.*;
 
-public class SUListener extends JavaPlugin implements Listener, CommandExecutor {
+public class SUListener implements Listener, CommandExecutor {
+    public SUListener() {
+        SU.pl().getCommand("sl").setExecutor(this);
+    }
+
+    public static void onDisable() {
+        log(SU.pl(), "§4[§cShutdown§4]§e Collecting plugins depending on RedCore...");
+        ArrayList<Plugin> depend = new ArrayList<>();
+        for (Plugin p : pm.getPlugins()) {
+            PluginDescriptionFile pdf = p.getDescription();
+            if (pdf.getDepend() != null && pdf.getDepend().contains("RedCore") || pdf.getSoftDepend() != null && pdf.getSoftDepend().contains("RedCore"))
+                depend.add(p);
+        }
+        log(SU.pl(), "§4[§cShutdown§4]§e Unloading plugins depending on RedCore...");
+        for (Plugin p : depend) {
+            log(SU.pl(), "§4[§cShutdown§4]§e Unloading plugin §f" + p.getName() + "§e...");
+            unloadPlugin(p);
+        }
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping TPSMeter...");
+        TPSMeter.meter.cancel(true);
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping PacketAPI...");
+        try {
+            tp.close();
+        } catch (Throwable e) {
+            error(cs, e, "RedCore", "com.redmancometh");
+        }
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping AnimationAPI...");
+        AnimationAPI.stopRunningAnimations(SU.pl());
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping ScoreboardAPI...");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            PlayerBars pbs = ScoreboardAPI.sidebars.remove(p.getName());
+            for (ScoreboardBar sb : pbs.loaded)
+                sb.unload(p);
+            pbs = ScoreboardAPI.nametags.remove(p.getName());
+            for (ScoreboardBar sb : pbs.loaded)
+                sb.unload(p);
+            pbs = ScoreboardAPI.tabbars.remove(p.getName());
+            for (ScoreboardBar sb : pbs.loaded)
+                sb.unload(p);
+        }
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping CommandAPI...");
+        CustomCommandMap.unhook();
+        log(SU.pl(), "§4[§cShutdown§4]§a The RedCore has shutted down properly.");
+    }
+
     public boolean onCommand(final CommandSender sender, Command command, String label, String[] args) {
         try {
             Player plr = sender instanceof Player ? (Player) sender : null;
             String cmd = args.length == 0 ? "help" : args[0].toLowerCase();
-            if (!sender.hasPermission("RedCore.command." + cmd)) {
+            if (!sender.hasPermission("redcore.command." + cmd)) {
                 sender.sendMessage("§4§lAccess Denied.");
                 return true;
             }
@@ -98,46 +141,6 @@ public class SUListener extends JavaPlugin implements Listener, CommandExecutor 
         return true;
     }
 
-    public void onDisable() {
-        log(this, "§4[§cShutdown§4]§e Collecting plugins depending on RedCore...");
-        ArrayList<Plugin> depend = new ArrayList<>();
-        for (Plugin p : pm.getPlugins()) {
-            PluginDescriptionFile pdf = p.getDescription();
-            if (pdf.getDepend() != null && pdf.getDepend().contains("RedCore") || pdf.getSoftDepend() != null && pdf.getSoftDepend().contains("RedCore"))
-                depend.add(p);
-        }
-        log(this, "§4[§cShutdown§4]§e Unloading plugins depending on RedCore...");
-        for (Plugin p : depend) {
-            log(this, "§4[§cShutdown§4]§e Unloading plugin §f" + p.getName() + "§e...");
-            unloadPlugin(p);
-        }
-        log(this, "§4[§cShutdown§4]§e Stopping TPSMeter...");
-        TPSMeter.meter.cancel(true);
-        log(this, "§4[§cShutdown§4]§e Stopping PacketAPI...");
-        try {
-            tp.close();
-        } catch (Throwable e) {
-            error(cs, e, "RedCore", "com.redmancometh");
-        }
-        log(this, "§4[§cShutdown§4]§e Stopping AnimationAPI...");
-        AnimationAPI.stopRunningAnimations(this);
-        log(this, "§4[§cShutdown§4]§e Stopping ScoreboardAPI...");
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            PlayerBars pbs = ScoreboardAPI.sidebars.remove(p.getName());
-            for (ScoreboardBar sb : pbs.loaded)
-                sb.unload(p);
-            pbs = ScoreboardAPI.nametags.remove(p.getName());
-            for (ScoreboardBar sb : pbs.loaded)
-                sb.unload(p);
-            pbs = ScoreboardAPI.tabbars.remove(p.getName());
-            for (ScoreboardBar sb : pbs.loaded)
-                sb.unload(p);
-        }
-        log(this, "§4[§cShutdown§4]§e Stopping CommandAPI...");
-        CustomCommandMap.unhook();
-        log(this, "§4[§cShutdown§4]§a The RedCore has shutted down properly.");
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLeave(PlayerQuitEvent e) {
         Player plr = e.getPlayer();
@@ -167,7 +170,7 @@ public class SUListener extends JavaPlugin implements Listener, CommandExecutor 
     public void registerServiceEvent(ServiceRegisterEvent e) {
         RegisteredServiceProvider p = e.getProvider();
         String sn = p.getService().getName();
-        log(this, "Register service - " + sn);
+        log(SU.pl(), "Register service - " + sn);
         switch (sn) {
             case "net.milkbowl.vault.chat.Chat":
                 chat = (Chat) p.getProvider();
@@ -185,7 +188,7 @@ public class SUListener extends JavaPlugin implements Listener, CommandExecutor 
     public void unregisterServiceEvent(ServiceUnregisterEvent e) {
         RegisteredServiceProvider p = e.getProvider();
         String sn = p.getService().getName();
-        log(this, "Unregister service - " + sn);
+        log(SU.pl(), "Unregister service - " + sn);
         switch (sn) {
             case "net.milkbowl.vault.chat.Chat":
                 chat = null;

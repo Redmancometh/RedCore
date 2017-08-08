@@ -74,7 +74,7 @@ public final class SU {
     /**
      * RedCore instance
      */
-    public static RedCore pl;
+    private static RedCore pl;
     /**
      * The main instance of the PluginManager object.
      */
@@ -830,5 +830,9 @@ public final class SU {
         } catch (Throwable e) {
             error(cs, e, "RedCore", "com.redmancometh");
         }
+    }
+
+    public static RedCore pl() {
+        return pl;
     }
 }

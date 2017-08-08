@@ -101,7 +101,7 @@ public final class AnimationAPI {
                 String text = d.length <= 1 ? effect.getText() : d[1];
                 return effect.next(VariableAPI.fillVariables(text, plr, oArgs));
             }
-            SU.log(SU.pl, "The given " + name + " name (" + d[0] + ") is invalid " + name + " name in animation ");
+            SU.log(SU.pl(), "The given " + name + " name (" + d[0] + ") is invalid " + name + " name in animation ");
             return "?";
         }
     }

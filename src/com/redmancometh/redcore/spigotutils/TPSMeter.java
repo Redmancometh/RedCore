@@ -79,7 +79,7 @@ public class TPSMeter implements Runnable {
 
     public void start() {
         meter = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this, checkTime, checkTime, TimeUnit.MILLISECONDS);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(SU.pl, () -> ++ticks, 0, 1);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(SU.pl(), () -> ++ticks, 0, 1);
     }
 
 }

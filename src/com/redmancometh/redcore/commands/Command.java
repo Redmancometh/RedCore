@@ -352,7 +352,7 @@ public class Command implements StringSerializable {
             return false;
         if (delay < 0)
             return executeNow(sender, args);
-        SU.sch.scheduleSyncDelayedTask(pl, new DelayedCommandExecutor(this, sender, args), delay);
+        SU.sch.scheduleSyncDelayedTask(pl(), new DelayedCommandExecutor(this, sender, args), delay);
         return true;
     }
 

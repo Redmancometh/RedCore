@@ -3,3 +3,5 @@ main: com.redmancometh.redcore.RedCore
 version: 1.0
 load: STARTUP
 softdepend: [Vault,WorldEdit]
+commands:
+  sl:

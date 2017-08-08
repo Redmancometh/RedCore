@@ -509,7 +509,7 @@ public class ItemUtils {
                     meta.addEnchant(enc, Integer.valueOf(s[1]), true);
                 }
             } catch (Throwable e) {
-                log(SU.pl, "§cError on deserializing §eItemMeta§c data of item \"§f" + in + "§c\"");
+                log(SU.pl(), "§cError on deserializing §eItemMeta§c data of item \"§f" + in + "§c\"");
                 error(cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -526,7 +526,7 @@ public class ItemUtils {
                         bmeta.addPage(text);
                     }
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §eBookMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §eBookMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -550,7 +550,7 @@ public class ItemUtils {
                             bmeta.addPattern(new Pattern(DyeColor.valueOf(s[1].toUpperCase()), type));
                         }
                     } catch (Throwable e) {
-                        log(SU.pl, "§cError on deserializing §eBannerMeta§c data of item \"§f" + in + "§c\"");
+                        log(SU.pl(), "§cError on deserializing §eBannerMeta§c data of item \"§f" + in + "§c\"");
                         error(cs, e, "RedCore", "com.redmancometh");
                     }
                 }
@@ -567,7 +567,7 @@ public class ItemUtils {
                             bmeta.setColor(Color.fromRGB(Integer.parseInt(color[0], 16)));
                     }
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §eLeatherArmorMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §eLeatherArmorMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -607,7 +607,7 @@ public class ItemUtils {
 
                     }
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §eFireworkMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §eFireworkMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -627,7 +627,7 @@ public class ItemUtils {
                         }
                     }
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §ePotionMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §ePotionMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -639,7 +639,7 @@ public class ItemUtils {
                         bmeta.setOwner(s[1]);
                     }
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §eSkullMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §eSkullMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -652,7 +652,7 @@ public class ItemUtils {
                     if (enc != null)
                         bmeta.addStoredEnchant(enc, Integer.valueOf(s[1]), true);
                 } catch (Throwable e) {
-                    log(SU.pl, "§cError on deserializing §eEnchantmentStorageMeta§c data of item \"§f" + in + "§c\"");
+                    log(SU.pl(), "§cError on deserializing §eEnchantmentStorageMeta§c data of item \"§f" + in + "§c\"");
                     error(cs, e, "RedCore", "com.redmancometh");
                 }
             }

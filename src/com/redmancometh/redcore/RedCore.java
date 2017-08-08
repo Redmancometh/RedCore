@@ -2,6 +2,7 @@ package com.redmancometh.redcore;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.redmancometh.redcore.databasing.MasterDatabase;
+import com.redmancometh.redcore.listener.SUListener;
 import com.redmancometh.redcore.spigotutils.SU;
 import com.redmancometh.redcore.tasks.SlowPollerTask;
 import org.bukkit.Bukkit;
@@ -10,8 +11,7 @@ import org.hibernate.SessionFactory;
 
 import java.util.concurrent.*;
 
-public class RedCore extends JavaPlugin
-{
+public class RedCore extends JavaPlugin {
     private SessionFactory sessionFactory;
     private Executor pool = Executors.newFixedThreadPool(8, new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());
     private RedPlugins getPlugins;
@@ -23,71 +23,60 @@ public class RedCore extends JavaPlugin
         SU.init(this);
     }
 
+    public static RedCore getInstance() {
+        return (RedCore) Bukkit.getPluginManager().getPlugin("RedCore");
+    }
+
+    public MasterDatabase getMasterDB() {
+        return masterDB;
+    }
+
+    public void setMasterDB(MasterDatabase masterDB) {
+        this.masterDB = masterDB;
+    }
+
+    public RedPlugins getPluginManager() {
+        return getPlugins;
+    }
+
+    public void setPluginManager(RedPlugins pluginManager) {
+        this.getPlugins = pluginManager;
+    }
+
+    public Executor getPool() {
+        return pool;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public SlowPollerTask getSlowPoller() {
+        return slowPoller;
+    }
+
+    public void setSlowPoller(SlowPollerTask slowPoller) {
+        this.slowPoller = slowPoller;
+    }
+
     @Override
-    public void onEnable()
-    {
+    public void onDisable() {
+        SUListener.onDisable();
+        slowPoller.stopTask();
+        super.onDisable();
+    }
+
+    @Override
+    public void onEnable() {
         SU.sch.scheduleSyncDelayedTask(this, SU::postInit);
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());
         slowPoller = new SlowPollerTask();
         slowPoller.startTask();
-    }
-
-    @Override
-    public void onDisable()
-    {
-        slowPoller.stopTask();
-        super.onDisable();
-    }
-
-    public SessionFactory getSessionFactory()
-    {
-        return sessionFactory;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public Executor getPool()
-    {
-        return pool;
-    }
-
-    public static RedCore getInstance()
-    {
-        return (RedCore) Bukkit.getPluginManager().getPlugin("RedCore");
-    }
-
-    public MasterDatabase getMasterDB()
-    {
-        return masterDB;
-    }
-
-    public void setMasterDB(MasterDatabase masterDB)
-    {
-        this.masterDB = masterDB;
-    }
-
-    public RedPlugins getPluginManager()
-    {
-        return getPlugins;
-    }
-
-    public void setPluginManager(RedPlugins pluginManager)
-    {
-        this.getPlugins = pluginManager;
-    }
-
-    public SlowPollerTask getSlowPoller()
-    {
-        return slowPoller;
-    }
-
-    public void setSlowPoller(SlowPollerTask slowPoller)
-    {
-        this.slowPoller = slowPoller;
     }
 
 }
