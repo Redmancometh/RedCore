@@ -78,5 +78,4 @@ public class RedCore extends JavaPlugin {
         slowPoller = new SlowPollerTask();
         slowPoller.startTask();
     }
-
 }

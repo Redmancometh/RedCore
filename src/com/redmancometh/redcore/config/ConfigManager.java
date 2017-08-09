@@ -2,6 +2,8 @@ package com.redmancometh.redcore.config;
 
 import com.redmancometh.redcore.RedPlugin;
 import com.redmancometh.redcore.protocol.Reflection;
+import com.redmancometh.redcore.util.StreamUtils;
+import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.libs.com.google.gson.*;
 import org.bukkit.craftbukkit.libs.com.google.gson.stream.*;
@@ -11,11 +13,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.lang.reflect.*;
 
+@Getter
 public class ConfigManager<T> {
-    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
+    private static Gson originalGson = new Gson();
+    private static Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
             .registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
             .registerTypeHierarchyAdapter(Location.class, new LocationAdapter())
+            .registerTypeHierarchyAdapter(ItemWrapper.class, (JsonDeserializer<ItemWrapper>) (el, type, context) -> {
+                if (el instanceof JsonPrimitive)
+                    return new ItemWrapper(el.getAsString());
+                return originalGson.fromJson(el, type);
+            })
             .registerTypeHierarchyAdapter(StringSerializable.class, (JsonSerializer)
                     (o, type, jsonSerializationContext) -> new JsonPrimitive(o.toString()))
             .registerTypeHierarchyAdapter(StringSerializable.class, (JsonDeserializer<StringSerializable>) (je, type, cont)
@@ -50,7 +59,6 @@ public class ConfigManager<T> {
                     System.out.println("\nValue: " + fieldValue);
                 } catch (Throwable t) {
                     System.out.println("Field: " + f.getName() + " was unable to be retrieved!");
-                    continue;
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
@@ -62,7 +70,7 @@ public class ConfigManager<T> {
         try {
             Method m = plugin.getClass().getDeclaredMethod("getCfg");
             m.setAccessible(true);
-            Object config = m.invoke(null, new Object[0]);
+            Object config = m.invoke(null);
             return (ConfigManager) config;
         } catch (SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             System.out.println("Need a static or instanced getCfg() method attached to this object to use this!");
@@ -89,10 +97,9 @@ public class ConfigManager<T> {
     }
 
     public void reload() {
-        try (FileInputStream fileIn = new FileInputStream(configFile)) {
-            try (InputStreamReader in = new InputStreamReader(fileIn)) {
-                this.currentConfig = gson.fromJson(in, confClass);
-            }
+        try (FileInputStream is = new FileInputStream(configFile)) {
+            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "§$1");
+            this.currentConfig = gson.fromJson(s, confClass);
         } catch (IOException e) {
             e.printStackTrace();
         }

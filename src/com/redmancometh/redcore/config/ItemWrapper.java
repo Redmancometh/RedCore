@@ -1,7 +1,7 @@
 package com.redmancometh.redcore.config;
 
 import com.google.gson.Gson;
-import com.redmancometh.redcore.spigotutils.SU;
+import com.redmancometh.redcore.spigotutils.*;
 import com.redmancometh.redcore.util.ItemUtil;
 import lombok.Data;
 import org.bukkit.*;
@@ -27,6 +27,15 @@ public class ItemWrapper {
     private Material material;
     private List<String> pages;
     private List<Pattern> patterns;
+
+    /**
+     * Constructs an item from String
+     *
+     * @param in - The input item String
+     */
+    public ItemWrapper(String in) {
+        this(ItemUtils.stringToItemStack(in));
+    }
 
     /**
      * Constructs a new ItemWrapper from an ItemStack
