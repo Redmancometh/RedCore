@@ -12,18 +12,21 @@ public class PacketPlayOutOpenWindow
     public String type;
     public int windowId;
 
-    public PacketPlayOutOpenWindow() {
+    public PacketPlayOutOpenWindow()
+    {
 
     }
 
-    public PacketPlayOutOpenWindow(int windowId, String type, ChatTag title, int slots) {
+    public PacketPlayOutOpenWindow(int windowId, String type, ChatTag title, int slots)
+    {
         this.windowId = windowId;
         this.type = type;
         this.title = title;
         this.slots = slots;
     }
 
-    public PacketPlayOutOpenWindow(int windowId, String type, ChatTag title, int slots, int entityId) {
+    public PacketPlayOutOpenWindow(int windowId, String type, ChatTag title, int slots, int entityId)
+    {
         this.windowId = windowId;
         this.type = type;
         this.title = title;
@@ -32,7 +35,8 @@ public class PacketPlayOutOpenWindow
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] o = PacketOutType.OpenWindow.getPacketData(packet);
         windowId = (Integer) o[0];
         type = (String) o[1];
@@ -42,7 +46,8 @@ public class PacketPlayOutOpenWindow
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.OpenWindow.newPacket(windowId, type, title.toICBC(), slots, entityId);
     }
 }

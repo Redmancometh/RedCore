@@ -4,18 +4,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface QuadFunction<T, U, V, X, R>
-{
-
-    /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @return the function result
-     */
-    R apply(T t, U u, V v, X x);
+public interface QuadFunction<T, U, V, X, R> {
 
     /**
      * Returns a composed function that first applies this function to
@@ -35,4 +24,14 @@ public interface QuadFunction<T, U, V, X, R>
         Objects.requireNonNull(after);
         return (T t, U u, V v, X x) -> after.apply(apply(t, u, v, x));
     }
+
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @param v the third function argument
+     * @return the function result
+     */
+    R apply(T t, U u, V v, X x);
 }

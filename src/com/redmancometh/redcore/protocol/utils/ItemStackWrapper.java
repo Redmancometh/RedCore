@@ -47,14 +47,17 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
 
     public NBTCompound nbtData = new NBTCompound();
 
-    public ItemStackWrapper() {
+    public ItemStackWrapper()
+    {
     }
 
-    public ItemStackWrapper(ItemStack is) {
+    public ItemStackWrapper(ItemStack is)
+    {
         loadFromBukkitStack(is);
     }
 
-    public void loadFromBukkitStack(ItemStack is) {
+    public void loadFromBukkitStack(ItemStack is)
+    {
         try {
             if (is != null) {
                 Object nms = nmsCopy.invoke(null, is);
@@ -66,11 +69,13 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public ItemStackWrapper(Object vanillaStack) {
+    public ItemStackWrapper(Object vanillaStack)
+    {
         loadFromVanillaStack(vanillaStack);
     }
 
-    public void loadFromVanillaStack(Object is) {
+    public void loadFromVanillaStack(Object is)
+    {
         try {
             if (is != null)
                 nbtData.loadFromNMS(saveStack.invoke(is, new NBTCompound().toNMS()));
@@ -79,15 +84,18 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public byte getCount() {
+    public byte getCount()
+    {
         return (byte) ((NBTPrimitive) nbtData.map.get("Count")).data;
     }
 
-    public void setCount(byte count) {
+    public void setCount(byte count)
+    {
         nbtData.map.put("Count", new NBTPrimitive(count));
     }
 
-    public short getDamage() {
+    public short getDamage()
+    {
         try {
             return (Short) ((NBTPrimitive) nbtData.map.get("Damage")).data;
         } catch (Throwable e) {
@@ -96,15 +104,18 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public void setDamage(short damage) {
+    public void setDamage(short damage)
+    {
         nbtData.map.put("Damage", new NBTPrimitive(damage));
     }
 
-    public int getNumericId() {
+    public int getNumericId()
+    {
         return getType().getId();
     }
 
-    public void setNumericId(int newId) {
+    public void setNumericId(int newId)
+    {
         try {
             nbtData.map.put("id", new NBTPrimitive(itemNames.get(newId)));
         } catch (Throwable e) {
@@ -112,7 +123,8 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public Material getType() {
+    public Material getType()
+    {
         try {
             return (Material) getType.invoke(cmnObj, getId());
         } catch (Throwable e) {
@@ -121,29 +133,35 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public String getId() {
+    public String getId()
+    {
         if (nbtData.map.get("id") == null)
             return "minecraft:air";
         return (String) ((NBTPrimitive) nbtData.map.get("id")).data;
     }
 
-    public void setId(String newId) {
+    public void setId(String newId)
+    {
         nbtData.map.put("id", new NBTPrimitive(newId));
     }
 
-    public boolean hasMetaData() {
+    public boolean hasMetaData()
+    {
         return nbtData.map.containsKey("tag");
     }
 
-    public boolean isUnbreakable() {
+    public boolean isUnbreakable()
+    {
         return getMetaData().getBoolean("Unbreakable");
     }
 
-    public NBTCompound getMetaData() {
+    public NBTCompound getMetaData()
+    {
         return nbtData.getCompound("tag");
     }
 
-    public void setUnbreakable(boolean unbreakable) {
+    public void setUnbreakable(boolean unbreakable)
+    {
         if (unbreakable) {
             getMetaData().map.put("Unbreakable", new NBTPrimitive(Byte.valueOf((byte) 1)));
         } else {
@@ -151,11 +169,13 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         }
     }
 
-    public void removeMetaData() {
+    public void removeMetaData()
+    {
         nbtData.map.remove("tag");
     }
 
-    public ItemStack toBukkitStack() {
+    public ItemStack toBukkitStack()
+    {
         try {
             return (ItemStack) bukkitStack.newInstance(toNMS());
         } catch (Throwable e) {
@@ -165,7 +185,8 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return createStack.invoke(null, nbtData.toNMS());
         } catch (Throwable e) {
@@ -175,7 +196,8 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return nbtData.toString();
     }
 }

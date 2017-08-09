@@ -1,31 +1,24 @@
 package com.redmancometh.redcore.mediators;
 
-import java.util.UUID;
-import org.bukkit.entity.Player;
-
-import com.redmancometh.redcore.Defaultable;
-import com.redmancometh.redcore.RedCore;
+import com.redmancometh.redcore.*;
 import com.redmancometh.redcore.databasing.SubDatabase;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 import com.redmancometh.redcore.util.SpecialFuture;
+import org.bukkit.entity.Player;
 
-public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T>
-{
+import java.util.UUID;
+
+public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T> {
     private final Class<T> type;
-
-    public Class<T> getType()
-    {
-        return type;
-    }
 
     public ObjectManager(Class<T> type)
     {
         this.type = type;
     }
 
-    public void insertObject(UUID key, T value)
+    public void delete(T e)
     {
-        getSubDB().insertObject(key, value);
+        getSubDB().deleteObject(e);
     }
 
     public T getBlocking(UUID key)
@@ -35,6 +28,7 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
 
     /**
      * Don't use this if you can avoid.
+     *
      * @return
      */
     public SubDatabase<UUID, T> getSubDB()
@@ -42,9 +36,25 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return RedCore.getInstance().getMasterDB().getSubDBForType(type);
     }
 
+    @Override
+    public ObjectManager<T> getThis()
+    {
+        return this;
+    }
+
+    public Class<T> getType()
+    {
+        return type;
+    }
+
     public SpecialFuture<T> getRecord(UUID uuid)
     {
         return getSubDB().getObject(uuid);
+    }
+
+    public void insertObject(UUID key, T value)
+    {
+        getSubDB().insertObject(key, value);
     }
 
     public SpecialFuture<Void> save(T e)
@@ -62,43 +72,26 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
         return getSubDB().getObject(uuid).thenAccept((record) -> getSubDB().saveObject(record));
     }
 
-    public SpecialFuture<?> saveAndPurge(T e, UUID uuid)
-    {
-        try
-        {
-            return getSubDB().saveAndPurge(e, uuid);
-        }
-        catch (ObjectNotPresentException ex)
-        {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    public void delete(T e)
-    {
-        getSubDB().deleteObject(e);
-    }
-
     public SpecialFuture<T> saveAndPurge(Player p)
     {
         UUID uuid = p.getUniqueId();
         return getSubDB().getObject(uuid).thenAccept((record) ->
         {
-            try
-            {
+            try {
                 getSubDB().saveAndPurge(record, uuid);
-            }
-            catch (ObjectNotPresentException e)
-            {
+            } catch (ObjectNotPresentException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    @Override
-    public ObjectManager<T> getThis()
+    public SpecialFuture<?> saveAndPurge(T e, UUID uuid)
     {
-        return this;
+        try {
+            return getSubDB().saveAndPurge(e, uuid);
+        } catch (ObjectNotPresentException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

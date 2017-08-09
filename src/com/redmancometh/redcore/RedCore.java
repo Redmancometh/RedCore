@@ -12,66 +12,79 @@ import org.hibernate.SessionFactory;
 import java.util.concurrent.*;
 
 public class RedCore extends JavaPlugin {
-    private SessionFactory sessionFactory;
-    private Executor pool = Executors.newFixedThreadPool(8, new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());
     private RedPlugins getPlugins;
     private MasterDatabase masterDB;
+    private Executor pool = Executors.newFixedThreadPool(8, new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());
+    private SessionFactory sessionFactory;
     private SlowPollerTask slowPoller;
 
-    @Override
-    public void onLoad() {
-        SU.init(this);
-    }
-
-    public static RedCore getInstance() {
+    public static RedCore getInstance()
+    {
         return (RedCore) Bukkit.getPluginManager().getPlugin("RedCore");
     }
 
-    public MasterDatabase getMasterDB() {
+    public MasterDatabase getMasterDB()
+    {
         return masterDB;
     }
 
-    public void setMasterDB(MasterDatabase masterDB) {
+    public void setMasterDB(MasterDatabase masterDB)
+    {
         this.masterDB = masterDB;
     }
 
-    public RedPlugins getPluginManager() {
+    public RedPlugins getPluginManager()
+    {
         return getPlugins;
     }
 
-    public void setPluginManager(RedPlugins pluginManager) {
+    public void setPluginManager(RedPlugins pluginManager)
+    {
         this.getPlugins = pluginManager;
     }
 
-    public Executor getPool() {
+    public Executor getPool()
+    {
         return pool;
     }
 
-    public SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory()
+    {
         return sessionFactory;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
+    public void setSessionFactory(SessionFactory sessionFactory)
+    {
         this.sessionFactory = sessionFactory;
     }
 
-    public SlowPollerTask getSlowPoller() {
+    public SlowPollerTask getSlowPoller()
+    {
         return slowPoller;
     }
 
-    public void setSlowPoller(SlowPollerTask slowPoller) {
+    public void setSlowPoller(SlowPollerTask slowPoller)
+    {
         this.slowPoller = slowPoller;
     }
 
     @Override
-    public void onDisable() {
+    public void onLoad()
+    {
+        SU.init(this);
+    }
+
+    @Override
+    public void onDisable()
+    {
         SUListener.onDisable();
         slowPoller.stopTask();
         super.onDisable();
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         SU.sch.scheduleSyncDelayedTask(this, SU::postInit);
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());

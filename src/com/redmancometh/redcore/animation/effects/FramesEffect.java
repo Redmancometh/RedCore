@@ -17,7 +17,8 @@ public class FramesEffect implements CustomEffect {
     public transient int state = -1;
 
     @Override
-    public CustomEffect clone() {
+    public CustomEffect clone()
+    {
         FramesEffect fe = new FramesEffect();
         fe.frameTime = frameTime;
         fe.state = state;
@@ -32,16 +33,19 @@ public class FramesEffect implements CustomEffect {
     }
 
     @Override
-    public String getText() {
+    public String getText()
+    {
         return f != null ? f.text : "";
     }
 
     @Override
-    public void setText(String newText) {
+    public void setText(String newText)
+    {
     }
 
     @Override
-    public String next(String in) {
+    public String next(String in)
+    {
         if (repeat == 0) {
             if (delays == null || !delays.hasNext()) {
                 state = random ? SU.rand.nextInt(frames.size()) : (state + 1) % frames.size();

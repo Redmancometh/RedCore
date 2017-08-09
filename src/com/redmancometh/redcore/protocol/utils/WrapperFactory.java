@@ -15,7 +15,8 @@ public class WrapperFactory {
     public static final HashMap<Class, Method> enumWrap = new HashMap<>();
     public static final HashMap<Class, Constructor> wrap = new HashMap<>();
 
-    public static void init() {
+    public static void init()
+    {
         try {
             wrap.put(Reflection.getNMSClass("BaseBlockPosition"), BlockLocation.class.getConstructor(Object.class));
             wrap.put(Reflection.getNMSClass("DataWatcher"), DataWatcher.class.getConstructor(Object.class));
@@ -31,7 +32,8 @@ public class WrapperFactory {
         }
     }
 
-    public static Object unwrap(Object o) {
+    public static Object unwrap(Object o)
+    {
         if (o == null)
             return null;
         if (o instanceof WrappedData)
@@ -39,7 +41,8 @@ public class WrapperFactory {
         return o;
     }
 
-    public static Object wrap(Object o) {
+    public static Object wrap(Object o)
+    {
         if (o == null)
             return null;
         Class cl = Primitives.unwrap(o.getClass());

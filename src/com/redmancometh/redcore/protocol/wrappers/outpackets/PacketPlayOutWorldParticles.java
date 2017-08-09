@@ -15,11 +15,13 @@ public class PacketPlayOutWorldParticles extends WrappedPacket {
     public String particle;
     public float x, y, z, offsetX, offsetY, offsetZ, data;
 
-    public PacketPlayOutWorldParticles() {
+    public PacketPlayOutWorldParticles()
+    {
 
     }
 
-    public PacketPlayOutWorldParticles(String particle, float x, float y, float z, float offsetX, float offsetY, float offsetZ, int count, float data, int[] extraData, boolean longDistance) {
+    public PacketPlayOutWorldParticles(String particle, float x, float y, float z, float offsetX, float offsetY, float offsetZ, int count, float data, int[] extraData, boolean longDistance)
+    {
         this.particle = particle;
         this.count = count;
         this.extraData = extraData;
@@ -33,19 +35,9 @@ public class PacketPlayOutWorldParticles extends WrappedPacket {
         this.data = data;
     }
 
-
     @Override
-    public Object getVanillaPacket() {
-        try {
-            return PacketOutType.WorldParticles.newPacket(enumParticleValueOf.invoke(null, particle), x, y, z, offsetX, offsetY, offsetZ, data, count, longDistance, extraData);
-        } catch (Throwable e) {
-            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-            return null;
-        }
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.WorldParticles.getPacketData(packet);
         particle = d[0].toString();
         x = (float) d[1];
@@ -58,5 +50,16 @@ public class PacketPlayOutWorldParticles extends WrappedPacket {
         count = (int) d[8];
         longDistance = (boolean) d[9];
         extraData = (int[]) d[10];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        try {
+            return PacketOutType.WorldParticles.newPacket(enumParticleValueOf.invoke(null, particle), x, y, z, offsetX, offsetY, offsetZ, data, count, longDistance, extraData);
+        } catch (Throwable e) {
+            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
+            return null;
+        }
     }
 }

@@ -16,41 +16,47 @@ public class PacketPlayOutPlayerInfo extends WrappedPacket {
     public PlayerInfoAction action = PlayerInfoAction.ADD_PLAYER;
     public ArrayList<PlayerInfoData> players = new ArrayList<>();
 
-    public PacketPlayOutPlayerInfo() {
+    public PacketPlayOutPlayerInfo()
+    {
 
     }
 
-    public PacketPlayOutPlayerInfo(PlayerInfoAction action, PlayerInfoData... pls) {
+    public PacketPlayOutPlayerInfo(PlayerInfoAction action, PlayerInfoData... pls)
+    {
         this.action = action;
         for (PlayerInfoData pid : pls)
             players.add(pid);
     }
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.PlayerInfo.newPacket(action.toNMS(), toVanillaDataList());
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.PlayerInfo.getPacketData(packet);
         action = PlayerInfoAction.valueOf(d[0].toString());
         loadVanillaDataList((List) d[1]);
     }
 
-    private void loadVanillaDataList(List l) {
-        players = new ArrayList<>();
-        for (Object o : l) {
-            players.add(new PlayerInfoData(o));
-        }
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.PlayerInfo.newPacket(action.toNMS(), toVanillaDataList());
     }
 
-    private List toVanillaDataList() {
+    private List toVanillaDataList()
+    {
         List l = new ArrayList();
         for (PlayerInfoData p : players) {
             l.add(p.toNMS());
         }
         return l;
+    }
+
+    private void loadVanillaDataList(List l)
+    {
+        players = new ArrayList<>();
+        for (Object o : l) {
+            players.add(new PlayerInfoData(o));
+        }
     }
 
     public enum PlayerInfoAction implements WrappedData {
@@ -62,7 +68,8 @@ public class PacketPlayOutPlayerInfo extends WrappedPacket {
         private static final Method valueOf = Reflection.getMethod(
                 Reflection.getNMSClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction"), "valueOf", String.class);
 
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {
@@ -85,18 +92,21 @@ public class PacketPlayOutPlayerInfo extends WrappedPacket {
         public GameProfile gameProfile;
         public int ping;
 
-        public PlayerInfoData() {
+        public PlayerInfoData()
+        {
 
         }
 
-        public PlayerInfoData(int ping, GameMode gm, GameProfile gp, ChatTag dn) {
+        public PlayerInfoData(int ping, GameMode gm, GameProfile gp, ChatTag dn)
+        {
             this.ping = ping;
             gameMode = gm;
             gameProfile = gp;
             displayName = dn;
         }
 
-        public PlayerInfoData(Object vd) {
+        public PlayerInfoData(Object vd)
+        {
             try {
                 ping = pingF.getInt(vd);
                 Object nmsGm = gmF.get(vd);
@@ -108,7 +118,8 @@ public class PacketPlayOutPlayerInfo extends WrappedPacket {
             }
         }
 
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return vanillaConst.newInstance(null, gameProfile.toNMS(), ping,
                         WorldType.toVanillaGameMode(gameMode), displayName == null ? null : displayName.toICBC());

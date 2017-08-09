@@ -13,17 +13,20 @@ public class PacketPlayOutBlockChange extends WrappedPacket {
     public int blockId;
     public BlockLocation loc;
 
-    public PacketPlayOutBlockChange() {
+    public PacketPlayOutBlockChange()
+    {
     }
 
-    public PacketPlayOutBlockChange(BlockLocation loc, int blockId, byte blockData) {
+    public PacketPlayOutBlockChange(BlockLocation loc, int blockId, byte blockData)
+    {
         this.loc = loc;
         this.blockId = blockId;
         this.blockData = blockData;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.BlockChange.getPacketData(packet);
         loc = new BlockLocation(d[0]);
         int id = BlockUtils.getCombinedId(d[1]);
@@ -32,7 +35,8 @@ public class PacketPlayOutBlockChange extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.BlockChange.newPacket(loc.toNMS(), BlockUtils.getNMSBlock(blockId, blockData));
     }
 }

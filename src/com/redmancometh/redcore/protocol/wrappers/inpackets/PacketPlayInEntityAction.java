@@ -14,16 +14,18 @@ public class PacketPlayInEntityAction
     public int jumpBoost;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.EntityAction.newPacket(entityId, action.toVanillaPlayerAction(), jumpBoost);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketInType.EntityAction.getPacketData(packet);
         entityId = (Integer) d[0];
         action = PlayerAction.valueOf(d[1].toString());
         jumpBoost = (Integer) d[2];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketInType.EntityAction.newPacket(entityId, action.toVanillaPlayerAction(), jumpBoost);
     }
 
     public enum PlayerAction {
@@ -41,10 +43,12 @@ public class PacketPlayInEntityAction
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInEntityAction$EnumPlayerAction"), "valueOf", String.class);
         }
 
-        PlayerAction() {
+        PlayerAction()
+        {
         }
 
-        public Object toVanillaPlayerAction() {
+        public Object toVanillaPlayerAction()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

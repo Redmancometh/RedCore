@@ -23,7 +23,8 @@ public abstract class ScoreboardBar {
      * @param teamNamePrefix - The prefix of the Scoreboard team packets
      * @param displaySlot    - The slot of this ScoreboardBar (0: list, 1: sidebar, 2: below name)
      */
-    public ScoreboardBar(String barname, String teamNamePrefix, int displaySlot) {
+    public ScoreboardBar(String barname, String teamNamePrefix, int displaySlot)
+    {
         this.currentData = new BarData(barname, barname, INTEGER, true);
         this.teamNamePrefix = teamNamePrefix;
         showPacket = PacketOutType.ScoreboardDisplayObjective.newPacket(displaySlot, barname);
@@ -36,7 +37,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar was not active for the given player before
      */
-    public boolean activate(Player plr) {
+    public boolean activate(Player plr)
+    {
         if (active.containsKey(plr.getName()))
             return false;
         BarData bd = loaded.get(plr.getName());
@@ -57,7 +59,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar was active for the given player before
      */
-    public boolean deActivate(Player plr) {
+    public boolean deActivate(Player plr)
+    {
         return active.remove(plr.getName()) != null;
     }
 
@@ -67,7 +70,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target player
      * @return True if this ScoreboardBar was loaded for the player before
      */
-    public boolean drop(Player plr) {
+    public boolean drop(Player plr)
+    {
         if (loaded.remove(plr.getName()) == null)
             return false;
         active.remove(plr.getName());
@@ -79,7 +83,8 @@ public abstract class ScoreboardBar {
      *
      * @return The scoreboards display mode
      */
-    public ScoreboardDisplayMode getDisplayMode() {
+    public ScoreboardDisplayMode getDisplayMode()
+    {
         return currentData.displayMode;
     }
 
@@ -88,7 +93,8 @@ public abstract class ScoreboardBar {
      *
      * @param mode - The new displaymode
      */
-    public void setDisplayMode(ScoreboardDisplayMode mode) {
+    public void setDisplayMode(ScoreboardDisplayMode mode)
+    {
         if (currentData.displayMode == mode)
             return;
         currentData.displayMode = mode;
@@ -99,7 +105,8 @@ public abstract class ScoreboardBar {
      *
      * @return - The title of this scoreboard bar
      */
-    public String getTitle() {
+    public String getTitle()
+    {
         return currentData.title;
     }
 
@@ -108,7 +115,8 @@ public abstract class ScoreboardBar {
      *
      * @param newtitle - The new title
      */
-    public void setTitle(String newtitle) {
+    public void setTitle(String newtitle)
+    {
         newtitle = SU.setLength(newtitle, 32);
         if (currentData.title.equals(newtitle))
             return;
@@ -116,7 +124,8 @@ public abstract class ScoreboardBar {
         update();
     }
 
-    public void update() {
+    public void update()
+    {
         Iterator<Map.Entry<String, BarData>> it = active.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, BarData> e = it.next();
@@ -139,7 +148,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar is active for the given player
      */
-    public boolean isActive(Player plr) {
+    public boolean isActive(Player plr)
+    {
         return active.containsKey(plr.getName());
     }
 
@@ -149,7 +159,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar is already loaded for the given player
      */
-    public boolean isLoaded(Player plr) {
+    public boolean isLoaded(Player plr)
+    {
         return loaded.containsKey(plr.getName());
     }
 
@@ -158,7 +169,8 @@ public abstract class ScoreboardBar {
      *
      * @return The scoreboard bars visibility
      */
-    public boolean isVisible() {
+    public boolean isVisible()
+    {
         return currentData.visible;
     }
 
@@ -167,7 +179,8 @@ public abstract class ScoreboardBar {
      *
      * @param visible - The new visibility state
      */
-    public void setVisible(boolean visible) {
+    public void setVisible(boolean visible)
+    {
         if (visible != currentData.visible) {
             currentData.visible = visible;
             update();
@@ -180,7 +193,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar hasn't been loaded for the player before
      */
-    public boolean load(Player plr) {
+    public boolean load(Player plr)
+    {
         if (loaded.containsKey(plr.getName()))
             return false;
         BarData bd = currentData.clone();
@@ -198,7 +212,8 @@ public abstract class ScoreboardBar {
      * @param plr - Target Player
      * @return True if this ScoreboardBar has been loaded for the player before
      */
-    public boolean unload(Player plr) {
+    public boolean unload(Player plr)
+    {
         BarData bd = loaded.remove(plr.getName());
         if (bd == null)
             return false;

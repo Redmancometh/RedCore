@@ -8,12 +8,14 @@ public class PacketPlayInChat
     public String message;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         message = (String) PacketInType.Chat.getPacketData(packet)[0];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.Chat.newPacket(message);
     }
 }

@@ -36,7 +36,8 @@ public class BlockUtils {
         toLegacyDataM = getMethod(blCl, "toLegacyData", getNMSClass("IBlockData"));
     }
 
-    public static int getCombinedId(Object nmsBlock) {
+    public static int getCombinedId(Object nmsBlock)
+    {
         try {
             return (int) getCombinedIdM.invoke(null, nmsBlock);
         } catch (Throwable e) {
@@ -45,12 +46,14 @@ public class BlockUtils {
         return 0;
     }
 
-    public static Vector getDirection(float yaw, float pitch) {
+    public static Vector getDirection(float yaw, float pitch)
+    {
         double xz = cos(toRadians(pitch));
         return new Vector(-xz * sin(toRadians(yaw)), -sin(toRadians(pitch)), xz * cos(toRadians(yaw)));
     }
 
-    public static Object getNMSBlock(int id, byte data) {
+    public static Object getNMSBlock(int id, byte data)
+    {
         try {
             return fromLegacyDataM.invoke(getBlockByIdM.invoke(null, id), (int) data);
         } catch (Throwable e) {
@@ -59,7 +62,8 @@ public class BlockUtils {
         return null;
     }
 
-    public static byte getNMSBlockData(Object nmsBlock) {
+    public static byte getNMSBlockData(Object nmsBlock)
+    {
         try {
             Integer id = nmsBlockIDMap.get(nmsBlock);
             if (id == null) {
@@ -73,12 +77,14 @@ public class BlockUtils {
         }
     }
 
-    public static int getNMSBlockId(Object nmsBlock) {
+    public static int getNMSBlockId(Object nmsBlock)
+    {
         Integer i = nmsBlockIDMap.get(nmsBlock);
         return i == null ? -1 : i;
     }
 
-    public static Object getNMSBlockType(int id) {
+    public static Object getNMSBlockType(int id)
+    {
         try {
             return getBlockByIdM.invoke(null, id);
         } catch (Throwable e) {
@@ -87,7 +93,8 @@ public class BlockUtils {
         return null;
     }
 
-    public static int getNMSBlockTypeId(Object nmsBlock) {
+    public static int getNMSBlockTypeId(Object nmsBlock)
+    {
         try {
             return (int) getBlockIdM.invoke(null, nmsBlock);
         } catch (Throwable e) {
@@ -96,7 +103,8 @@ public class BlockUtils {
         }
     }
 
-    public static float getPitch(Vector vec) {
+    public static float getPitch(Vector vec)
+    {
         double x = vec.getX();
         double z = vec.getZ();
         if (x == 0 && z == 0)
@@ -104,21 +112,24 @@ public class BlockUtils {
         return (float) toDegrees(atan(-vec.getY() / sqrt(x * x + z * z)));
     }
 
-    public static byte getSignDurability(float yaw) {
+    public static byte getSignDurability(float yaw)
+    {
         yaw -= 168.75f;
         while (yaw < 0)
             yaw += 360;
         return (byte) (yaw / 22.5f);
     }
 
-    public static Direction getSimpleDirection(float yaw, float pitch) {
+    public static Direction getSimpleDirection(float yaw, float pitch)
+    {
         while (yaw < 45)
             yaw += 360;
         yaw -= 45;
         return pitch > 45 ? Direction.DOWN : pitch < -45 ? Direction.UP : Direction.values()[(int) (yaw / 90 + 2)];
     }
 
-    public static Location getYMax(World world, int minx, int minz) {
+    public static Location getYMax(World world, int minx, int minz)
+    {
         for (int y = 255; y > 0; y--) {
             Block b = world.getBlockAt(minx, y, minz);
             if (b.getType().isSolid())
@@ -127,7 +138,8 @@ public class BlockUtils {
         return new Location(world, minx, 1, minz);
     }
 
-    public static float getYaw(Vector vec) {
+    public static float getYaw(Vector vec)
+    {
         return (float) ((toDegrees(atan2(-vec.getX(), vec.getZ())) + 720) % 360);
     }
 }

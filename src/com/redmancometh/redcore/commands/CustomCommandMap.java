@@ -21,7 +21,8 @@ public class CustomCommandMap extends SimpleCommandMap {
     public static SimpleCommandMap backend;
     public static Map<String, Command> knownCommands;
 
-    public CustomCommandMap() {
+    public CustomCommandMap()
+    {
         super(srv);
         try {
             backend = (SimpleCommandMap) cmdMapF1.get(srv);
@@ -35,7 +36,8 @@ public class CustomCommandMap extends SimpleCommandMap {
         }
     }
 
-    public static void unhook() {
+    public static void unhook()
+    {
         try {
             cmdMapF1.set(pm, backend);
             cmdMapF2.set(srv, backend);
@@ -43,29 +45,34 @@ public class CustomCommandMap extends SimpleCommandMap {
         }
     }
 
-    public void setFallbackCommands() {
+    public void setFallbackCommands()
+    {
         backend.setFallbackCommands();
     }
 
     @Override
-    public void registerAll(String fallbackPrefix, List<Command> commands) {
+    public void registerAll(String fallbackPrefix, List<Command> commands)
+    {
         backend.registerAll(fallbackPrefix, commands);
     }
 
     @Override
-    public boolean register(String fallbackPrefix, Command command) {
+    public boolean register(String fallbackPrefix, Command command)
+    {
         if (backend == null)
             return false;
         return backend.register(fallbackPrefix, command);
     }
 
     @Override
-    public boolean register(String label, String fallbackPrefix, Command command) {
+    public boolean register(String label, String fallbackPrefix, Command command)
+    {
         return backend.register(label, fallbackPrefix, command);
     }
 
     @Override
-    public boolean dispatch(CommandSender sender, String cmd) throws CommandException {
+    public boolean dispatch(CommandSender sender, String cmd) throws CommandException
+    {
         {
             CommandExecuteEvent e = new CommandExecuteEvent(sender, cmd);
             pm.callEvent(e);
@@ -97,17 +104,20 @@ public class CustomCommandMap extends SimpleCommandMap {
     }
 
     @Override
-    public void clearCommands() {
+    public void clearCommands()
+    {
         backend.clearCommands();
     }
 
     @Override
-    public Command getCommand(String name) {
+    public Command getCommand(String name)
+    {
         return backend.getCommand(name);
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String cmdLine) throws IllegalArgumentException {
+    public List<String> tabComplete(CommandSender sender, String cmdLine) throws IllegalArgumentException
+    {
         {
             PreTabCompleteEvent e = new PreTabCompleteEvent(sender, cmdLine);
             pm.callEvent(e);
@@ -122,11 +132,13 @@ public class CustomCommandMap extends SimpleCommandMap {
         return list;
     }
 
-    public Collection<Command> getCommands() {
+    public Collection<Command> getCommands()
+    {
         return Collections.unmodifiableCollection(knownCommands.values());
     }
 
-    public void registerServerAliases() {
+    public void registerServerAliases()
+    {
         backend.registerServerAliases();
     }
 }

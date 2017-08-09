@@ -9,21 +9,25 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 public class PacketPlayOutKeepAlive extends WrappedPacket {
     public int id;
 
-    public PacketPlayOutKeepAlive() {
+    public PacketPlayOutKeepAlive()
+    {
 
     }
 
-    public PacketPlayOutKeepAlive(int id) {
+    public PacketPlayOutKeepAlive(int id)
+    {
         this.id = id;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         id = (int) PacketOutType.KeepAlive.getPacketData(packet)[0];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.KeepAlive.newPacket(id);
     }
 }

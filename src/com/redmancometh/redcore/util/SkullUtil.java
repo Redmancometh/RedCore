@@ -5,13 +5,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class SkullUtil
-{
-
-    public static String getOwnerFromType(EntityType type)
-    {
-        return "MHF_" + type.name();
-    }
+public class SkullUtil {
 
     public static ItemStack getSkullItemOfType(EntityType type)
     {
@@ -20,6 +14,11 @@ public class SkullUtil
         meta.setOwner(getOwnerFromType(type));
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static String getOwnerFromType(EntityType type)
+    {
+        return "MHF_" + type.name();
     }
 
     public static ItemStack getSkullOwnedBy(String player)

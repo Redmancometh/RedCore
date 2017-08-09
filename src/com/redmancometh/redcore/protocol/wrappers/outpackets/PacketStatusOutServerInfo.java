@@ -16,22 +16,26 @@ import java.util.ArrayList;
 public class PacketStatusOutServerInfo extends WrappedPacket {
     public ServerInfo info;
 
-    public PacketStatusOutServerInfo() {
+    public PacketStatusOutServerInfo()
+    {
 
     }
 
-    public PacketStatusOutServerInfo(ServerInfo info) {
+    public PacketStatusOutServerInfo(ServerInfo info)
+    {
         this.info = info;
     }
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.StatusOutServerInfo.newPacket(info.toNMS());
+    public void loadVanillaPacket(Object packet)
+    {
+        info = new ServerInfo(PacketOutType.StatusOutServerInfo.getPacketData(packet)[0]);
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        info = new ServerInfo(PacketOutType.StatusOutServerInfo.getPacketData(packet)[0]);
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.StatusOutServerInfo.newPacket(info.toNMS());
     }
 
     public static class PlayerList implements WrappedData {
@@ -50,10 +54,12 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         public int max, online;
         public ArrayList<GameProfile> sample = new ArrayList<>();
 
-        public PlayerList() {
+        public PlayerList()
+        {
         }
 
-        public PlayerList(Object nms) {
+        public PlayerList(Object nms)
+        {
             try {
                 max = fields[0].getInt(nms);
                 online = fields[1].getInt(nms);
@@ -65,7 +71,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
             }
         }
 
-        public PlayerList clone() {
+        public PlayerList clone()
+        {
             PlayerList out = new PlayerList();
             out.max = max;
             out.online = online;
@@ -76,7 +83,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object nms = Reflection.newInstance(nmsClass);
                 fields[0].set(nms, max);
@@ -100,11 +108,13 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         public String name;
         public int protocol;
 
-        public ServerData() {
+        public ServerData()
+        {
 
         }
 
-        public ServerData(Object nms) {
+        public ServerData(Object nms)
+        {
             try {
                 name = (String) nameField.get(nms);
                 protocol = protocolField.getInt(nms);
@@ -113,13 +123,15 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
             }
         }
 
-        public ServerData(String name, int protocol) {
+        public ServerData(String name, int protocol)
+        {
             this.name = name;
             this.protocol = protocol;
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object nms = Reflection.newInstance(nmsClass);
                 nameField.set(nms, name);
@@ -131,7 +143,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
             return null;
         }
 
-        public ServerData clone() {
+        public ServerData clone()
+        {
             return new ServerData(name, protocol);
         }
     }
@@ -154,11 +167,13 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         public PlayerList players;
         public ServerData version;
 
-        public ServerInfo() {
+        public ServerInfo()
+        {
 
         }
 
-        public ServerInfo(Object nms) {
+        public ServerInfo(Object nms)
+        {
             try {
                 description = ChatTag.fromICBC(fields[0].get(nms)).toColoredString();
                 players = new PlayerList(fields[1].get(nms));
@@ -169,7 +184,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
             }
         }
 
-        public ServerInfo clone() {
+        public ServerInfo clone()
+        {
             ServerInfo out = new ServerInfo();
             out.description = description;
             out.favicon = favicon;
@@ -179,7 +195,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object nms = Reflection.newInstance(nmsClass);
                 fields[0].set(nms, ChatTag.fromColoredText(description).toICBC());

@@ -26,11 +26,13 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.redmancometh.redcore.spigotutils.SU.*;
 
 public class SUListener implements Listener, CommandExecutor {
-    public SUListener() {
+    public SUListener()
+    {
         SU.pl().getCommand("sl").setExecutor(this);
     }
 
-    public static void onDisable() {
+    public static void onDisable()
+    {
         log(SU.pl(), "§4[§cShutdown§4]§e Collecting plugins depending on RedCore...");
         ArrayList<Plugin> depend = new ArrayList<>();
         for (Plugin p : pm.getPlugins()) {
@@ -70,7 +72,8 @@ public class SUListener implements Listener, CommandExecutor {
         log(SU.pl(), "§4[§cShutdown§4]§a The RedCore has shutted down properly.");
     }
 
-    public boolean onCommand(final CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, Command command, String label, String[] args)
+    {
         try {
             Player plr = sender instanceof Player ? (Player) sender : null;
             String cmd = args.length == 0 ? "help" : args[0].toLowerCase();
@@ -142,7 +145,8 @@ public class SUListener implements Listener, CommandExecutor {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerLeave(PlayerQuitEvent e) {
+    public void onPlayerLeave(PlayerQuitEvent e)
+    {
         Player plr = e.getPlayer();
         UUID uid = plr.getUniqueId();
         AnimationAPI.stopRunningAnimations(plr);
@@ -153,13 +157,15 @@ public class SUListener implements Listener, CommandExecutor {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerLogin(PlayerLoginEvent e) {
+    public void onPlayerLogin(PlayerLoginEvent e)
+    {
         Player plr = e.getPlayer();
         ScoreboardAPI.playerJoin(plr);
     }
 
     @EventHandler
-    public void onPluginUnload(PluginDisableEvent e) {
+    public void onPluginUnload(PluginDisableEvent e)
+    {
         Plugin pl = e.getPlugin();
         AnimationAPI.stopRunningAnimations(pl);
         tp.unregisterIncomingListener(pl);
@@ -167,7 +173,8 @@ public class SUListener implements Listener, CommandExecutor {
     }
 
     @EventHandler
-    public void registerServiceEvent(ServiceRegisterEvent e) {
+    public void registerServiceEvent(ServiceRegisterEvent e)
+    {
         RegisteredServiceProvider p = e.getProvider();
         String sn = p.getService().getName();
         log(SU.pl(), "Register service - " + sn);
@@ -185,7 +192,8 @@ public class SUListener implements Listener, CommandExecutor {
     }
 
     @EventHandler
-    public void unregisterServiceEvent(ServiceUnregisterEvent e) {
+    public void unregisterServiceEvent(ServiceUnregisterEvent e)
+    {
         RegisteredServiceProvider p = e.getProvider();
         String sn = p.getService().getName();
         log(SU.pl(), "Unregister service - " + sn);

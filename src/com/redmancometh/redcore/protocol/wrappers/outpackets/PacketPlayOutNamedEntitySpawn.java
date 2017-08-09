@@ -20,18 +20,21 @@ public class PacketPlayOutNamedEntitySpawn extends WrappedPacket {
     public double x, y, z;
     public byte yaw, pitch;
 
-    public PacketPlayOutNamedEntitySpawn() {
+    public PacketPlayOutNamedEntitySpawn()
+    {
 
     }
 
-    public PacketPlayOutNamedEntitySpawn(int eid, UUID eUUID, LocationData loc, DataWatcher data) {
+    public PacketPlayOutNamedEntitySpawn(int eid, UUID eUUID, LocationData loc, DataWatcher data)
+    {
         entityId = eid;
         entityUUID = eUUID;
         setLocation(loc);
         meta = data;
     }
 
-    public void setLocation(LocationData loc) {
+    public void setLocation(LocationData loc)
+    {
         x = loc.x;
         y = loc.y;
         z = loc.z;
@@ -40,7 +43,8 @@ public class PacketPlayOutNamedEntitySpawn extends WrappedPacket {
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.NamedEntitySpawn.getPacketData(packet);
         entityId = (int) d[0];
         entityUUID = (UUID) d[1];
@@ -60,7 +64,8 @@ public class PacketPlayOutNamedEntitySpawn extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         if (Reflection.ver.isAbove(v1_9))
             return PacketOutType.NamedEntitySpawn.newPacket(entityId, entityUUID, x, y, z, yaw, pitch, meta.toNMS());
         else

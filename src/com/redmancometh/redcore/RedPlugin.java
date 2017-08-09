@@ -13,12 +13,10 @@ import java.io.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public interface RedPlugin
-{
+public interface RedPlugin {
     JSONParser parser = new JSONParser();
     //Automatically rebuild the 
-    LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().build(new CacheLoader<String, JSONObject>()
-    {
+    LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().build(new CacheLoader<String, JSONObject>() {
         @Override
         public JSONObject load(String javaPlugin) throws Exception
         {
@@ -30,12 +28,9 @@ public interface RedPlugin
     {
         File hibernateConfig = new File(plugin.getDataFolder(), "config.json");
         if (!hibernateConfig.exists()) plugin.saveResource("config.json", true);
-        try (FileReader scanner = new FileReader(hibernateConfig))
-        {
+        try (FileReader scanner = new FileReader(hibernateConfig)) {
             return (JSONObject) parser.parse(scanner);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalStateException("Configuration not initialized properly. Either config.json is missing, corrupted, or ill-formatted");
         }
     }
@@ -45,30 +40,21 @@ public interface RedPlugin
         RedCore.getInstance().getPluginManager().unloadPlugin(this.getClass());
     }
 
-    default void enable() {
+    default void enable()
+    {
         RedCore.getInstance().getPluginManager().loadPlugin(this);
     }
 
     ObjectManager getManager();
 
-    List<Class> getMappedClasses();
-
-    default SessionFactory getSessionFactory() {
-        if (getInternalFactory() == null)
-        {
-            SessionFactory factory = buildSessionFactory(getBukkitPlugin());
-            setInternalFactory(factory);
-            return factory;
+    default JSONObject getConfiguration()
+    {
+        try {
+            return configCache.get(this.getName());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return getInternalFactory();
-    }
-
-    default void initialize() {
-        if (!(this instanceof MenuPlugin)) {
-            SessionFactory factory = buildSessionFactory(getBukkitPlugin());
-            setInternalFactory(factory);
-            getMappedClasses().forEach((mappingClass) -> RedCore.getInstance().getMasterDB().registerDatabase(mappingClass, factory));
-        }
+        return null;
     }
 
     SessionFactory getInternalFactory();
@@ -89,32 +75,48 @@ public interface RedPlugin
 
     JavaPlugin getBukkitPlugin();
 
-    default JSONObject getConfiguration() {
-        try {
-            return configCache.get(this.getName());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    String getName();
+
+    default SessionFactory getSessionFactory()
+    {
+        if (getInternalFactory() == null) {
+            SessionFactory factory = buildSessionFactory(getBukkitPlugin());
+            setInternalFactory(factory);
+            return factory;
         }
-        return null;
+        return getInternalFactory();
     }
 
     void setInternalFactory(SessionFactory factory);
 
-    default boolean loginFetch() {
+    default void initialize()
+    {
+        if (!(this instanceof MenuPlugin)) {
+            SessionFactory factory = buildSessionFactory(getBukkitPlugin());
+            setInternalFactory(factory);
+            getMappedClasses().forEach((mappingClass) -> RedCore.getInstance().getMasterDB().registerDatabase(mappingClass, factory));
+        }
+    }
+
+    List<Class> getMappedClasses();
+
+    default boolean loginFetch()
+    {
         return true;
     }
 
-    default boolean logoutSave() {
+    default boolean logoutSave()
+    {
         return true;
     }
 
-    default void poll() {
+    default void poll()
+    {
         configCache.refresh(getName());
     }
 
-    String getName();
-
-    default void registerMenus() {
+    default void registerMenus()
+    {
 
     }
 

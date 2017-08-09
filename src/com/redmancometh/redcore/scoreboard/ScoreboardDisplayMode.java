@@ -13,10 +13,12 @@ public enum ScoreboardDisplayMode {
         valueOf = Reflection.getMethod(Reflection.getNMSClass("IScoreboardCriteria$EnumScoreboardHealthDisplay"), "valueOf", String.class);
     }
 
-    ScoreboardDisplayMode() {
+    ScoreboardDisplayMode()
+    {
     }
 
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return valueOf.invoke(null, name());
         } catch (Throwable e) {

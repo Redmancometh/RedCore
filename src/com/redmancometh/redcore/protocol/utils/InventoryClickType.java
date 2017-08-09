@@ -24,7 +24,8 @@ public enum InventoryClickType implements WrappedData {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         if (Reflection.ver.isAbove(ServerVersion.v1_9))
             try {
                 return valueOf.invoke(null, name());

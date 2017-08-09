@@ -44,7 +44,8 @@ public class RomanNumsAPI {
      * @param roman - The roman number
      * @return The latin number (conversion result)
      */
-    public static int fromRoman(String roman) {
+    public static int fromRoman(String roman)
+    {
         roman = roman.toUpperCase();
         int out = 0;
         for (Map.Entry<Integer, String> e : reversed.entrySet()) {
@@ -64,7 +65,8 @@ public class RomanNumsAPI {
      * @param num - The latin number
      * @return The roman number (conversion result)
      */
-    public static String toRoman(int num) {
+    public static String toRoman(int num)
+    {
         StringBuilder out = new StringBuilder();
         while (num > 0) {
             Map.Entry<Integer, String> e = romanNums.floorEntry(num);

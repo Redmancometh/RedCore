@@ -11,29 +11,35 @@ public abstract class PacketEvent extends Event implements Cancellable {
     protected Object packet;
     private boolean cancelled;
 
-    public PacketEvent(Object channel, Player plr, Object packet) {
+    public PacketEvent(Object channel, Player plr, Object packet)
+    {
         this.channel = channel;
         this.packet = packet;
         player = plr;
     }
 
-    public static HandlerList getHandlerList() {
+    public static HandlerList getHandlerList()
+    {
         return hl;
     }
 
-    public Object getChannel() {
+    public Object getChannel()
+    {
         return channel;
     }
 
-    public HandlerList getHandlers() {
+    public HandlerList getHandlers()
+    {
         return hl;
     }
 
-    public Object getPacket() {
+    public Object getPacket()
+    {
         return packet;
     }
 
-    public void setPacket(WrappedPacket packet) {
+    public void setPacket(WrappedPacket packet)
+    {
         this.packet = packet.getVanillaPacket();
     }
 
@@ -41,19 +47,23 @@ public abstract class PacketEvent extends Event implements Cancellable {
 
     public abstract void setPacketData(Object... var1);
 
-    public Player getPlayer() {
+    public Player getPlayer()
+    {
         return player;
     }
 
-    public boolean isCancelled() {
+    public boolean isCancelled()
+    {
         return cancelled;
     }
 
-    public void setCancelled(boolean cancel) {
+    public void setCancelled(boolean cancel)
+    {
         cancelled = cancel;
     }
 
-    public void setPacket(Object packet) {
+    public void setPacket(Object packet)
+    {
         this.packet = packet;
     }
 

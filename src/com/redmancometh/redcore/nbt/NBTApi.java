@@ -34,7 +34,8 @@ public class NBTApi {
         typeMap.put(int[].class, 11);
     }
 
-    public static NBTCompound getNbtData(Entity ent) {
+    public static NBTCompound getNbtData(Entity ent)
+    {
         try {
             Object nmsEntity = getEntityHandle.invoke(ent);
             Object tag = NBTCompound.nmsClass.newInstance();
@@ -46,11 +47,13 @@ public class NBTApi {
         }
     }
 
-    public static int getType(NBTTag value) {
+    public static int getType(NBTTag value)
+    {
         return typeMap.get(value instanceof NBTPrimitive ? ((NBTPrimitive) value).data.getClass() : value.getClass());
     }
 
-    public static void init() {
+    public static void init()
+    {
         getEntityHandle = Reflection.getMethod(Reflection.getOBCClass("entity.CraftEntity"), "getHandle");
         nmsEntityClass = Reflection.getNMSClass("Entity");
         types[9] = NBTCompound.nmsClass = Reflection.getNMSClass("NBTTagCompound");
@@ -63,14 +66,16 @@ public class NBTApi {
         setEntityNBTData = Reflection.getMethod(nmsEntityClass, "f", NBTCompound.nmsClass);
     }
 
-    public static String readString(DataInputStream bis) throws Throwable {
+    public static String readString(DataInputStream bis) throws Throwable
+    {
         short s = bis.readShort();
         byte[] d = new byte[s];
         bis.read(d);
         return new String(d, utf8);
     }
 
-    public static NBTTag readTag(DataInputStream bis, byte type) throws Throwable {
+    public static NBTTag readTag(DataInputStream bis, byte type) throws Throwable
+    {
         switch (type) {
             case 1:
                 return new NBTPrimitive(bis.readByte());
@@ -124,7 +129,8 @@ public class NBTApi {
         throw new RuntimeException("§cUnknown NBT tag type - " + type);
     }
 
-    public static ByteBuf save(String title, NBTCompound comp) {
+    public static ByteBuf save(String title, NBTCompound comp)
+    {
         ByteBuf buf = ByteBufAllocator.DEFAULT.heapBuffer();
         buf.writeByte(10);
         buf.writeShort(title.length());
@@ -133,7 +139,8 @@ public class NBTApi {
         return buf;
     }
 
-    public static void setNbtData(Entity ent, NBTCompound data) {
+    public static void setNbtData(Entity ent, NBTCompound data)
+    {
         try {
             Object nmsEntity = getEntityHandle.invoke(ent);
             setEntityNBTData.invoke(nmsEntity, data.toNMS());

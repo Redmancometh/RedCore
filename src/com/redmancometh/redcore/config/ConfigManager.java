@@ -45,7 +45,8 @@ public class ConfigManager<T> {
      * @param configName - Config files names
      * @param confClass  - Class used for storing the config in the memory
      */
-    public ConfigManager(String configName, Class<T> confClass) {
+    public ConfigManager(String configName, Class<T> confClass)
+    {
         this.configName = configName;
         this.confClass = confClass;
     }
@@ -57,18 +58,30 @@ public class ConfigManager<T> {
      * @param configName - Config files name
      * @param confClass  - Class used for storing the config in the memory
      */
-    public ConfigManager(JavaPlugin pl, String configName, Type confClass) {
+    public ConfigManager(JavaPlugin pl, String configName, Type confClass)
+    {
         this.configName = configName;
         this.confClass = confClass;
         init(pl);
     }
 
-    public void init(JavaPlugin plugin) {
+    public void init(JavaPlugin plugin)
+    {
         File configFile = new File(plugin.getDataFolder(), configName);
         if (!configFile.exists())
             plugin.saveResource(configName, false);
         this.configFile = configFile;
         reload();
+    }
+
+    public void reload()
+    {
+        try (FileInputStream is = new FileInputStream(configFile)) {
+            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "§$1");
+            this.currentConfig = gson.fromJson(s, confClass);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -77,7 +90,8 @@ public class ConfigManager<T> {
      *
      * @param object
      */
-    public static void debugPrint(Object object) {
+    public static void debugPrint(Object object)
+    {
         Class c = object.getClass();
         for (Field f : Reflection.getAllFields(object.getClass())) {
             try {
@@ -95,15 +109,8 @@ public class ConfigManager<T> {
         }
     }
 
-    public T getCurrentConfig() {
-        return currentConfig;
-    }
-
-    public void setCurrentConfig(T currentConfig) {
-        this.currentConfig = currentConfig;
-    }
-
-    public static ConfigManager tryDebugPrint(RedPlugin plugin) {
+    public static ConfigManager tryDebugPrint(RedPlugin plugin)
+    {
         try {
             Object config = Reflection.getMethod(plugin.getClass(), "getCfg").invoke(null);
             return (ConfigManager) config;
@@ -114,16 +121,18 @@ public class ConfigManager<T> {
         return null;
     }
 
-    public void reload() {
-        try (FileInputStream is = new FileInputStream(configFile)) {
-            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "§$1");
-            this.currentConfig = gson.fromJson(s, confClass);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public T getCurrentConfig()
+    {
+        return currentConfig;
     }
 
-    public void save() {
+    public void setCurrentConfig(T currentConfig)
+    {
+        this.currentConfig = currentConfig;
+    }
+
+    public void save()
+    {
         try (FileOutputStream os = new FileOutputStream(configFile)) {
             StreamUtils.stringToStream(gson.toJson(currentConfig).replaceAll("§([0-9a-fk-or])", "&$1"), os);
         } catch (IOException e) {
@@ -133,7 +142,8 @@ public class ConfigManager<T> {
 
     private static class EntityTypeAdapter extends TypeAdapter<EntityType> {
         @Override
-        public void write(JsonWriter jsonWriter, EntityType material) throws IOException {
+        public void write(JsonWriter jsonWriter, EntityType material) throws IOException
+        {
             if (material == null) {
                 jsonWriter.nullValue();
                 return;
@@ -142,7 +152,8 @@ public class ConfigManager<T> {
         }
 
         @Override
-        public EntityType read(JsonReader jsonReader) throws IOException {
+        public EntityType read(JsonReader jsonReader) throws IOException
+        {
             if (jsonReader.peek() == JsonToken.NULL) {
                 jsonReader.nextNull();
                 return null;
@@ -154,12 +165,14 @@ public class ConfigManager<T> {
     private static class LocationAdapter extends TypeAdapter<Location> {
 
         @Override
-        public void write(JsonWriter jsonWriter, Location location) throws IOException {
+        public void write(JsonWriter jsonWriter, Location location) throws IOException
+        {
             jsonWriter.value(location.toString());
         }
 
         @Override
-        public Location read(JsonReader jsonReader) throws IOException {
+        public Location read(JsonReader jsonReader) throws IOException
+        {
             int x = 0, y = 0, z = 0;
             World w = null;
             jsonReader.beginObject();
@@ -185,7 +198,8 @@ public class ConfigManager<T> {
 
     private static class MaterialAdapter extends TypeAdapter<Material> {
         @Override
-        public void write(JsonWriter jsonWriter, Material material) throws IOException {
+        public void write(JsonWriter jsonWriter, Material material) throws IOException
+        {
             if (material == null) {
                 jsonWriter.nullValue();
                 return;
@@ -194,7 +208,8 @@ public class ConfigManager<T> {
         }
 
         @Override
-        public Material read(JsonReader jsonReader) throws IOException {
+        public Material read(JsonReader jsonReader) throws IOException
+        {
             if (jsonReader.peek() == JsonToken.NULL) {
                 jsonReader.nextNull();
                 return null;
@@ -207,7 +222,8 @@ public class ConfigManager<T> {
 
     private static class PotionEffectAdapter extends TypeAdapter<PotionEffect> {
         @Override
-        public void write(JsonWriter jsonWriter, PotionEffect o) throws IOException {
+        public void write(JsonWriter jsonWriter, PotionEffect o) throws IOException
+        {
             StringBuilder sb = new StringBuilder();
             sb.append(o.getType().getName()).append(":").append(o.getAmplifier()).append(":").append(o.getDuration());
             if (o.hasParticles())
@@ -218,7 +234,8 @@ public class ConfigManager<T> {
         }
 
         @Override
-        public PotionEffect read(JsonReader jsonReader) throws IOException {
+        public PotionEffect read(JsonReader jsonReader) throws IOException
+        {
             if (jsonReader.peek() == JsonToken.NULL) {
                 jsonReader.nextNull();
                 return null;
@@ -233,7 +250,8 @@ public class ConfigManager<T> {
 
     private static class StringAdapter extends TypeAdapter<String> {
         @Override
-        public void write(JsonWriter jsonWriter, String s) throws IOException {
+        public void write(JsonWriter jsonWriter, String s) throws IOException
+        {
             if (s == null) {
                 jsonWriter.nullValue();
                 return;
@@ -250,7 +268,8 @@ public class ConfigManager<T> {
         }
 
         @Override
-        public String read(JsonReader jsonReader) throws IOException {
+        public String read(JsonReader jsonReader) throws IOException
+        {
             JsonToken jt = jsonReader.peek();
             if (jt == JsonToken.NULL) {
                 jsonReader.nextNull();

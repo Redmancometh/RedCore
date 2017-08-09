@@ -18,27 +18,20 @@ public class PacketPlayOutCustomPayload extends WrappedPacket {
     public String channel;
     public byte[] data;
 
-    public PacketPlayOutCustomPayload() {
+    public PacketPlayOutCustomPayload()
+    {
 
     }
 
-    public PacketPlayOutCustomPayload(String channel, byte[] data) {
+    public PacketPlayOutCustomPayload(String channel, byte[] data)
+    {
         this.channel = channel;
         this.data = data;
     }
 
     @Override
-    public Object getVanillaPacket() {
-        try {
-            return PacketOutType.CustomPayload.newPacket(channel, con.newInstance(ByteBufAllocator.DEFAULT.buffer().writeBytes(data)));
-        } catch (Throwable e) {
-            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-        }
-        return null;
-    }
-
-    @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.CustomPayload.getPacketData(obj);
         channel = (String) data[0];
         try {
@@ -46,5 +39,16 @@ public class PacketPlayOutCustomPayload extends WrappedPacket {
         } catch (Throwable e) {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        try {
+            return PacketOutType.CustomPayload.newPacket(channel, con.newInstance(ByteBufAllocator.DEFAULT.buffer().writeBytes(data)));
+        } catch (Throwable e) {
+            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
+        }
+        return null;
     }
 }

@@ -14,10 +14,12 @@ public class NBTPrimitive extends NBTTag {
     private static HashMap<Class, Field> f = new HashMap();
     public Object data;
 
-    public NBTPrimitive() {
+    public NBTPrimitive()
+    {
     }
 
-    public NBTPrimitive(Object tag) {
+    public NBTPrimitive(Object tag)
+    {
         if (tag.getClass().getName().startsWith("net.minecraft.server."))
             loadFromNMS(tag);
         else
@@ -25,7 +27,8 @@ public class NBTPrimitive extends NBTTag {
     }
 
     @Override
-    public void loadFromNMS(Object nmsTag) {
+    public void loadFromNMS(Object nmsTag)
+    {
         try {
             data = f.get(nmsTag.getClass()).get(nmsTag);
         } catch (Throwable e) {
@@ -33,7 +36,8 @@ public class NBTPrimitive extends NBTTag {
         }
     }
 
-    public void write(ByteBuf buf) {
+    public void write(ByteBuf buf)
+    {
         if (data instanceof byte[]) {
             byte[] d = (byte[]) data;
             buf.writeInt(d.length);
@@ -63,7 +67,8 @@ public class NBTPrimitive extends NBTTag {
 
     }
 
-    static void init() {
+    static void init()
+    {
         Class cl;
         NBTApi.types[0] = Reflection.getNMSClass("NBTTagEnd");
         NBTApi.types[1] = cl = Reflection.getNMSClass("NBTTagByte");
@@ -95,13 +100,15 @@ public class NBTPrimitive extends NBTTag {
         f.put(cl, Reflection.getField(cl, "data"));
     }
 
-    public NBTPrimitive setData(Object data) {
+    public NBTPrimitive setData(Object data)
+    {
         this.data = data;
         return this;
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return c.get(data.getClass()).newInstance(data);
         } catch (Throwable e) {
@@ -111,7 +118,8 @@ public class NBTPrimitive extends NBTTag {
         }
     }
 
-    public String toString() {
+    public String toString()
+    {
         return data.toString();
     }
 }

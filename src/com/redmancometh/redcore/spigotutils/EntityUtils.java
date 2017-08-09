@@ -36,7 +36,8 @@ public class EntityUtils {
      * @param ent - The NMS entity
      * @return The Bukkit entity
      */
-    public static Entity getBukkitEntity(Object ent) {
+    public static Entity getBukkitEntity(Object ent)
+    {
         try {
             return (Entity) bukkitEntityM.invoke(ent);
         } catch (Throwable e) {
@@ -51,7 +52,8 @@ public class EntityUtils {
      * @param world - The Bukkit world
      * @return The NMS entity
      */
-    public static World getBukkitWorld(Object world) {
+    public static World getBukkitWorld(Object world)
+    {
         try {
             return (World) craftWorldF.get(world);
         } catch (Throwable e) {
@@ -66,7 +68,8 @@ public class EntityUtils {
      * @param ent - The Bukkit entity
      * @return The wrapped data watcher of the entity
      */
-    public static DataWatcher getDataWatcher(Entity ent) {
+    public static DataWatcher getDataWatcher(Entity ent)
+    {
         try {
             return new DataWatcher(dataWatcherF.get(nmsEntityF.get(ent)));
         } catch (Throwable e) {
@@ -75,7 +78,8 @@ public class EntityUtils {
         return null;
     }
 
-    public static Entity getEntityDamager(Entity ent) {
+    public static Entity getEntityDamager(Entity ent)
+    {
         if (ent instanceof Projectile) {
             ProjectileSource src = ((Projectile) ent).getShooter();
             if (src instanceof Entity)
@@ -91,7 +95,8 @@ public class EntityUtils {
      * @param world - The Bukkit world
      * @return The NMS entity
      */
-    public static Object getNMSWorld(World world) {
+    public static Object getNMSWorld(World world)
+    {
         try {
             return nmsWorldF.get(world);
         } catch (Throwable e) {
@@ -100,7 +105,8 @@ public class EntityUtils {
         return null;
     }
 
-    public static Player getPlayerDamager(Entity ent) {
+    public static Player getPlayerDamager(Entity ent)
+    {
         if (ent instanceof Player)
             return (Player) ent;
         if (ent instanceof Projectile) {
@@ -117,7 +123,8 @@ public class EntityUtils {
      * @param w - The world
      * @return The nms WorldData of the world
      */
-    public static Object getWorldData(World w) {
+    public static Object getWorldData(World w)
+    {
         try {
             return nmsWorldDataF.get(nmsWorldF.get(w));
         } catch (Throwable e) {
@@ -132,7 +139,8 @@ public class EntityUtils {
      * @param worldData - The world data
      * @return The type of the given world data
      */
-    public static WorldType getWorldType(Object worldData) {
+    public static WorldType getWorldType(Object worldData)
+    {
         try {
             return WorldType.fromVanillaWorldType(nmsWorldTypeF.get(worldData));
         } catch (Throwable e) {
@@ -147,7 +155,8 @@ public class EntityUtils {
      * @param ent - Target entity
      * @return The NoAI mode of the given entity
      */
-    public static boolean hasNoAI(LivingEntity ent) {
+    public static boolean hasNoAI(LivingEntity ent)
+    {
         if (ent == null)
             return false;
         NBTCompound nbt = NBTApi.getNbtData(ent);
@@ -161,7 +170,8 @@ public class EntityUtils {
      * @param ent - The Bukkit entity
      * @param dw  - The DataWatcher
      */
-    public static void setDataWatcher(Entity ent, DataWatcher dw) {
+    public static void setDataWatcher(Entity ent, DataWatcher dw)
+    {
         try {
             dataWatcherF.set(nmsEntityF.get(ent), dw.toNMS());
         } catch (Throwable e) {
@@ -175,7 +185,8 @@ public class EntityUtils {
      * @param ent    - The entity
      * @param killer - The new killer of the entity
      */
-    public static void setKiller(LivingEntity ent, Player killer) {
+    public static void setKiller(LivingEntity ent, Player killer)
+    {
         Object nmsEnt = getNMSEntity(ent);
         try {
             killerField.set(nmsEnt, killer == null ? null : getNMSEntity(killer));
@@ -190,7 +201,8 @@ public class EntityUtils {
      * @param ent - The Bukkit entity
      * @return The NMS entity
      */
-    public static Object getNMSEntity(Entity ent) {
+    public static Object getNMSEntity(Entity ent)
+    {
         try {
             return nmsEntityF.get(ent);
         } catch (Throwable e) {
@@ -205,7 +217,8 @@ public class EntityUtils {
      * @param ent  - The entity
      * @param noAi - The new NoAI mode
      */
-    public static void setNoAI(LivingEntity ent, boolean noAi) {
+    public static void setNoAI(LivingEntity ent, boolean noAi)
+    {
         if (ent == null)
             return;
         NBTCompound nbt = NBTApi.getNbtData(ent);
@@ -219,7 +232,8 @@ public class EntityUtils {
      * @param ent - The entity
      * @param loc - Teleport destination
      */
-    public static void teleport(Entity ent, Location loc) {
+    public static void teleport(Entity ent, Location loc)
+    {
         try {
             setLocationM.invoke(nmsEntityF.get(ent), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         } catch (Throwable e) {

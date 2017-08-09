@@ -24,7 +24,8 @@ public class PacketPlayOutLogin extends WrappedPacket {
     public boolean reducedDebugInfo;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.Login.getPacketData(packet);
         entityId = (int) d[0];
         hardcore = (boolean) d[1];
@@ -38,7 +39,8 @@ public class PacketPlayOutLogin extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.Login.newPacket(entityId, hardcore, WorldType.toVanillaGameMode(gameMode), dimension, WorldType.toVanillaDifficulty(difficulty), maxPlayers, levelType.toNMS(), reducedDebugInfo);
     }
 }

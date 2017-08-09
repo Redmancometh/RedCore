@@ -15,17 +15,20 @@ public class PacketPlayOutUpdateSign extends WrappedPacket {
     public BlockLocation block;
     public ChatTag[] lines;
 
-    public PacketPlayOutUpdateSign(BlockLocation loc, ChatTag[] lines) {
+    public PacketPlayOutUpdateSign(BlockLocation loc, ChatTag[] lines)
+    {
         block = loc;
         this.lines = lines;
     }
 
-    public PacketPlayOutUpdateSign() {
+    public PacketPlayOutUpdateSign()
+    {
 
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketOutType.UpdateSign.getPacketData(packet);
         block = new BlockLocation(data[1]);
         lines = new ChatTag[4];
@@ -36,7 +39,8 @@ public class PacketPlayOutUpdateSign extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
             NBTCompound nbt = new NBTCompound();
             for (int i = 0; i < 4; ++i)

@@ -14,18 +14,20 @@ public class PacketPlayInSettings extends WrappedPacket {
     public int viewDistance;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.Settings.newPacket(locale, viewDistance, chatVisibility.toVanillaChatVisibility(), chatColors, skinParts);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.Settings.getPacketData(packet);
         locale = (String) data[0];
         viewDistance = (Integer) data[1];
         chatVisibility = data[2] == null ? ChatVisibility.FULL : ChatVisibility.valueOf(data[2].toString());
         chatColors = (Boolean) data[3];
         skinParts = (Integer) data[4];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketInType.Settings.newPacket(locale, viewDistance, chatVisibility.toVanillaChatVisibility(), chatColors, skinParts);
     }
 
     public enum ChatVisibility {
@@ -39,10 +41,12 @@ public class PacketPlayInSettings extends WrappedPacket {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("EntityHuman$EnumChatVisibility"), "valueOf", String.class);
         }
 
-        ChatVisibility() {
+        ChatVisibility()
+        {
         }
 
-        public Object toVanillaChatVisibility() {
+        public Object toVanillaChatVisibility()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

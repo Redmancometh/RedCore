@@ -17,7 +17,8 @@ public class PacketPlayOutSpawnEntityPainting extends WrappedPacket {
     public String title;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.SpawnEntityPainting.getPacketData(packet);
         entityId = (int) d[0];
         entityUUID = (UUID) d[1];
@@ -27,7 +28,8 @@ public class PacketPlayOutSpawnEntityPainting extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.SpawnEntityPainting.newPacket(entityId, entityUUID, location.toNMS(), facing.toNMS(), title);
     }
 }

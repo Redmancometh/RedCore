@@ -1,19 +1,13 @@
 package com.redmancometh.redcore.util;
 
-import java.util.function.Consumer;
-
+import com.redmancometh.redcore.RedCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import com.redmancometh.redcore.RedCore;
 
-public class MetaUtil
-{
-    public static void removeMetaAfter(Player p, String metaName, int seconds)
-    {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getInstance(), () -> p.removeMetadata(metaName, RedCore.getInstance()), seconds * 20L);
-    }
+import java.util.function.Consumer;
 
+public class MetaUtil {
     public static void addMetaThenRemoveAfter(Player p, String metaName, int seconds)
     {
         p.setMetadata(metaName, new FixedMetadataValue(RedCore.getInstance(), true));
@@ -21,7 +15,6 @@ public class MetaUtil
     }
 
     /**
-     * 
      * @param p
      * @param metaName
      * @param seconds
@@ -35,5 +28,10 @@ public class MetaUtil
             callback.accept(p);
             p.removeMetadata(metaName, RedCore.getInstance());
         }, seconds * 20L);
+    }
+
+    public static void removeMetaAfter(Player p, String metaName, int seconds)
+    {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getInstance(), () -> p.removeMetadata(metaName, RedCore.getInstance()), seconds * 20L);
     }
 }

@@ -12,15 +12,18 @@ public class NBTList extends NBTTag {
     static Field listType;
     public ArrayList<NBTTag> list = new ArrayList();
 
-    public NBTList() {
+    public NBTList()
+    {
     }
 
-    public NBTList(Object tag) {
+    public NBTList(Object tag)
+    {
         loadFromNMS(tag);
     }
 
     @Override
-    public void loadFromNMS(Object tag) {
+    public void loadFromNMS(Object tag)
+    {
         try {
             for (Object o : (List) listField.get(tag)) {
                 String cln = o.getClass().getSimpleName();
@@ -40,7 +43,8 @@ public class NBTList extends NBTTag {
     }
 
     @Override
-    public void write(ByteBuf buf) {
+    public void write(ByteBuf buf)
+    {
         if (list.isEmpty()) {
             buf.writeByte(0);
             buf.writeInt(0);
@@ -52,7 +56,8 @@ public class NBTList extends NBTTag {
             nbtTag.write(buf);
     }
 
-    public NBTList addAll(Collection col) {
+    public NBTList addAll(Collection col)
+    {
         for (Object o : col) {
             if (o == null) continue;
             list.add(NBTTag.make(o));
@@ -60,7 +65,8 @@ public class NBTList extends NBTTag {
         return this;
     }
 
-    public NBTList addAll(Object... col) {
+    public NBTList addAll(Object... col)
+    {
         for (Object o : col) {
             if (o == null) continue;
             list.add(NBTTag.make(o));
@@ -69,7 +75,8 @@ public class NBTList extends NBTTag {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             Object o = nmsClass.newInstance();
             ArrayList<Object> l = new ArrayList<Object>();
@@ -87,7 +94,8 @@ public class NBTList extends NBTTag {
         }
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "[\u00a7b" + StringUtils.join(list, ", \u00a7b") + "\u00a7b]";
     }
 }

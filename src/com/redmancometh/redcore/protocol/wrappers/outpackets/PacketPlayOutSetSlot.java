@@ -12,18 +12,21 @@ public class PacketPlayOutSetSlot extends WrappedPacket {
     public int slot;
     public int windowId;
 
-    public PacketPlayOutSetSlot() {
+    public PacketPlayOutSetSlot()
+    {
 
     }
 
-    public PacketPlayOutSetSlot(int windowId, int slot, ItemStackWrapper item) {
+    public PacketPlayOutSetSlot(int windowId, int slot, ItemStackWrapper item)
+    {
         this.windowId = windowId;
         this.slot = slot;
         this.item = item;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.SetSlot.getPacketData(packet);
         windowId = (int) d[0];
         slot = (int) d[1];
@@ -31,7 +34,8 @@ public class PacketPlayOutSetSlot extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.SetSlot.newPacket(windowId, slot, item.toNMS());
     }
 }

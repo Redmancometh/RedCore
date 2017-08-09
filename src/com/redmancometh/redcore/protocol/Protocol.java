@@ -23,7 +23,8 @@ public abstract class Protocol implements Listener {
      *
      * @param event - The packet event
      */
-    public static void dispatchPacketInEvent(PacketInEvent event) {
+    public static void dispatchPacketInEvent(PacketInEvent event)
+    {
         String pn = event.getPacket().getClass().getSimpleName();
         if (event.getType() == null) {
             SU.cs.sendMessage(pa + "Missing in packet type:§c " + pn + "§e.");
@@ -46,7 +47,8 @@ public abstract class Protocol implements Listener {
      *
      * @param event - The packet event
      */
-    public static void dispatchPacketOutEvent(PacketOutEvent event) {
+    public static void dispatchPacketOutEvent(PacketOutEvent event)
+    {
         String pn = event.getPacket().getClass().getSimpleName();
         if (event.getType() == null) {
             SU.cs.sendMessage(pa + "Missing out packet type:§c " + pn + "§e.");
@@ -67,7 +69,8 @@ public abstract class Protocol implements Listener {
     /**
      * Closes the PacketAPI
      */
-    public void close() throws Throwable {
+    public void close() throws Throwable
+    {
         HandlerList.unregisterAll(this);
         unregisterServerChannelHandler();
         SU.srv.getOnlinePlayers().forEach(this::uninjectPlayer);
@@ -100,7 +103,8 @@ public abstract class Protocol implements Listener {
      * @param player - The sender player
      * @param packet - The sendable packet
      */
-    public void receivePacket(Player player, Object packet) {
+    public void receivePacket(Player player, Object packet)
+    {
         Object channel = getChannel(player);
         if (channel == null || packet == null) {
             SU.error(SU.cs, new RuntimeException("§cFailed to receive packet " + packet + " from player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
@@ -132,7 +136,8 @@ public abstract class Protocol implements Listener {
      * @param listener   - The packet listener
      * @param packetType - The listenable packet type
      */
-    public void registerIncomingListener(Plugin plugin, PacketInListener listener, PacketInType packetType) {
+    public void registerIncomingListener(Plugin plugin, PacketInListener listener, PacketInType packetType)
+    {
         if (inListenerTypes.containsKey(listener))
             throw new RuntimeException("The given listener is already registered.");
         ArrayList<PacketInListener> pil = inListeners.get(packetType);
@@ -155,7 +160,8 @@ public abstract class Protocol implements Listener {
      * @param listener   - The packet listener
      * @param packetType - The listenable packet type
      */
-    public void registerOutgoingListener(Plugin plugin, PacketOutListener listener, PacketOutType packetType) {
+    public void registerOutgoingListener(Plugin plugin, PacketOutListener listener, PacketOutType packetType)
+    {
         if (outListenerTypes.containsKey(listener))
             throw new RuntimeException("The given listener is already registered.");
         ArrayList<PacketOutListener> pol = outListeners.get(packetType);
@@ -179,7 +185,8 @@ public abstract class Protocol implements Listener {
      * @param player - The target player
      * @param packet - The sendable packet
      */
-    public void sendPacket(Player player, Object packet) {
+    public void sendPacket(Player player, Object packet)
+    {
         Object channel = getChannel(player);
         if (channel == null || packet == null) {
             SU.error(SU.cs, new RuntimeException("§cFailed to send packet " + packet + " to player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
@@ -196,11 +203,13 @@ public abstract class Protocol implements Listener {
      */
     public abstract void sendPacket(Object channel, Object packet);
 
-    public void uninjectPlayer(Player player) {
+    public void uninjectPlayer(Player player)
+    {
         uninjectChannel(getChannel(player));
     }
 
-    public void uninjectChannel(Object ch) {
+    public void uninjectChannel(Object ch)
+    {
         removeHandler(ch, "RedCoreInit");
         removeHandler(ch, "RedCore");
     }
@@ -212,7 +221,8 @@ public abstract class Protocol implements Listener {
      *
      * @param pl - Target plugin
      */
-    public void unregisterIncomingListener(Plugin pl) {
+    public void unregisterIncomingListener(Plugin pl)
+    {
         ArrayList<PacketInListener> pol = pluginInListeners.remove(pl);
         if (pol == null)
             return;
@@ -220,11 +230,13 @@ public abstract class Protocol implements Listener {
             inListeners.remove(inListenerTypes.remove(l));
     }
 
-    public void unregisterIncomingListener(PacketInListener listener) {
+    public void unregisterIncomingListener(PacketInListener listener)
+    {
         inListeners.get(inListenerTypes.remove(listener)).remove(listener);
     }
 
-    public void unregisterOutgoingListener(PacketOutListener listener) {
+    public void unregisterOutgoingListener(PacketOutListener listener)
+    {
         outListeners.get(outListenerTypes.remove(listener)).remove(listener);
     }
 
@@ -233,7 +245,8 @@ public abstract class Protocol implements Listener {
      *
      * @param pl - Target plugin
      */
-    public void unregisterOutgoingListener(Plugin pl) {
+    public void unregisterOutgoingListener(Plugin pl)
+    {
         ArrayList<PacketOutListener> pol = pluginOutListeners.remove(pl);
         if (pol == null)
             return;

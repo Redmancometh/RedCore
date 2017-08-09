@@ -1,16 +1,12 @@
 package com.redmancometh.redcore.databasing;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.function.Consumer;
-
+import lombok.Getter;
 import org.hibernate.SessionFactory;
 
-import lombok.Getter;
+import java.util.*;
+import java.util.function.Consumer;
 
-public class MasterDatabase implements Iterable<SubDatabase>
-{
+public class MasterDatabase implements Iterable<SubDatabase> {
     @Getter
     private Map<Class, SubDatabase> subDBMap = new HashMap();
 
@@ -19,11 +15,10 @@ public class MasterDatabase implements Iterable<SubDatabase>
         return subDBMap.get(clazz);
     }
 
-    public void registerDatabase(Class ofType, SessionFactory factory)
+    @Override
+    public Iterator<SubDatabase> iterator()
     {
-        System.out.println("REGISTERED FOR: " + ofType);
-        System.out.println("WITH FACTORY: " + factory);
-        this.subDBMap.put(ofType, new SubDatabase(ofType, factory));
+        return subDBMap.values().iterator();
     }
 
     @Override
@@ -32,10 +27,11 @@ public class MasterDatabase implements Iterable<SubDatabase>
         subDBMap.values().forEach(action);
     }
 
-    @Override
-    public Iterator<SubDatabase> iterator()
+    public void registerDatabase(Class ofType, SessionFactory factory)
     {
-        return subDBMap.values().iterator();
+        System.out.println("REGISTERED FOR: " + ofType);
+        System.out.println("WITH FACTORY: " + factory);
+        this.subDBMap.put(ofType, new SubDatabase(ofType, factory));
     }
 
 }

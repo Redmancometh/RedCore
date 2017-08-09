@@ -11,13 +11,15 @@ public class PacketPlayInClientCommand
     public ClientCommand command;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.ClientCommand.newPacket(command.toVanillaClientCommand());
+    public void loadVanillaPacket(Object packet)
+    {
+        command = ClientCommand.valueOf(PacketInType.ClientCommand.getPacketData(packet)[0].toString());
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        command = ClientCommand.valueOf(PacketInType.ClientCommand.getPacketData(packet)[0].toString());
+    public Object getVanillaPacket()
+    {
+        return PacketInType.ClientCommand.newPacket(command.toVanillaClientCommand());
     }
 
     public enum ClientCommand {
@@ -31,10 +33,12 @@ public class PacketPlayInClientCommand
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInClientCommand$EnumClientCommand"), "valueOf", String.class);
         }
 
-        ClientCommand() {
+        ClientCommand()
+        {
         }
 
-        public Object toVanillaClientCommand() {
+        public Object toVanillaClientCommand()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

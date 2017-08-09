@@ -29,11 +29,13 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
     public double x, y, z;
     public float yaw, pitch, headPitch;
 
-    public PacketPlayOutSpawnEntityLiving() {
+    public PacketPlayOutSpawnEntityLiving()
+    {
 
     }
 
-    public PacketPlayOutSpawnEntityLiving(int entityId, UUID entityUUID, int type, LocationData loc, float headPitch, Vector velocity, DataWatcher meta) {
+    public PacketPlayOutSpawnEntityLiving(int entityId, UUID entityUUID, int type, LocationData loc, float headPitch, Vector velocity, DataWatcher meta)
+    {
         this.entityId = entityId;
         this.entityUUID = entityUUID;
         this.type = type;
@@ -44,11 +46,13 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
         this.meta = meta;
     }
 
-    public Location getLocation() {
+    public Location getLocation()
+    {
         return new Location(null, x, y, z, yaw, pitch);
     }
 
-    public void setLocation(LocationData loc) {
+    public void setLocation(LocationData loc)
+    {
         x = loc.x;
         y = loc.y;
         z = loc.z;
@@ -56,18 +60,21 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
         pitch = loc.pitch;
     }
 
-    public Vector getVelocity() {
+    public Vector getVelocity()
+    {
         return new Vector(velX / 8000.0, velY / 8000.0, velZ / 8000.0);
     }
 
-    public void setVelocity(Vector velocity) {
+    public void setVelocity(Vector velocity)
+    {
         velX = (int) (velocity.getX() * 8000);
         velY = (int) (velocity.getY() * 8000);
         velZ = (int) (velocity.getZ() * 8000);
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.SpawnEntityLiving.getPacketData(packet);
         entityId = (int) d[0];
         int add = 0;
@@ -95,7 +102,8 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.SpawnEntityLiving.newPacket(entityId, entityUUID, type, x, y, z, velX, velY, velZ,
                 (byte) (yaw / 360.0f * 256), (byte) (pitch / 360.0f * 256), (byte) (headPitch / 360.0f * 256), meta.toNMS()) :
                 PacketOutType.SpawnEntityLiving.newPacket(entityId, type, (int) x << 5, (int) y << 5, (int) z << 5, velX, velY, velZ,

@@ -45,11 +45,13 @@ public class PacketPlayOutMap extends WrappedPacket {
     public int x;
     public int z;
 
-    public PacketPlayOutMap() {
+    public PacketPlayOutMap()
+    {
 
     }
 
-    public PacketPlayOutMap(MapData mapData) {
+    public PacketPlayOutMap(MapData mapData)
+    {
         mapId = mapData.mapId;
         scale = mapData.scale.getValue();
         showIcons = mapData.showIcons;
@@ -62,28 +64,8 @@ public class PacketPlayOutMap extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
-        try {
-            return ver.isAbove(v1_9) ? con.newInstance(mapId, scale, showIcons, getNMSIcons(), data, columns, rows, x, z)
-                    : con.newInstance(mapId, scale, getNMSIcons(), data, columns, rows, x, z);
-        } catch (Throwable e) {
-            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-        }
-        return null;
-    }
-
-    public ArrayList<Object> getNMSIcons() {
-        ArrayList<Object> out = new ArrayList<>();
-        if (icons == null)
-            return out;
-        for (MapIcon ic : icons) {
-            out.add(ic.toNMS());
-        }
-        return out;
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.Map.getPacketData(packet);
         mapId = (int) d[0];
         scale = (byte) d[1];
@@ -99,5 +81,28 @@ public class PacketPlayOutMap extends WrappedPacket {
         x = (int) d[st++];
         z = (int) d[st++];
         data = (byte[]) d[st++];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        try {
+            return ver.isAbove(v1_9) ? con.newInstance(mapId, scale, showIcons, getNMSIcons(), data, columns, rows, x, z)
+                    : con.newInstance(mapId, scale, getNMSIcons(), data, columns, rows, x, z);
+        } catch (Throwable e) {
+            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
+        }
+        return null;
+    }
+
+    public ArrayList<Object> getNMSIcons()
+    {
+        ArrayList<Object> out = new ArrayList<>();
+        if (icons == null)
+            return out;
+        for (MapIcon ic : icons) {
+            out.add(ic.toNMS());
+        }
+        return out;
     }
 }

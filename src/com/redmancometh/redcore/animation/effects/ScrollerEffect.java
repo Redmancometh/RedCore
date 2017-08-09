@@ -14,14 +14,17 @@ public class ScrollerEffect implements CustomEffect {
     public int start;
     public String text;
 
-    public ScrollerEffect() {
+    public ScrollerEffect()
+    {
     }
 
-    public ScrollerEffect(int max, int size, String text) {
+    public ScrollerEffect(int max, int size, String text)
+    {
         this(max, size, 1, 0, false, true, ' ', text);
     }
 
-    public ScrollerEffect(int max, int size, int speed, int start, boolean reversed, boolean skipColors, char fill, String text) {
+    public ScrollerEffect(int max, int size, int speed, int start, boolean reversed, boolean skipColors, char fill, String text)
+    {
         this.max = max;
         this.size = size;
         this.speed = speed;
@@ -33,22 +36,26 @@ public class ScrollerEffect implements CustomEffect {
     }
 
     @Override
-    public CustomEffect clone() {
+    public CustomEffect clone()
+    {
         return new ScrollerEffect(max, size, speed, start, reversed, skipColors, fill, text);
     }
 
     @Override
-    public String getText() {
+    public String getText()
+    {
         return text;
     }
 
     @Override
-    public void setText(String text) {
+    public void setText(String text)
+    {
         this.text = text;
     }
 
     @Override
-    public String next(String text) {
+    public String next(String text)
+    {
         char c;
         int i;
         int i2;

@@ -12,17 +12,19 @@ public class PacketPlayOutRelEntityMove extends WrappedPacket {
     public boolean onGround;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.RelEntityMove.newPacket(entityId, deltaX, deltaY, deltaZ, onGround);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.RelEntityMove.getPacketData(packet);
         entityId = (int) d[0];
         deltaX = (byte) d[1];
         deltaY = (byte) d[2];
         deltaZ = (byte) d[3];
         onGround = (boolean) d[4];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.RelEntityMove.newPacket(entityId, deltaX, deltaY, deltaZ, onGround);
     }
 }

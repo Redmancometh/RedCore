@@ -13,7 +13,8 @@ import static com.redmancometh.redcore.mojang.WebApi.post;
  * Created by GyuriX on 2015.12.27..
  */
 public class MojangAPI {
-    public static ClientSession clientLogin(String userName, String password) {
+    public static ClientSession clientLogin(String userName, String password)
+    {
         try {
             String s = post("https://authserver.mojang.com/authenticate",
                     "{\"agent\":{\"name\":\"Minecraft\",\"version\":1}," +
@@ -30,7 +31,8 @@ public class MojangAPI {
         }
     }
 
-    public static ArrayList<NameData> getNameHistory(UUID id) {
+    public static ArrayList<NameData> getNameHistory(UUID id)
+    {
         try {
             return (ArrayList<NameData>) JsonAPI.deserialize(get("https://api.mojang.com/user/profiles/" + id.toString().replace("-", "") + "/names"), ArrayList.class, NameData.class);
         } catch (Throwable e) {
@@ -39,7 +41,8 @@ public class MojangAPI {
         return null;
     }
 
-    public static GameProfile getProfile(String name) {
+    public static GameProfile getProfile(String name)
+    {
         try {
             return JsonAPI.deserialize(get("https://api.mojang.com/users/profiles/minecraft/" + name), GameProfile.class);
         } catch (Throwable e) {
@@ -47,19 +50,23 @@ public class MojangAPI {
         }
     }
 
-    public static GameProfile getProfile(String name, long time) {
+    public static GameProfile getProfile(String name, long time)
+    {
         return JsonAPI.deserialize(get("https://api.mojang.com/users/profiles/minecraft/" + name + "?at=" + time), GameProfile.class);
     }
 
-    public static GameProfile getProfileWithSkin(UUID id) {
+    public static GameProfile getProfileWithSkin(UUID id)
+    {
         return JsonAPI.deserialize(get("https://sessionserver.mojang.com/session/minecraft/profile/" + id.toString().replace("-", "") + "?unsigned=false"), GameProfile.class);
     }
 
-    public static ArrayList<GameProfile> getProfiles(String... names) {
+    public static ArrayList<GameProfile> getProfiles(String... names)
+    {
         return (ArrayList<GameProfile>) JsonAPI.deserialize(post("https://api.mojang.com/profiles/minecraft", JsonAPI.serialize(names)), ArrayList.class, GameProfile.class);
     }
 
-    public static HashMap<String, MojangServerState> getServerState() {
+    public static HashMap<String, MojangServerState> getServerState()
+    {
         HashMap<String, MojangServerState> out = new HashMap<>();
         String[] d = get("https://status.mojang.com/check").split(",");
         for (String s : d) {
@@ -80,7 +87,8 @@ public class MojangAPI {
         public String name;
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return JsonAPI.serialize(this);
         }
     }

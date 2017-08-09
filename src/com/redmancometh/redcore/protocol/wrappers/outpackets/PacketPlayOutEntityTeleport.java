@@ -17,16 +17,19 @@ public class PacketPlayOutEntityTeleport extends WrappedPacket {
     public byte yaw;
     public double z;
 
-    public PacketPlayOutEntityTeleport() {
+    public PacketPlayOutEntityTeleport()
+    {
 
     }
 
-    public PacketPlayOutEntityTeleport(int entityId, LocationData loc) {
+    public PacketPlayOutEntityTeleport(int entityId, LocationData loc)
+    {
         this.entityId = entityId;
         setLocation(loc);
     }
 
-    public void setLocation(LocationData loc) {
+    public void setLocation(LocationData loc)
+    {
         x = loc.x;
         y = loc.y;
         z = loc.z;
@@ -35,7 +38,8 @@ public class PacketPlayOutEntityTeleport extends WrappedPacket {
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.EntityTeleport.getPacketData(packet);
         entityId = (int) d[0];
         if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
@@ -54,7 +58,8 @@ public class PacketPlayOutEntityTeleport extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         if (Reflection.ver.isAbove(ServerVersion.v1_9))
             return PacketOutType.EntityTeleport.newPacket(entityId, x, y, z, yaw, pitch, onGround);
         else if (Reflection.ver == ServerVersion.v1_8)

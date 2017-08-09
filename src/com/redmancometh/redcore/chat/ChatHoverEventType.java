@@ -17,15 +17,18 @@ public enum ChatHoverEventType {
 
     final char id;
 
-    ChatHoverEventType(char id) {
+    ChatHoverEventType(char id)
+    {
         this.id = id;
     }
 
-    public static ChatHoverEventType forId(char id) {
+    public static ChatHoverEventType forId(char id)
+    {
         return byId.get(id);
     }
 
-    public char getId() {
+    public char getId()
+    {
         return id;
     }
 

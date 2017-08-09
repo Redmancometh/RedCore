@@ -17,23 +17,27 @@ public class XZ implements StringSerializable, Comparable<XZ>, WrappedData {
     private static transient Field xField = Reflection.getField(nmsClass, "x"), zField = Reflection.getField(nmsClass, "z");
     public int x, z;
 
-    public XZ(String in) {
+    public XZ(String in)
+    {
         String[] d = in.split(" ", 2);
         x = Integer.valueOf(d[0]);
         z = Integer.valueOf(d[1]);
     }
 
-    public XZ(int x, int z) {
+    public XZ(int x, int z)
+    {
         this.x = x;
         this.z = z;
     }
 
-    public XZ(Block bl) {
+    public XZ(Block bl)
+    {
         x = bl.getX();
         z = bl.getZ();
     }
 
-    public XZ(Object nms) {
+    public XZ(Object nms)
+    {
         try {
             x = xField.getInt(nms);
             z = zField.getInt(nms);
@@ -42,34 +46,40 @@ public class XZ implements StringSerializable, Comparable<XZ>, WrappedData {
         }
     }
 
-    public XZ(Chunk c) {
+    public XZ(Chunk c)
+    {
         x = c.getX();
         z = c.getZ();
     }
 
     @Override
-    public int compareTo(XZ o) {
+    public int compareTo(XZ o)
+    {
         return ((Integer) hashCode()).compareTo(o.hashCode());
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return x << 16 + z;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         XZ xz = (XZ) obj;
         return x == xz.x && z == xz.z;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return x + " " + z;
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return con.newInstance(x, z);
         } catch (Throwable e) {

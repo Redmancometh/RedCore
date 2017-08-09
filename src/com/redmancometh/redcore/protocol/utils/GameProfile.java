@@ -24,27 +24,32 @@ public class GameProfile implements WrappedData {
     public String name;
     public ArrayList<Property> properties = new ArrayList<>();
 
-    public GameProfile() {
+    public GameProfile()
+    {
 
     }
 
-    public GameProfile(String n) {
+    public GameProfile(String n)
+    {
         name = n;
         id = UUID.nameUUIDFromBytes(("OfflinePlayer:" + n).getBytes());
     }
 
-    public GameProfile(String n, UUID uid) {
+    public GameProfile(String n, UUID uid)
+    {
         name = n;
         id = uid;
     }
 
-    public GameProfile(String n, UUID uid, ArrayList<Property> props) {
+    public GameProfile(String n, UUID uid, ArrayList<Property> props)
+    {
         name = n;
         id = uid;
         properties = props;
     }
 
-    public GameProfile(Object nmsProfile) {
+    public GameProfile(Object nmsProfile)
+    {
         try {
             id = (UUID) fid.get(nmsProfile);
             name = (String) fname.get(nmsProfile);
@@ -57,7 +62,8 @@ public class GameProfile implements WrappedData {
         }
     }
 
-    public GameProfile clone() {
+    public GameProfile clone()
+    {
         GameProfile out = new GameProfile(name, id);
         out.demo = demo;
         out.legacy = legacy;
@@ -67,7 +73,8 @@ public class GameProfile implements WrappedData {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             Object o = con.newInstance(id, name);
             flegacy.set(o, legacy);
@@ -92,7 +99,8 @@ public class GameProfile implements WrappedData {
         public String value;
 
 
-        public Property(Object o) {
+        public Property(Object o)
+        {
             try {
                 name = (String) fname.get(o);
                 value = (String) fvalue.get(o);
@@ -101,13 +109,15 @@ public class GameProfile implements WrappedData {
             }
         }
 
-        public Property(String name, String value, String signature) {
+        public Property(String name, String value, String signature)
+        {
             this.name = name;
             this.value = value;
             this.signature = signature;
         }
 
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return con.newInstance(name, value, signature);
             } catch (Throwable e) {
@@ -116,18 +126,21 @@ public class GameProfile implements WrappedData {
             }
         }
 
-        public Property clone() {
+        public Property clone()
+        {
             return new Property(name, value, signature);
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return JsonAPI.serialize(this);
         }
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return JsonAPI.serialize(this);
     }
 

@@ -17,7 +17,8 @@ import java.util.*;
 public class BungeeAPI implements PluginMessageListener {
     public static boolean enabled;
 
-    public static boolean executeBungeeCommands(String[] commands, String... players) {
+    public static boolean executeBungeeCommands(String[] commands, String... players)
+    {
         if (!enabled)
             return false;
         String json = JsonAPI.serialize(commands);
@@ -33,38 +34,16 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean executePlayerCommands(Command[] commands, String... players) {
+    public static boolean executePlayerCommands(Command[] commands, String... players)
+    {
         if (!enabled)
             return false;
         String json = JsonAPI.serialize(commands);
         return forwardToPlayer("CommandExecution", json.getBytes(), players);
     }
 
-    public static boolean forwardToAllServer(String channel, byte[] message) {
-        if (!enabled)
-            return false;
-        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
-        if (pc.isEmpty())
-            return false;
-        Player p = pc.iterator().next();
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Forward");
-        out.writeUTF("ALL");
-        out.writeUTF(channel);
-        out.writeShort(message.length);
-        out.write(message);
-        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
-        return true;
-    }
-
-    public static boolean executeServerCommands(String[] commands, String... servers) {
-        if (!enabled)
-            return false;
-        String json = JsonAPI.serialize(commands);
-        return forwardToServer("CommandExecution", json.getBytes(), servers);
-    }
-
-    public static boolean forwardToPlayer(String channel, byte[] message, String... players) {
+    public static boolean forwardToPlayer(String channel, byte[] message, String... players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -83,33 +62,16 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean executeServerCommands(Command[] commands, String... servers) {
+    public static boolean executeServerCommands(String[] commands, String... servers)
+    {
         if (!enabled)
             return false;
         String json = JsonAPI.serialize(commands);
         return forwardToServer("CommandExecution", json.getBytes(), servers);
     }
 
-    public static boolean forwardToPlayer(String channel, byte[] message, Iterable<String> players) {
-        if (!enabled)
-            return false;
-        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
-        if (pc.isEmpty())
-            return false;
-        Player p = pc.iterator().next();
-        for (String s : players) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("ForwardToPlayer");
-            out.writeUTF(s);
-            out.writeUTF(channel);
-            out.writeShort(message.length);
-            out.write(message);
-            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
-        }
-        return true;
-    }
-
-    public static boolean forwardToServer(String channel, byte[] message, String... servers) {
+    public static boolean forwardToServer(String channel, byte[] message, String... servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -128,7 +90,54 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean kick(String message, String... players) {
+    public static boolean executeServerCommands(Command[] commands, String... servers)
+    {
+        if (!enabled)
+            return false;
+        String json = JsonAPI.serialize(commands);
+        return forwardToServer("CommandExecution", json.getBytes(), servers);
+    }
+
+    public static boolean forwardToAllServer(String channel, byte[] message)
+    {
+        if (!enabled)
+            return false;
+        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
+        if (pc.isEmpty())
+            return false;
+        Player p = pc.iterator().next();
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("Forward");
+        out.writeUTF("ALL");
+        out.writeUTF(channel);
+        out.writeShort(message.length);
+        out.write(message);
+        p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
+        return true;
+    }
+
+    public static boolean forwardToPlayer(String channel, byte[] message, Iterable<String> players)
+    {
+        if (!enabled)
+            return false;
+        Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
+        if (pc.isEmpty())
+            return false;
+        Player p = pc.iterator().next();
+        for (String s : players) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("ForwardToPlayer");
+            out.writeUTF(s);
+            out.writeUTF(channel);
+            out.writeShort(message.length);
+            out.write(message);
+            p.sendPluginMessage(SU.pl(), "BungeeCord", out.toByteArray());
+        }
+        return true;
+    }
+
+    public static boolean kick(String message, String... players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -145,7 +154,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean kick(String message, Iterable<String> players) {
+    public static boolean kick(String message, Iterable<String> players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -162,7 +172,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestCurrentServerName() {
+    public static boolean requestCurrentServerName()
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -176,7 +187,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static void requestIP(Player... players) {
+    public static void requestIP(Player... players)
+    {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("IP");
         byte[] data = out.toByteArray();
@@ -185,7 +197,8 @@ public class BungeeAPI implements PluginMessageListener {
         }
     }
 
-    public static void requestIP(Iterable<Player> players) {
+    public static void requestIP(Iterable<Player> players)
+    {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("IP");
         byte[] data = out.toByteArray();
@@ -194,7 +207,8 @@ public class BungeeAPI implements PluginMessageListener {
         }
     }
 
-    public static boolean requestPlayerCount(Iterable<String> servers) {
+    public static boolean requestPlayerCount(Iterable<String> servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -210,7 +224,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestPlayerCount(String... servers) {
+    public static boolean requestPlayerCount(String... servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -226,7 +241,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestPlayerList(Iterable<String> servers) {
+    public static boolean requestPlayerList(Iterable<String> servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -242,7 +258,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestPlayerList(String... servers) {
+    public static boolean requestPlayerList(String... servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -258,7 +275,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestServerIP(Iterable<String> servers) {
+    public static boolean requestServerIP(Iterable<String> servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -274,7 +292,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestServerIP(String... servers) {
+    public static boolean requestServerIP(String... servers)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -290,7 +309,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestServerNames() {
+    public static boolean requestServerNames()
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -304,7 +324,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestUUID(Iterable<String> players) {
+    public static boolean requestUUID(Iterable<String> players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -320,7 +341,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean requestUUID(String... players) {
+    public static boolean requestUUID(String... players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pls = (Collection<Player>) SU.srv.getOnlinePlayers();
@@ -336,7 +358,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static void send(String server, Player... players) {
+    public static void send(String server, Player... players)
+    {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
@@ -345,7 +368,8 @@ public class BungeeAPI implements PluginMessageListener {
         }
     }
 
-    public static void send(String server, Collection<Player> players) {
+    public static void send(String server, Collection<Player> players)
+    {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
@@ -354,7 +378,8 @@ public class BungeeAPI implements PluginMessageListener {
         }
     }
 
-    public static boolean send(String server, String... players) {
+    public static boolean send(String server, String... players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -371,7 +396,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean send(String server, Iterable<String> players) {
+    public static boolean send(String server, Iterable<String> players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -388,7 +414,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean sendMessage(String msg, String... players) {
+    public static boolean sendMessage(String msg, String... players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -405,7 +432,8 @@ public class BungeeAPI implements PluginMessageListener {
         return true;
     }
 
-    public static boolean sendMessage(String msg, Iterable<String> players) {
+    public static boolean sendMessage(String msg, Iterable<String> players)
+    {
         if (!enabled)
             return false;
         Collection<Player> pc = (Collection<Player>) Bukkit.getOnlinePlayers();
@@ -423,7 +451,8 @@ public class BungeeAPI implements PluginMessageListener {
     }
 
     @Override
-    public void onPluginMessageReceived(String channel, final Player player, byte[] bytes) {
+    public void onPluginMessageReceived(String channel, final Player player, byte[] bytes)
+    {
         try {
             if (!channel.equals("BungeeCord"))
                 return;

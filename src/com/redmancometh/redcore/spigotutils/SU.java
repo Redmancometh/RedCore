@@ -72,10 +72,6 @@ public final class SU {
      */
     public static Permission perm;
     /**
-     * RedCore instance
-     */
-    private static RedCore pl;
-    /**
      * The main instance of the PluginManager object.
      */
     public static PluginManager pm;
@@ -112,6 +108,10 @@ public final class SU {
     private static Constructor entityPlayerC, playerInterractManagerC;
     private static Method getBukkitEntityM, loadDataM, saveDataM;
     private static Field pingF;
+    /**
+     * RedCore instance
+     */
+    private static RedCore pl;
     private static boolean schedulePacketAPI;
     private static Object worldServer, mcServer;
 
@@ -121,7 +121,8 @@ public final class SU {
      * @param text multi line escapeable text input
      * @return The escaped text
      */
-    public static String escapeText(String text) {
+    public static String escapeText(String text)
+    {
         return text.replace("\\", "\\\\")
                 .replace("_", "\\_")
                 .replace("|", "\\|")
@@ -136,7 +137,8 @@ public final class SU {
      * @param vars - The variables and their values, which should be filled
      * @return The variable filled String
      */
-    public static String fillVariables(String s, HashMap<String, Object> vars) {
+    public static String fillVariables(String s, HashMap<String, Object> vars)
+    {
         for (Entry<String, Object> v : vars.entrySet())
             s = s.replace('<' + v.getKey() + '>', String.valueOf(v.getValue()));
         return s;
@@ -149,7 +151,8 @@ public final class SU {
      * @param vars - The variables and their values, which should be filled
      * @return The variable filled String
      */
-    public static String fillVariables(String s, Object... vars) {
+    public static String fillVariables(String s, Object... vars)
+    {
         String last = null;
         for (Object v : vars) {
             if (last == null)
@@ -169,7 +172,8 @@ public final class SU {
      * @param vars     - The variables and their values, which should be filled
      * @return The variable filled iterable converted to an ArrayList
      */
-    public static ArrayList<String> fillVariables(Iterable<String> iterable, Object... vars) {
+    public static ArrayList<String> fillVariables(Iterable<String> iterable, Object... vars)
+    {
         ArrayList<String> out = new ArrayList<>();
         iterable.forEach((s) -> {
             String last = null;
@@ -193,7 +197,8 @@ public final class SU {
      * @param start - Filter every string which starts with this one
      * @return The filtered Strings
      */
-    public static ArrayList<String> filterStart(String[] data, String start) {
+    public static ArrayList<String> filterStart(String[] data, String start)
+    {
         start = start.toLowerCase();
         ArrayList<String> ld = new ArrayList<>();
         for (String s : data) {
@@ -211,7 +216,8 @@ public final class SU {
      * @param start - Filter every string which starts with this one
      * @return The filtered Strings
      */
-    public static ArrayList<String> filterStart(Iterable<String> data, String start) {
+    public static ArrayList<String> filterStart(Iterable<String> data, String start)
+    {
         start = start.toLowerCase();
         ArrayList<String> ld = new ArrayList<>();
         for (String s : data) {
@@ -228,7 +234,8 @@ public final class SU {
      * @param plr target player
      * @return The ping of the given player in milliseconds.
      */
-    public static int getPing(Player plr) {
+    public static int getPing(Player plr)
+    {
         try {
             return pingF.getInt(entityF.get(plr));
         } catch (Throwable e) {
@@ -243,7 +250,8 @@ public final class SU {
      * @param name name of the player, which should be got / active.
      * @return The online player / active offline player who has the given name, or null if no such player have found.
      */
-    public static Player getPlayer(String name) {
+    public static Player getPlayer(String name)
+    {
         if (name.length() > 16) {
             UUID uuid = UUID.fromString(name);
             Player p = Bukkit.getPlayer(uuid);
@@ -263,7 +271,8 @@ public final class SU {
      * @param uuid uuid of the loadable offline player
      * @return the active Player object, or null if the player was not found.
      */
-    public static Player loadPlayer(UUID uuid) {
+    public static Player loadPlayer(UUID uuid)
+    {
         try {
             if (uuid == null) {
                 return null;
@@ -290,7 +299,8 @@ public final class SU {
      * @param name name of the target player
      * @return The UUID of the requested player, or null if it was not found.
      */
-    public static UUID getUUID(String name) {
+    public static UUID getUUID(String name)
+    {
         Player plr = Bukkit.getPlayer(name);
         if (plr != null)
             return plr.getUniqueId();
@@ -320,7 +330,8 @@ public final class SU {
      * @param plugin - The plugin where the error appeared
      * @param author - The author name, which will be searched in the error report
      */
-    public static void error(CommandSender sender, Throwable err, String plugin, String author) {
+    public static void error(CommandSender sender, Throwable err, String plugin, String author)
+    {
         StringBuilder report = new StringBuilder();
         report.append("§4§l").append(plugin).append(" - ERROR REPORT - ")
                 .append(err.getClass().getSimpleName());
@@ -346,7 +357,8 @@ public final class SU {
             sender.sendMessage(rep);
     }
 
-    public static UUID getOnlineUUID(String name) {
+    public static UUID getOnlineUUID(String name)
+    {
         name = name.toLowerCase();
         UUID uid = uuidCache.get(name);
         if (uid == null) {
@@ -361,11 +373,13 @@ public final class SU {
         return uid;
     }
 
-    public static UUID getOfflineUUID(String name) {
+    public static UUID getOfflineUUID(String name)
+    {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(utf8));
     }
 
-    public static Player getPlayer(UUID uid) {
+    public static Player getPlayer(UUID uid)
+    {
         Player plr = Bukkit.getPlayer(uid);
         if (plr != null)
             return plr;
@@ -381,7 +395,8 @@ public final class SU {
      * @param plr target player
      * @return the GameProfile of the target player
      */
-    public static GameProfile getProfile(Player plr) {
+    public static GameProfile getProfile(Player plr)
+    {
         try {
             return new GameProfile(plr.getClass().getMethod("getProfile").invoke(plr));
         } catch (Throwable e) {
@@ -396,7 +411,8 @@ public final class SU {
      * @param name name of the target player
      * @return The UUID of the requested player, or null if it was not found.
      */
-    public static UUID getUUIDExact(String name) {
+    public static UUID getUUIDExact(String name)
+    {
         Player plr = Bukkit.getPlayer(name);
         if (plr != null)
             return plr.getUniqueId();
@@ -408,7 +424,8 @@ public final class SU {
         return MojangAPI.getProfile(name).id;
     }
 
-    public static void init(RedCore redCore) {
+    public static void init(RedCore redCore)
+    {
         srv = getServer();
         pm = srv.getPluginManager();
         cs = srv.getConsoleSender();
@@ -437,7 +454,8 @@ public final class SU {
         cm = new CustomCommandMap();
     }
 
-    public static void registerVariables() {
+    public static void registerVariables()
+    {
         VariableAPI.handlers.put("eval", (plr, inside, oArgs) -> {
             String s = StringUtils.join(inside, "");
             try {
@@ -515,7 +533,8 @@ public final class SU {
      * @return The unescaped text
      */
 
-    public static String unescapeText(String text) {
+    public static String unescapeText(String text)
+    {
         return (' ' + text).replaceAll("([^\\\\])_", "$1 ")
                 .replaceAll("([^\\\\])\\|", "$1\n")
                 .replaceAll("([^\\\\])\\\\([_\\|])", "$1$2")
@@ -528,7 +547,8 @@ public final class SU {
      * @param pl  - The plugin who wants to log the message
      * @param msg - The message which should be logged
      */
-    public static void log(Plugin pl, Iterable<Object>... msg) {
+    public static void log(Plugin pl, Iterable<Object>... msg)
+    {
         cs.sendMessage('[' + pl.getName() + "] " + StringUtils.join(msg, ", "));
     }
 
@@ -538,7 +558,8 @@ public final class SU {
      * @param uuids collection of player uuids which will be converted to names
      * @return the convertion result, which is an ArrayList of player names
      */
-    public static ArrayList<String> namesFromUUIDs(Collection<UUID> uuids) {
+    public static ArrayList<String> namesFromUUIDs(Collection<UUID> uuids)
+    {
         ArrayList<String> out = new ArrayList<>();
         for (UUID id : uuids) {
             out.add(getName(id));
@@ -552,7 +573,8 @@ public final class SU {
      * @param id UUID of the target player
      * @return The name of the requested player or null if the name was not found.
      */
-    public static String getName(UUID id) {
+    public static String getName(UUID id)
+    {
         Player plr = Bukkit.getPlayer(id);
         if (plr != null)
             return plr.getName();
@@ -568,7 +590,8 @@ public final class SU {
      * @param names collection of player names which will be converted to UUIDs
      * @return the convertion result, which is an ArrayList of player UUIDs
      */
-    public static ArrayList<UUID> namesToUUIDs(Collection<String> names) {
+    public static ArrayList<UUID> namesToUUIDs(Collection<String> names)
+    {
         ArrayList<UUID> out = new ArrayList<>();
         for (String s : names) {
             out.add(getUUID(s));
@@ -582,7 +605,8 @@ public final class SU {
      * @param in input message containing color and formatting codes
      * @return The color and formatting code optimized string
      */
-    public static String optimizeColorCodes(String in) {
+    public static String optimizeColorCodes(String in)
+    {
         StringBuilder out = new StringBuilder();
         StringBuilder oldFormat = new StringBuilder("§r");
         StringBuilder newFormat = new StringBuilder("§r");
@@ -640,7 +664,13 @@ public final class SU {
         return out.toString();
     }
 
-    public static void postInit() {
+    public static RedCore pl()
+    {
+        return pl;
+    }
+
+    public static void postInit()
+    {
         pm.registerEvents(new SUListener(), pl);
         SU.pm.registerEvents(SU.tp, pl);
         initOfflinePlayerManager();
@@ -669,7 +699,8 @@ public final class SU {
         cs.sendMessage("§2[§aStartup§2]§a Started RedCore properly.");
     }
 
-    public static void initOfflinePlayerManager() {
+    public static void initOfflinePlayerManager()
+    {
         try {
             Class mcServerClass = Reflection.getNMSClass("MinecraftServer");
             Class entityPlayerClass = Reflection.getNMSClass("EntityPlayer");
@@ -698,7 +729,8 @@ public final class SU {
      * @param pl  - The plugin who wants to log the message
      * @param msg - The message which should be logged
      */
-    public static void log(Plugin pl, Object... msg) {
+    public static void log(Plugin pl, Object... msg)
+    {
         cs.sendMessage('[' + pl.getName() + "] " + StringUtils.join(msg, ", "));
     }
 
@@ -709,7 +741,8 @@ public final class SU {
      * @param max - Maximal value of the random number
      * @return A random double between min and max
      */
-    public static double rand(double min, double max) {
+    public static double rand(double min, double max)
+    {
         return rand.nextDouble() * Math.abs(max - min) + min;
     }
 
@@ -722,7 +755,8 @@ public final class SU {
      * @param maxLuminance  - Maximal luminance (0-1)
      * @return The generated random color
      */
-    public static Color randColor(double minSaturation, double maxSaturation, double minLuminance, double maxLuminance) {
+    public static Color randColor(double minSaturation, double maxSaturation, double minLuminance, double maxLuminance)
+    {
         float hue = rand.nextFloat();
         double saturation = SU.rand.nextDouble() * (maxSaturation - minSaturation) + minSaturation;
         double luminance = SU.rand.nextDouble() * (maxLuminance - minLuminance) + minLuminance;
@@ -736,7 +770,8 @@ public final class SU {
      *
      * @param plr Loaded offline players Player object
      */
-    public static void savePlayer(Player plr) {
+    public static void savePlayer(Player plr)
+    {
         try {
             saveDataM.invoke(plr);
         } catch (Throwable e) {
@@ -751,7 +786,8 @@ public final class SU {
      * @param pl        instane of the plugin
      * @param fileNames names of the saveable files
      */
-    public static void saveResources(Plugin pl, String... fileNames) {
+    public static void saveResources(Plugin pl, String... fileNames)
+    {
         Logger log = pl.getLogger();
         File df = pl.getDataFolder();
         ClassLoader cl = pl.getClass().getClassLoader();
@@ -783,11 +819,13 @@ public final class SU {
      * @param len maximum length
      * @return The cutted String, which will maximally len characters.
      */
-    public static String setLength(String in, int len) {
+    public static String setLength(String in, int len)
+    {
         return in.length() > len ? in.substring(0, len) : in;
     }
 
-    public static String[] splitPage(String text, int lines) {
+    public static String[] splitPage(String text, int lines)
+    {
         String[] d = text.split("\n");
         String[] out = new String[(d.length + (lines - 1)) / lines];
         for (int i = 0; i < d.length; i++) {
@@ -804,7 +842,8 @@ public final class SU {
      *
      * @param p - The unloadable plugin
      */
-    public static void unloadPlugin(Plugin p) {
+    public static void unloadPlugin(Plugin p)
+    {
         try {
             if (!p.isEnabled())
                 return;
@@ -830,9 +869,5 @@ public final class SU {
         } catch (Throwable e) {
             error(cs, e, "RedCore", "com.redmancometh");
         }
-    }
-
-    public static RedCore pl() {
-        return pl;
     }
 }

@@ -23,7 +23,8 @@ public enum WorldType implements WrappedData {
         enumDifficultyVO = Reflection.getMethod(enumDifficultyCl, "getById", int.class);
     }
 
-    public static WorldType fromVanillaWorldType(Object vanilla) {
+    public static WorldType fromVanillaWorldType(Object vanilla)
+    {
         try {
             return valueOf(((String) name.get(vanilla)).toUpperCase());
         } catch (Throwable e) {
@@ -32,7 +33,8 @@ public enum WorldType implements WrappedData {
         return null;
     }
 
-    public static Object toVanillaDifficulty(Difficulty mode) {
+    public static Object toVanillaDifficulty(Difficulty mode)
+    {
         try {
             return enumDifficultyVO.invoke(null, mode.getValue());
         } catch (Throwable e) {
@@ -41,7 +43,8 @@ public enum WorldType implements WrappedData {
         return null;
     }
 
-    public static Object toVanillaGameMode(GameMode mode) {
+    public static Object toVanillaGameMode(GameMode mode)
+    {
         try {
             return enumGmVO.invoke(null, mode.name());
         } catch (Throwable e) {
@@ -50,7 +53,8 @@ public enum WorldType implements WrappedData {
         return null;
     }
 
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return valueOf.invoke(null, name());
         } catch (Throwable e) {

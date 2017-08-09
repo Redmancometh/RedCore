@@ -11,14 +11,16 @@ public class PacketPlayOutUpdateTime extends WrappedPacket {
     public long worldAge;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.UpdateTime.getPacketData(packet);
         worldAge = (long) d[0];
         timeOfDay = (long) d[1];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.UpdateTime.newPacket(worldAge, timeOfDay);
     }
 }

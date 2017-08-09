@@ -12,12 +12,8 @@ public class PacketPlayOutRelEntityMoveLook extends WrappedPacket {
     public boolean onGround;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.RelEntityMoveLook.newPacket(entityId, deltaX, deltaY, deltaZ, yaw, pitch, onGround);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.RelEntityMoveLook.getPacketData(packet);
         entityId = (int) d[0];
         deltaX = (byte) d[1];
@@ -26,5 +22,11 @@ public class PacketPlayOutRelEntityMoveLook extends WrappedPacket {
         yaw = (byte) d[4];
         pitch = (byte) d[5];
         onGround = (boolean) d[6];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.RelEntityMoveLook.newPacket(entityId, deltaX, deltaY, deltaZ, yaw, pitch, onGround);
     }
 }

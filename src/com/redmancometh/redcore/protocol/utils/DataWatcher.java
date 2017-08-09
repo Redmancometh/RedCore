@@ -57,10 +57,12 @@ public class DataWatcher implements WrappedData, StringSerializable {
 
     public TreeMap<Integer, Object> map = new TreeMap<>();
 
-    public DataWatcher() {
+    public DataWatcher()
+    {
     }
 
-    public DataWatcher(Iterable<WrappedItem> list) {
+    public DataWatcher(Iterable<WrappedItem> list)
+    {
         try {
             for (WrappedItem wi : list)
                 map.put(wi.id, wi.data);
@@ -69,7 +71,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
         }
     }
 
-    public DataWatcher(Object nmsData) {
+    public DataWatcher(Object nmsData)
+    {
         try {
             if (nmsData == null)
                 return;
@@ -86,7 +89,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
         }
     }
 
-    public static ArrayList<WrappedItem> wrapNMSItems(Iterable<Object> in) {
+    public static ArrayList<WrappedItem> wrapNMSItems(Iterable<Object> in)
+    {
         ArrayList<WrappedItem> out = new ArrayList<>();
         for (Object o : in) {
             try {
@@ -98,7 +102,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
         return out;
     }
 
-    public static ArrayList<Object> convertToNmsItems(Iterable<WrappedItem> in) {
+    public static ArrayList<Object> convertToNmsItems(Iterable<WrappedItem> in)
+    {
         ArrayList<Object> out = new ArrayList<>();
         for (WrappedItem wi : in) {
             try {
@@ -118,7 +123,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder out = new StringBuilder();
         for (Entry<Integer, Object> e : map.entrySet()) {
             out.append("§e, §b").append(e.getKey()).append("§e: §f").append(JsonAPI.serialize(e.getValue()));
@@ -130,12 +136,14 @@ public class DataWatcher implements WrappedData, StringSerializable {
         public Object data;
         public int id;
 
-        public WrappedItem(int id, Object data) {
+        public WrappedItem(int id, Object data)
+        {
             this.id = id;
             this.data = data;
         }
 
-        public WrappedItem(Object o) {
+        public WrappedItem(Object o)
+        {
             try {
                 data = WrapperFactory.wrap(itemField.get(o));
                 id = idField.getInt(o);
@@ -145,7 +153,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 if (Reflection.ver.isAbove(ServerVersion.v1_9))
                     return itc.newInstance(objcon.newInstance(id, serializers.get(data.getClass())), data);
@@ -159,7 +168,8 @@ public class DataWatcher implements WrappedData, StringSerializable {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         Object dw = null;
         try {
             dw = con.newInstance((Object) null);

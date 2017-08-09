@@ -10,19 +10,22 @@ public class PacketPlayInCustomPayload extends WrappedPacket implements StringSe
     public ByteBuf data;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketInType.CustomPayload.getPacketData(packet);
         channel = (String) d[0];
         data = (ByteBuf) d[1];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.CustomPayload.newPacket(channel, data);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return channel;
     }
 }

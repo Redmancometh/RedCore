@@ -19,15 +19,18 @@ public enum ChatClickEventType {
 
     final char id;
 
-    ChatClickEventType(char id) {
+    ChatClickEventType(char id)
+    {
         this.id = id;
     }
 
-    public static ChatClickEventType forId(char id) {
+    public static ChatClickEventType forId(char id)
+    {
         return byId.get(id);
     }
 
-    public char getId() {
+    public char getId()
+    {
         return id;
     }
 }

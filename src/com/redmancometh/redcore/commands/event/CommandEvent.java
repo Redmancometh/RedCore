@@ -8,35 +8,42 @@ public abstract class CommandEvent extends Event implements Cancellable {
     private String command;
     private CommandSender sender;
 
-    public CommandEvent(CommandSender sender, String command) {
+    public CommandEvent(CommandSender sender, String command)
+    {
         this.sender = sender;
         this.command = command;
     }
 
 
-    public String getCommand() {
+    public String getCommand()
+    {
         return command;
     }
 
-    public void setCommand(String command) {
+    public void setCommand(String command)
+    {
         this.command = command;
     }
 
-    public CommandSender getSender() {
+    public CommandSender getSender()
+    {
         return sender;
     }
 
-    public void setSender(CommandSender sender) {
+    public void setSender(CommandSender sender)
+    {
         this.sender = sender;
     }
 
     @Override
-    public boolean isCancelled() {
+    public boolean isCancelled()
+    {
         return cancel;
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCancelled(boolean cancel)
+    {
         this.cancel = cancel;
     }
 }

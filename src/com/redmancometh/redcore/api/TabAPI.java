@@ -12,11 +12,13 @@ import static com.redmancometh.redcore.api.ChatAPI.toICBC;
 
 
 public class TabAPI {
-    public static void setGlobalHeaderFooter(String header, String footer) {
+    public static void setGlobalHeaderFooter(String header, String footer)
+    {
         setLocalHeaderFooter(header, footer, Bukkit.getOnlinePlayers());
     }
 
-    public static void setLocalHeaderFooter(String header, String footer, Collection<? extends Player> plrs) {
+    public static void setLocalHeaderFooter(String header, String footer, Collection<? extends Player> plrs)
+    {
         Object h = toICBC(TextToJson(header));
         Object f = toICBC(TextToJson(footer));
         Object packet = PacketOutType.PlayerListHeaderFooter.newPacket(h, f);
@@ -25,7 +27,8 @@ public class TabAPI {
         }
     }
 
-    public static void setLocalHeaderFooter(String header, String footer, Player... plrs) {
+    public static void setLocalHeaderFooter(String header, String footer, Player... plrs)
+    {
         Object h = toICBC(TextToJson(header));
         Object f = toICBC(TextToJson(footer));
         Object packet = PacketOutType.PlayerListHeaderFooter.newPacket(h, f);

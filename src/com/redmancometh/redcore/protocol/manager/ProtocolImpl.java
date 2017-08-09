@@ -31,16 +31,80 @@ public final class ProtocolImpl extends Protocol {
     private static Field oldHChildF;
     private ChannelFuture cf;
 
-    public ProtocolImpl() {
+    public ProtocolImpl()
+    {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e)
+    {
         injectPlayer(e.getPlayer());
     }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerLogin(PlayerLoginEvent e)
+    {
+        injectPlayer(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerQuit(final PlayerQuitEvent e)
+    {
+        final String pln = e.getPlayer().getName();
+        SU.sch.scheduleSyncDelayedTask(pl(), () -> {
+            Player p = Bukkit.getPlayer(pln);
+            if (p == null)
+                channelLookup.remove(pln);
+        });
+    }
+
     @Override
-    public Channel getChannel(Player plr) {
+    public void unregisterServerChannelHandler() throws IllegalAccessException
+    {
+        removeHandler(cf.channel(), "RedCoreServer");
+    }
+
+    @Override
+    public Player getPlayer(Object channel)
+    {
+        ClientChannelHook ch = ((Channel) channel).pipeline().get(ClientChannelHook.class);
+        if (ch == null)
+            return null;
+        return ch.player;
+    }
+
+    @Override
+    public void init() throws Throwable
+    {
+        Object minecraftServer = getFirstFieldOfType(Reflection.getOBCClass("CraftServer"), minecraftServerClass).get(SU.srv);
+        Object serverConnection = getFirstFieldOfType(minecraftServerClass, serverConnectionClass).get(minecraftServer);
+        cf = (ChannelFuture) ((List) getFirstFieldOfType(serverConnectionClass, List.class).get(serverConnection)).iterator().next();
+        registerServerChannelHook();
+        SU.srv.getOnlinePlayers().forEach(this::injectPlayer);
+    }
+
+    @Override
+    public void injectPlayer(final Player plr)
+    {
+        Channel ch = getChannel(plr);
+        if (ch != null) {
+            ClientChannelHook cch = ch.pipeline().get(ClientChannelHook.class);
+            if (cch != null)
+                cch.player = plr;
+        }
+    }
+
+    @Override
+    public void printPipeline(Iterable<Map.Entry<String, ?>> pipeline)
+    {
+        ArrayList<String> list = new ArrayList<>();
+        pipeline.forEach((e) -> list.add(e.getKey()));
+        SU.cs.sendMessage("§ePipeline: §f" + StringUtils.join(list, ", "));
+    }
+
+    @Override
+    public Channel getChannel(Player plr)
+    {
         if (plr == null)
             return null;
         Channel c = channelLookup.get(plr.getName());
@@ -59,48 +123,16 @@ public final class ProtocolImpl extends Protocol {
     }
 
     @Override
-    public Player getPlayer(Object channel) {
-        ClientChannelHook ch = ((Channel) channel).pipeline().get(ClientChannelHook.class);
-        if (ch == null)
-            return null;
-        return ch.player;
-    }
-
-    @Override
-    public void init() throws Throwable {
-        Object minecraftServer = getFirstFieldOfType(Reflection.getOBCClass("CraftServer"), minecraftServerClass).get(SU.srv);
-        Object serverConnection = getFirstFieldOfType(minecraftServerClass, serverConnectionClass).get(minecraftServer);
-        cf = (ChannelFuture) ((List) getFirstFieldOfType(serverConnectionClass, List.class).get(serverConnection)).iterator().next();
-        registerServerChannelHook();
-        SU.srv.getOnlinePlayers().forEach(this::injectPlayer);
-    }
-
-    @Override
-    public void injectPlayer(final Player plr) {
-        Channel ch = getChannel(plr);
-        if (ch != null) {
-            ClientChannelHook cch = ch.pipeline().get(ClientChannelHook.class);
-            if (cch != null)
-                cch.player = plr;
-        }
-    }
-
-    @Override
-    public void printPipeline(Iterable<Map.Entry<String, ?>> pipeline) {
-        ArrayList<String> list = new ArrayList<>();
-        pipeline.forEach((e) -> list.add(e.getKey()));
-        SU.cs.sendMessage("§ePipeline: §f" + StringUtils.join(list, ", "));
-    }
-
-    @Override
-    public void receivePacket(Object channel, Object packet) {
+    public void receivePacket(Object channel, Object packet)
+    {
         if (packet instanceof WrappedPacket)
             packet = ((WrappedPacket) packet).getVanillaPacket();
         ((Channel) channel).pipeline().context("encoder").fireChannelRead(packet);
     }
 
     @Override
-    public void registerServerChannelHook() throws Throwable {
+    public void registerServerChannelHook() throws Throwable
+    {
         Channel serverCh = cf.channel();
         oldH = serverCh.pipeline().get(Reflection.getClass("io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor"));
         oldHChildF = Reflection.getField(oldH.getClass(), "childHandler");
@@ -108,15 +140,8 @@ public final class ProtocolImpl extends Protocol {
     }
 
     @Override
-    public void removeHandler(Object ch, String handler) {
-        try {
-            ((Channel) ch).pipeline().remove(handler);
-        } catch (Throwable ignored) {
-        }
-    }
-
-    @Override
-    public void sendPacket(Object channel, Object packet) {
+    public void sendPacket(Object channel, Object packet)
+    {
         if (channel == null || packet == null) {
             SU.error(SU.cs, new RuntimeException("§cFailed to send packet " + packet + " to channel " + channel), "RedCore", "com.redmancometh");
             return;
@@ -127,29 +152,19 @@ public final class ProtocolImpl extends Protocol {
     }
 
     @Override
-    public void unregisterServerChannelHandler() throws IllegalAccessException {
-        removeHandler(cf.channel(), "RedCoreServer");
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLogin(PlayerLoginEvent e) {
-        injectPlayer(e.getPlayer());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(final PlayerQuitEvent e) {
-        final String pln = e.getPlayer().getName();
-        SU.sch.scheduleSyncDelayedTask(pl(), () -> {
-            Player p = Bukkit.getPlayer(pln);
-            if (p == null)
-                channelLookup.remove(pln);
-        });
+    public void removeHandler(Object ch, String handler)
+    {
+        try {
+            ((Channel) ch).pipeline().remove(handler);
+        } catch (Throwable ignored) {
+        }
     }
 
     public class ClientChannelHook extends ChannelDuplexHandler {
         public Player player;
 
-        public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
+        public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception
+        {
             try {
                 Channel channel = ctx.channel();
                 PacketInEvent e = new PacketInEvent(channel, player, packet);
@@ -166,7 +181,8 @@ public final class ProtocolImpl extends Protocol {
             }
         }
 
-        public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
+        public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception
+        {
             try {
                 PacketOutEvent e = new PacketOutEvent(ctx.channel(), player, packet);
                 dispatchPacketOutEvent(e);
@@ -182,17 +198,20 @@ public final class ProtocolImpl extends Protocol {
     public class ServerChannelHook extends ChannelInboundHandlerAdapter {
         public final ChannelHandler childHandler;
 
-        public ServerChannelHook(ChannelHandler childHandler) {
+        public ServerChannelHook(ChannelHandler childHandler)
+        {
             this.childHandler = childHandler;
         }
 
-        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
+        {
             if (childHandler.getClass().getName().equals("lilypad.bukkit.connect.injector.NettyChannelInitializer"))
                 Reflection.getField(childHandler.getClass(), "oldChildHandler").set(childHandler, oldHChildF.get(oldH));
             Channel c = (Channel) msg;
             c.pipeline().addLast("RedCoreInit", new ChannelInboundHandlerAdapter() {
                 @Override
-                public void channelRead(ChannelHandlerContext ctx, Object o) throws Exception {
+                public void channelRead(ChannelHandlerContext ctx, Object o) throws Exception
+                {
                     ChannelPipeline pipeline = ctx.pipeline();
                     pipeline.remove("RedCoreInit");
                     pipeline.addBefore("packet_handler", "RedCore", new ClientChannelHook());

@@ -22,11 +22,13 @@ public class PacketPlayOutSpawnEntity extends WrappedPacket {
     public float yaw;
     public double z;
 
-    public PacketPlayOutSpawnEntity() {
+    public PacketPlayOutSpawnEntity()
+    {
 
     }
 
-    public PacketPlayOutSpawnEntity(int id, int type, UUID uid, LocationData loc, Vector vec) {
+    public PacketPlayOutSpawnEntity(int id, int type, UUID uid, LocationData loc, Vector vec)
+    {
         entityId = id;
         entityTypeId = type;
         entityUUID = uid;
@@ -35,7 +37,8 @@ public class PacketPlayOutSpawnEntity extends WrappedPacket {
             setVelocity(vec);
     }
 
-    public void setLocation(LocationData loc) {
+    public void setLocation(LocationData loc)
+    {
         x = loc.x;
         y = loc.y;
         z = loc.z;
@@ -43,14 +46,16 @@ public class PacketPlayOutSpawnEntity extends WrappedPacket {
         pitch = loc.pitch;
     }
 
-    public void setVelocity(Vector vec) {
+    public void setVelocity(Vector vec)
+    {
         speedX = (float) vec.getX();
         speedY = (float) vec.getY();
         speedZ = (float) vec.getZ();
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] o = PacketOutType.SpawnEntity.getPacketData(packet);
         entityId = (int) o[0];
         int st = 5;
@@ -75,7 +80,8 @@ public class PacketPlayOutSpawnEntity extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return Reflection.ver.isAbove(ServerVersion.v1_10) ? PacketOutType.SpawnEntity.newPacket(entityId, entityUUID, x, y, z,
                 convertSpeed(speedX), convertSpeed(speedY), convertSpeed(speedZ),
                 (int) ((double) (pitch * 256.0f) / 360.0), (int) ((double) (yaw * 256.0f) / 360.0), entityTypeId, objectData) :
@@ -84,7 +90,8 @@ public class PacketPlayOutSpawnEntity extends WrappedPacket {
                         (int) ((double) (pitch * 256.0f) / 360.0), (int) ((double) (yaw * 256.0f) / 360.0), entityTypeId, objectData);
     }
 
-    public int convertSpeed(float num) {
+    public int convertSpeed(float num)
+    {
         return (int) (((double) num < -3.9 ? -3.9 : (double) num > 3.9 ? 3.9 : (double) num) * 8000.0);
     }
 }

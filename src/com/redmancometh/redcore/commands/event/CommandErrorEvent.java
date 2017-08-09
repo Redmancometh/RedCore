@@ -7,21 +7,25 @@ public class CommandErrorEvent extends CommandEvent {
     private static final HandlerList hl = new HandlerList();
     private final Throwable error;
 
-    public CommandErrorEvent(CommandSender sender, String command, Throwable error) {
+    public CommandErrorEvent(CommandSender sender, String command, Throwable error)
+    {
         super(sender, command);
         this.error = error;
     }
 
-    public static HandlerList getHandlerList() {
+    public static HandlerList getHandlerList()
+    {
         return hl;
     }
 
-    public Throwable getError() {
+    public Throwable getError()
+    {
         return error;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public HandlerList getHandlers()
+    {
         return hl;
     }
 }

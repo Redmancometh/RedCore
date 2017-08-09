@@ -8,12 +8,14 @@ public class PacketPlayInHeldItemSlot
     public int itemInHandIndex;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         itemInHandIndex = (Integer) PacketInType.HeldItemSlot.getPacketData(packet)[0];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.HeldItemSlot.newPacket(itemInHandIndex);
     }
 }

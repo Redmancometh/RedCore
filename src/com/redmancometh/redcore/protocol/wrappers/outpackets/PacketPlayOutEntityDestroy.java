@@ -9,21 +9,25 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 public class PacketPlayOutEntityDestroy extends WrappedPacket {
     public int[] entityIds;
 
-    public PacketPlayOutEntityDestroy() {
+    public PacketPlayOutEntityDestroy()
+    {
 
     }
 
-    public PacketPlayOutEntityDestroy(int... eids) {
+    public PacketPlayOutEntityDestroy(int... eids)
+    {
         entityIds = eids;
     }
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.EntityDestroy.newPacket(entityIds);
+    public void loadVanillaPacket(Object packet)
+    {
+        entityIds = (int[]) PacketOutType.EntityDestroy.getPacketData(packet)[0];
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        entityIds = (int[]) PacketOutType.EntityDestroy.getPacketData(packet)[0];
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.EntityDestroy.newPacket(entityIds);
     }
 }

@@ -10,7 +10,8 @@ public class PacketPlayInTransaction
     public int windowId;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.Transaction.getPacketData(packet);
         windowId = (Integer) data[0];
         actionId = (Short) data[1];
@@ -18,7 +19,8 @@ public class PacketPlayInTransaction
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.Transaction.newPacket(windowId, actionId, accepted);
     }
 }

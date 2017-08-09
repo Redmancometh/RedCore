@@ -14,12 +14,8 @@ public class PacketPlayInFlying extends WrappedPacket {
     public double z;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.Flying.newPacket(x, y, z, yaw, pitch, onGround, hasPos, hasLook);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.Flying.getPacketData(packet);
         x = (Double) data[0];
         y = (Double) data[1];
@@ -29,6 +25,12 @@ public class PacketPlayInFlying extends WrappedPacket {
         onGround = (Boolean) data[5];
         hasPos = (Boolean) data[6];
         hasLook = (Boolean) data[7];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketInType.Flying.newPacket(x, y, z, yaw, pitch, onGround, hasPos, hasLook);
     }
 }
 

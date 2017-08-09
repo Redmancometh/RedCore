@@ -17,7 +17,8 @@ public class PacketPlayInBlockPlace extends WrappedPacket {
     public long timestamp;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.BlockPlace.getPacketData(packet);
         if (Reflection.ver.isBellow(ServerVersion.v1_8)) {
             location = new BlockLocation(data[0]);
@@ -34,7 +35,8 @@ public class PacketPlayInBlockPlace extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         Object[] d;
         if (Reflection.ver.isBellow(ServerVersion.v1_8)) {
             d = new Object[7];

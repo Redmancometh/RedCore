@@ -16,7 +16,8 @@ public final class AnimationAPI {
     public static HashMap<String, Class> effects = new HashMap();
     private static HashMap<Plugin, HashMap<String, HashSet<AnimationRunnable>>> runningAnimations = new HashMap();
 
-    public static void init() {
+    public static void init()
+    {
         effects.put("scroller", ScrollerEffect.class);
         effects.put("blink", BlinkEffect.class);
         effects.put("frame", FramesEffect.class);
@@ -28,7 +29,8 @@ public final class AnimationAPI {
         //ConfigSerialization.serializers.put(Animation.class, new AnimationSerializer());
     }
 
-    public static AnimationRunnable runAnimation(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener) {
+    public static AnimationRunnable runAnimation(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener)
+    {
         if (pl == null || a == null || plr == null || listener == null)
             return null;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.computeIfAbsent(pl, k -> new HashMap<>());
@@ -38,7 +40,8 @@ public final class AnimationAPI {
         return ar;
     }
 
-    public static void stopRunningAnimation(AnimationRunnable ar) {
+    public static void stopRunningAnimation(AnimationRunnable ar)
+    {
         if (ar == null)
             return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.get(ar.pl);
@@ -49,7 +52,8 @@ public final class AnimationAPI {
         ar.stop();
     }
 
-    public static void stopRunningAnimations(Player plr) {
+    public static void stopRunningAnimations(Player plr)
+    {
         if (plr == null)
             return;
         for (HashMap<String, HashSet<AnimationRunnable>> map : runningAnimations.values()) {
@@ -61,7 +65,8 @@ public final class AnimationAPI {
         }
     }
 
-    public static void stopRunningAnimations(Plugin pl) {
+    public static void stopRunningAnimations(Plugin pl)
+    {
         if (pl == null)
             return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.remove(pl);
@@ -73,7 +78,8 @@ public final class AnimationAPI {
         }
     }
 
-    public static void stopRunningAnimations(Plugin pl, Player plr) {
+    public static void stopRunningAnimations(Plugin pl, Player plr)
+    {
         if (pl == null || plr == null)
             return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.get(pl);
@@ -88,12 +94,14 @@ public final class AnimationAPI {
     public static class CustomEffectHandler implements VariableHandler {
         public final String name;
 
-        public CustomEffectHandler(String name) {
+        public CustomEffectHandler(String name)
+        {
             this.name = name;
         }
 
         @Override
-        public Object getValue(Player plr, ArrayList<Object> inside, Object[] oArgs) {
+        public Object getValue(Player plr, ArrayList<Object> inside, Object[] oArgs)
+        {
             AnimationRunnable ar = (AnimationRunnable) oArgs[0];
             String[] d = StringUtils.join(inside, "").split(":", 2);
             CustomEffect effect = ar.effects.get(name).get(d[0]);

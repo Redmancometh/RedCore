@@ -3,8 +3,7 @@ package com.redmancometh.redcore.sliceable;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
-{
+public class SlicedList<T> extends ArrayList<T> implements Sliceable<T> {
 
     private static final long serialVersionUID = -5221471063452246214L;
     private Consumer<T> action;
@@ -12,10 +11,9 @@ public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
     private boolean tailConsumer = false;
 
     /**
-     * 
-     * @param action This is the action to perform on the object of type T when processAction is called
+     * @param action       This is the action to perform on the object of type T when processAction is called
      * @param tailConsumer If this is true when the processTasks method reaches the end of the list it will wrap around
-     * and go back to 0 until the amount is fulfilled
+     *                     and go back to 0 until the amount is fulfilled
      */
     public SlicedList(Consumer<T> action, boolean tailConsumer)
     {
@@ -24,21 +22,23 @@ public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
         this.tailConsumer = tailConsumer;
     }
 
+    @Override
+    public Consumer getAction()
+    {
+        return action;
+    }
+
     public void processTasks(int amount)
     {
-        if (amount == 1)
-        {
+        if (amount == 1) {
             action.accept(get(currentIndex));
             currentIndex++;
             return;
         }
-        for (int x = currentIndex; x < amount; x++)
-        {
+        for (int x = currentIndex; x < amount; x++) {
             action.accept(get(currentIndex));
-            if (currentIndex + 1 > size())
-            {
-                if (tailConsumer)
-                {
+            if (currentIndex + 1 > size()) {
+                if (tailConsumer) {
                     processTasks(amount - x);
                     currentIndex = 0;
                     return;
@@ -46,11 +46,5 @@ public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
             }
             currentIndex++;
         }
-    }
-
-    @Override
-    public Consumer getAction()
-    {
-        return action;
     }
 }

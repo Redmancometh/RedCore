@@ -9,14 +9,16 @@ public class PacketPlayInSetCreativeSlot extends WrappedPacket {
     public int slot;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.SetCreativeSlot.getPacketData(packet);
         slot = (Integer) data[0];
         itemStack = new ItemStackWrapper(data[1]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.SetCreativeSlot.newPacket(slot, itemStack == null ? null : itemStack.toNMS());
     }
 }

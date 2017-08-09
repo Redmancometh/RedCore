@@ -10,17 +10,20 @@ public class PacketPlayOutTileEntityData extends WrappedPacket {
     public BlockLocation block;
     public NBTCompound nbt;
 
-    public PacketPlayOutTileEntityData() {
+    public PacketPlayOutTileEntityData()
+    {
     }
 
-    public PacketPlayOutTileEntityData(BlockLocation block, int action, NBTCompound nbt) {
+    public PacketPlayOutTileEntityData(BlockLocation block, int action, NBTCompound nbt)
+    {
         this.block = block;
         this.action = action;
         this.nbt = nbt;
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.TileEntityData.getPacketData(obj);
         block = new BlockLocation(data[0]);
         action = (int) data[1];
@@ -28,7 +31,8 @@ public class PacketPlayOutTileEntityData extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.TileEntityData.newPacket(block.toNMS(), action, nbt.toNMS());
     }
 }

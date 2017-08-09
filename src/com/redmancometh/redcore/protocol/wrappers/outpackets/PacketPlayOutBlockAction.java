@@ -12,10 +12,12 @@ public class PacketPlayOutBlockAction extends WrappedPacket {
     public int actionId, actionData, blockId;
     public BlockLocation loc;
 
-    public PacketPlayOutBlockAction() {
+    public PacketPlayOutBlockAction()
+    {
     }
 
-    public PacketPlayOutBlockAction(BlockLocation loc, int actionId, int actionData, int blockId) {
+    public PacketPlayOutBlockAction(BlockLocation loc, int actionId, int actionData, int blockId)
+    {
         this.loc = loc;
         this.actionId = actionId;
         this.actionData = actionData;
@@ -23,16 +25,18 @@ public class PacketPlayOutBlockAction extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.BlockAction.newPacket(loc.toNMS(), actionId, actionData, BlockUtils.getNMSBlockType(blockId));
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.BlockAction.getPacketData(packet);
         loc = new BlockLocation(d[0]);
         actionId = (int) d[1];
         actionData = (int) d[2];
         blockId = BlockUtils.getNMSBlockTypeId(d[3]);
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.BlockAction.newPacket(loc.toNMS(), actionId, actionData, BlockUtils.getNMSBlockType(blockId));
     }
 }

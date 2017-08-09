@@ -18,19 +18,8 @@ public class PacketPlayOutMapChunkBulk extends WrappedPacket {
     public World world;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.MapChunkBulk.newPacket(chunkX, chunkZ, getNMSChunkMapArray(), hasSkyLight, world == null ? null : EntityUtils.getNMSWorld(world));
-    }
-
-    public Object[] getNMSChunkMapArray() {
-        Object[] out = (Object[]) Array.newInstance(PacketPlayOutMapChunk.ChunkMap.nmsChunkMap, chunkMaps.length);
-        for (int i = 0; i < chunkMaps.length; ++i)
-            out[i] = chunkMaps[i].toNMS();
-        return out;
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.MapChunkBulk.getPacketData(packet);
         chunkX = (int[]) d[0];
         chunkZ = (int[]) d[1];
@@ -39,7 +28,22 @@ public class PacketPlayOutMapChunkBulk extends WrappedPacket {
         world = d[4] == null ? null : EntityUtils.getBukkitWorld(d[4]);
     }
 
-    public PacketPlayOutMapChunk.ChunkMap[] loadNMSChunkMapArray(Object[] ar) {
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.MapChunkBulk.newPacket(chunkX, chunkZ, getNMSChunkMapArray(), hasSkyLight, world == null ? null : EntityUtils.getNMSWorld(world));
+    }
+
+    public Object[] getNMSChunkMapArray()
+    {
+        Object[] out = (Object[]) Array.newInstance(PacketPlayOutMapChunk.ChunkMap.nmsChunkMap, chunkMaps.length);
+        for (int i = 0; i < chunkMaps.length; ++i)
+            out[i] = chunkMaps[i].toNMS();
+        return out;
+    }
+
+    public PacketPlayOutMapChunk.ChunkMap[] loadNMSChunkMapArray(Object[] ar)
+    {
         PacketPlayOutMapChunk.ChunkMap[] out = new PacketPlayOutMapChunk.ChunkMap[ar.length];
         for (int i = 0; i < ar.length; ++i)
             out[i] = new PacketPlayOutMapChunk.ChunkMap(ar[i]);

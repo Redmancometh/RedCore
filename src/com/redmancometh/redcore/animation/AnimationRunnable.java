@@ -22,7 +22,8 @@ public class AnimationRunnable implements Runnable {
     public String text = "§cERROR";
     protected ScheduledFuture future;
 
-    protected AnimationRunnable(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener) {
+    protected AnimationRunnable(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener)
+    {
         this.pl = pl;
         this.a = a;
         this.name = name;
@@ -39,7 +40,8 @@ public class AnimationRunnable implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         future = null;
         try {
             text = fillVariables(SU.optimizeColorCodes(f.next("")), plr, this);
@@ -54,11 +56,13 @@ public class AnimationRunnable implements Runnable {
         future = AnimationAPI.pool.schedule(this, f.delay, TimeUnit.MILLISECONDS);
     }
 
-    public boolean isRunning() {
+    public boolean isRunning()
+    {
         return future != null;
     }
 
-    public boolean stop() {
+    public boolean stop()
+    {
         if (future == null)
             return false;
         future.cancel(true);

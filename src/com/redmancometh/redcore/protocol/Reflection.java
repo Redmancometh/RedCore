@@ -26,7 +26,8 @@ public class Reflection {
     public static ServerVersion ver = ServerVersion.UNKNOWN;
     public static String version;
 
-    public static Field[] getAllFields(Class c) {
+    public static Field[] getAllFields(Class c)
+    {
         Field[] fs = allFieldCache.get(c);
         if (fs != null)
             return fs;
@@ -43,7 +44,8 @@ public class Reflection {
         return oa;
     }
 
-    public static Field setFieldAccessible(Field f) {
+    public static Field setFieldAccessible(Field f)
+    {
         try {
             f.setAccessible(true);
             Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -63,7 +65,8 @@ public class Reflection {
      * @param classes - The parameters of the constructor
      * @return The found constructor or null if it was not found.
      */
-    public static Constructor getConstructor(Class cl, Class... classes) {
+    public static Constructor getConstructor(Class cl, Class... classes)
+    {
         try {
             Constructor c = cl.getDeclaredConstructor(classes);
             c.setAccessible(true);
@@ -73,7 +76,8 @@ public class Reflection {
         return null;
     }
 
-    public static Object getData(Object obj, List<Object> data) {
+    public static Object getData(Object obj, List<Object> data)
+    {
         try {
             Class ocl = obj.getClass();
             Object[] input = EMPTY_OBJECT_ARRAY;
@@ -119,7 +123,8 @@ public class Reflection {
         return obj;
     }
 
-    public static Field getField(Class clazz, String name) {
+    public static Field getField(Class clazz, String name)
+    {
         try {
             return setFieldAccessible(clazz.getDeclaredField(name));
         } catch (Throwable e) {
@@ -127,7 +132,8 @@ public class Reflection {
         }
     }
 
-    public static Method getSimiliarMethod(Class ocl, String name, Class[] classes) {
+    public static Method getSimiliarMethod(Class ocl, String name, Class[] classes)
+    {
         Method m = getMethod(ocl, name, classes);
         if (m == null) {
             m = getMethod(ocl, "get" + name, classes);
@@ -152,7 +158,8 @@ public class Reflection {
         return null;
     }
 
-    public static <T> T convert(Object in, Class<T> to) {
+    public static <T> T convert(Object in, Class<T> to)
+    {
         if (in == null)
             return null;
         to = Primitives.wrap(to);
@@ -179,7 +186,8 @@ public class Reflection {
         return null;
     }
 
-    public static Method getMethod(Class cl, String name, Class... args) {
+    public static Method getMethod(Class cl, String name, Class... args)
+    {
         if (cl == null || name == null)
             return null;
         String originalClassName = cl.getName();
@@ -209,7 +217,8 @@ public class Reflection {
         return null;
     }
 
-    private static Method methodCheckNoArg(Class cl, String name) {
+    private static Method methodCheckNoArg(Class cl, String name)
+    {
         try {
             return cl.getDeclaredMethod(name);
         } catch (Throwable e) {
@@ -221,7 +230,8 @@ public class Reflection {
         }
     }
 
-    private static Method methodCheck(Class cl, String name, Class[] args) {
+    private static Method methodCheck(Class cl, String name, Class[] args)
+    {
         try {
             return cl.getDeclaredMethod(name, args);
         } catch (Throwable e) {
@@ -249,7 +259,8 @@ public class Reflection {
      * @param l2 - The second array of classes
      * @return True if the classes matches in the 2 arrays, false otherwise
      */
-    public static boolean classArrayCompare(Class[] l1, Class[] l2) {
+    public static boolean classArrayCompare(Class[] l1, Class[] l2)
+    {
         if (l1.length != l2.length) {
             return false;
         }
@@ -267,7 +278,8 @@ public class Reflection {
      * @param l2 - The second array of classes
      * @return True if each of the second arrays classes is assignable from the first arrays classes
      */
-    public static boolean classArrayCompareLight(Class[] l1, Class[] l2) {
+    public static boolean classArrayCompareLight(Class[] l1, Class[] l2)
+    {
         if (l1.length != l2.length) {
             return false;
         }
@@ -278,7 +290,8 @@ public class Reflection {
         return true;
     }
 
-    public static Object getEnum(Class enumType, String value) {
+    public static Object getEnum(Class enumType, String value)
+    {
         try {
             return enumType.getMethod("valueOf", String.class).invoke(null, value);
         } catch (Throwable e) {
@@ -286,11 +299,13 @@ public class Reflection {
         }
     }
 
-    public static Object getFieldData(Class clazz, String name) {
+    public static Object getFieldData(Class clazz, String name)
+    {
         return getFieldData(clazz, name, null);
     }
 
-    public static Object getFieldData(Class clazz, String name, Object object) {
+    public static Object getFieldData(Class clazz, String name, Object object)
+    {
         try {
             return setFieldAccessible(clazz.getDeclaredField(name)).get(object);
         } catch (Throwable e) {
@@ -298,7 +313,8 @@ public class Reflection {
         }
     }
 
-    public static Field getFirstFieldOfType(Class clazz, Class type) {
+    public static Field getFirstFieldOfType(Class clazz, Class type)
+    {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (f.getType().equals(type))
@@ -310,7 +326,8 @@ public class Reflection {
         return null;
     }
 
-    public static Field getLastFieldOfType(Class clazz, Class type) {
+    public static Field getLastFieldOfType(Class clazz, Class type)
+    {
         Field field = null;
         for (Field f : clazz.getDeclaredFields()) {
             if (f.getType().equals(type))
@@ -319,7 +336,8 @@ public class Reflection {
         return setFieldAccessible(field);
     }
 
-    public static Class getNMSClass(String className) {
+    public static Class getNMSClass(String className)
+    {
         String newName = nmsRenames.get(className);
         if (newName != null)
             className = newName;
@@ -332,7 +350,8 @@ public class Reflection {
      * @param className - The name of the gettable class
      * @return The found class or null if it was not found.
      */
-    public static Class getClass(String className) {
+    public static Class getClass(String className)
+    {
         try {
             String[] classNames = className.split("\\$");
             Class c = Class.forName(classNames[0]);
@@ -344,7 +363,8 @@ public class Reflection {
         return null;
     }
 
-    public static Class getInnerClass(Class cl, String name) {
+    public static Class getInnerClass(Class cl, String name)
+    {
         try {
             name = cl.getName() + "$" + name;
             for (Class c : cl.getDeclaredClasses())
@@ -356,17 +376,20 @@ public class Reflection {
         return null;
     }
 
-    public static Class getOBCClass(String className) {
+    public static Class getOBCClass(String className)
+    {
         return getClass("org.bukkit.craftbukkit." + version + className);
     }
 
-    public static Class getUtilClass(String className) {
+    public static Class getUtilClass(String className)
+    {
         if (ver.isAbove(v1_8))
             return getClass(className);
         return getClass("net.minecraft.util." + className);
     }
 
-    public static void init() {
+    public static void init()
+    {
         String name = Bukkit.getServer().getClass().getPackage().getName();
         version = name.substring(name.lastIndexOf('.') + 1);
         try {
@@ -396,7 +419,8 @@ public class Reflection {
      * @param objs    - The objects, passed to the constructor
      * @return The object constructed, with the found constructor or null if there was an error.
      */
-    public static Object newInstance(Class cl, Class[] classes, Object... objs) {
+    public static Object newInstance(Class cl, Class[] classes, Object... objs)
+    {
         try {
             Constructor c = cl.getDeclaredConstructor(classes);
             c.setAccessible(true);
@@ -413,7 +437,8 @@ public class Reflection {
      *
      * @param cl - The class
      */
-    public static Object newInstance(Class cl) {
+    public static Object newInstance(Class cl)
+    {
         try {
             try {
                 return cl.newInstance();

@@ -34,7 +34,8 @@ public class SignGUI implements PacketInListener {
      * @param plr - Player to which the SignGUI should be opened
      * @param dr  - The DataReader to which the result should be passed
      */
-    public SignGUI(Player plr, SignDataReader dr) {
+    public SignGUI(Player plr, SignDataReader dr)
+    {
         this(plr, dr, new String[]{"", "", "", ""});
     }
 
@@ -45,7 +46,8 @@ public class SignGUI implements PacketInListener {
      * @param dr           - The DataReader to which the result should be passed
      * @param initialLines - Default lines of the sign
      */
-    public SignGUI(Player plr, SignDataReader dr, String[] initialLines) {
+    public SignGUI(Player plr, SignDataReader dr, String[] initialLines)
+    {
         this.plr = plr;
         this.dr = dr;
         this.initialLines = initialLines;
@@ -61,7 +63,8 @@ public class SignGUI implements PacketInListener {
     }
 
     @Override
-    public void onPacketIN(PacketInEvent e) {
+    public void onPacketIN(PacketInEvent e)
+    {
         PacketPlayInUpdateSign packet = new PacketPlayInUpdateSign();
         packet.loadVanillaPacket(e.getPacket());
         if (e.getPlayer() == plr) {
@@ -81,7 +84,8 @@ public class SignGUI implements PacketInListener {
         }
     }
 
-    public void cancel() {
+    public void cancel()
+    {
         tp.unregisterIncomingListener(this);
         openSignGUIs.remove(plr.getName());
     }

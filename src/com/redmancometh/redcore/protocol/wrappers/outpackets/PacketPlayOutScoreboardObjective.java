@@ -16,16 +16,19 @@ public class PacketPlayOutScoreboardObjective extends WrappedPacket {
     public String name, title;
 
 
-    public PacketPlayOutScoreboardObjective() {
+    public PacketPlayOutScoreboardObjective()
+    {
 
     }
 
-    public PacketPlayOutScoreboardObjective(Object packet) {
+    public PacketPlayOutScoreboardObjective(Object packet)
+    {
         loadVanillaPacket(packet);
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] o = PacketOutType.ScoreboardObjective.getPacketData(packet);
         name = (String) o[0];
         title = (String) o[1];
@@ -34,11 +37,13 @@ public class PacketPlayOutScoreboardObjective extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.ScoreboardObjective.newPacket(name, title, displayMode == null ? null : displayMode.toNMS(), action);
     }
 
-    public PacketPlayOutScoreboardObjective(String name, String title, ScoreboardDisplayMode displayMode, int action) {
+    public PacketPlayOutScoreboardObjective(String name, String title, ScoreboardDisplayMode displayMode, int action)
+    {
         this.name = name;
         this.title = title;
         this.displayMode = displayMode;

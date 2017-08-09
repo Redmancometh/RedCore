@@ -11,14 +11,16 @@ public class ScoreboardAPI {
     public static HashMap<String, PlayerBars> sidebars = new HashMap<>();
     public static HashMap<String, PlayerBars> tabbars = new HashMap<>();
 
-    public static void playerJoin(Player plr) {
+    public static void playerJoin(Player plr)
+    {
         String pln = plr.getName();
         nametags.put(pln, new PlayerBars());
         sidebars.put(pln, new PlayerBars());
         tabbars.put(pln, new PlayerBars());
     }
 
-    public static void playerLeave(Player plr) {
+    public static void playerLeave(Player plr)
+    {
         String pln = plr.getName();
         for (ScoreboardBar sb : nametags.remove(pln).loaded)
             sb.drop(plr);
@@ -28,11 +30,13 @@ public class ScoreboardAPI {
             sb.drop(plr);
     }
 
-    public static void setNametagBar(Player plr, NametagBar bar) {
+    public static void setNametagBar(Player plr, NametagBar bar)
+    {
         set(plr, nametags.get(plr.getName()), bar);
     }
 
-    private static boolean set(Player plr, PlayerBars info, ScoreboardBar to) {
+    private static boolean set(Player plr, PlayerBars info, ScoreboardBar to)
+    {
         if (plr == null || info == null)
             return false;
         ScoreboardBar from = info.active;
@@ -48,15 +52,18 @@ public class ScoreboardAPI {
         return true;
     }
 
-    public static void setSidebar(Player plr, Sidebar bar) {
+    public static void setSidebar(Player plr, Sidebar bar)
+    {
         set(plr, sidebars.get(plr.getName()), bar);
     }
 
-    public static void setTabbar(Player plr, Tabbar bar) {
+    public static void setTabbar(Player plr, Tabbar bar)
+    {
         set(plr, tabbars.get(plr.getName()), bar);
     }
 
-    public static String[] specialSplit(String in, char uniqueChar) {
+    public static String[] specialSplit(String in, char uniqueChar)
+    {
         if ((in = SU.optimizeColorCodes(in)).length() < 17)
             return new String[]{in, "§" + uniqueChar, ""};
         String[] out = new String[3];

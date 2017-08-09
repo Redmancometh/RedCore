@@ -21,28 +21,33 @@ public enum ChatColor {
     final boolean format;
     final char id;
 
-    ChatColor(char id) {
+    ChatColor(char id)
+    {
         this.id = id;
         format = false;
     }
 
-    ChatColor(char id, boolean format) {
+    ChatColor(char id, boolean format)
+    {
         this.id = id;
         this.format = format;
     }
 
-    public static ChatColor forId(char id) {
+    public static ChatColor forId(char id)
+    {
         ChatColor cc = byId.get(id);
         if (cc == null)
             cc = white;
         return cc;
     }
 
-    public char getId() {
+    public char getId()
+    {
         return id;
     }
 
-    public boolean isFormat() {
+    public boolean isFormat()
+    {
         return format;
     }
 }

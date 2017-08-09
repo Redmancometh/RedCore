@@ -22,17 +22,20 @@ public class Rotation implements WrappedData {
     public float y;
     public float z;
 
-    public Rotation() {
+    public Rotation()
+    {
 
     }
 
-    public Rotation(float x, float y, float z) {
+    public Rotation(float x, float y, float z)
+    {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Rotation(Object vanillaVector) {
+    public Rotation(Object vanillaVector)
+    {
         try {
             x = (Float) xf.get(vanillaVector);
             y = (Float) yf.get(vanillaVector);
@@ -43,7 +46,8 @@ public class Rotation implements WrappedData {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return con.newInstance(x, y, z);
         } catch (Throwable e) {

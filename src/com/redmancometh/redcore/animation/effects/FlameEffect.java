@@ -11,7 +11,8 @@ public class FlameEffect implements CustomEffect {
     public int start;
 
     @Override
-    public CustomEffect clone() {
+    public CustomEffect clone()
+    {
         FlameEffect fe = new FlameEffect();
         fe.info = info;
         fe.speed = speed;
@@ -21,16 +22,19 @@ public class FlameEffect implements CustomEffect {
     }
 
     @Override
-    public String getText() {
+    public String getText()
+    {
         return "";
     }
 
     @Override
-    public void setText(String newText) {
+    public void setText(String newText)
+    {
     }
 
     @Override
-    public String next(String in) {
+    public String next(String in)
+    {
         StringBuilder out = new StringBuilder();
         int strstate = start;
         int state = 0;
@@ -60,7 +64,8 @@ public class FlameEffect implements CustomEffect {
         return SU.optimizeColorCodes(out.toString());
     }
 
-    private void step(String in) {
+    private void step(String in)
+    {
         int count = 0;
         for (int c : info.counts) {
             count += c;
@@ -84,10 +89,12 @@ public class FlameEffect implements CustomEffect {
         public int[] counts;
         public String[] pref;
 
-        public FlameInfo() {
+        public FlameInfo()
+        {
         }
 
-        public FlameInfo(String in) {
+        public FlameInfo(String in)
+        {
             String[] d = in.split(" ");
             counts = new int[d.length];
             pref = new String[d.length];
@@ -103,7 +110,8 @@ public class FlameEffect implements CustomEffect {
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             StringBuilder out = new StringBuilder();
             for (int i = 0; i < counts.length; ++i) {
                 out.append(' ').append(pref[i]).append(':').append(counts[i]);

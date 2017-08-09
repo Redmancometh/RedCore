@@ -14,7 +14,8 @@ public abstract class WrappedPacket implements WrappedData {
     public abstract void loadVanillaPacket(Object packet);
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         return getVanillaPacket();
     }
 

@@ -14,11 +14,13 @@ public class PacketPlayOutNamedSoundEffect extends WrappedPacket {
     public double y;
     public double z;
 
-    public PacketPlayOutNamedSoundEffect() {
+    public PacketPlayOutNamedSoundEffect()
+    {
 
     }
 
-    public PacketPlayOutNamedSoundEffect(String soundName, double x, double y, double z, float volume, float pitch) {
+    public PacketPlayOutNamedSoundEffect(String soundName, double x, double y, double z, float volume, float pitch)
+    {
         this.soundName = soundName;
         this.x = x;
         this.y = y;
@@ -28,7 +30,8 @@ public class PacketPlayOutNamedSoundEffect extends WrappedPacket {
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.NamedSoundEffect.getPacketData(obj);
         soundName = (String) data[0];
         x = ((int) data[1]) / 8.0;
@@ -39,7 +42,8 @@ public class PacketPlayOutNamedSoundEffect extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.NamedSoundEffect.newPacket(soundName, (int) (x * 8), (int) (y * 8), (int) (z * 8), volume, (int) (pitch * 64));
     }
 }

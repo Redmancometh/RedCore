@@ -29,7 +29,8 @@ public class ItemUtils {
      * @param maxStack - Maximal stack size of the item
      * @return The remaining items after the addition
      */
-    public static int addItem(Inventory inv, ItemStack is, int maxStack) {
+    public static int addItem(Inventory inv, ItemStack is, int maxStack)
+    {
         int left = is.getAmount();
         int size = inv instanceof PlayerInventory ? 36 : inv.getSize();
         for (int i = 0; i < size; i++) {
@@ -73,7 +74,8 @@ public class ItemUtils {
      * @return True if the two itemstack contains exactly the same abilities (id, durability, metadata), the item counts
      * could be different; false otherwise.
      */
-    public static boolean itemSimilar(ItemStack item1, ItemStack item2) {
+    public static boolean itemSimilar(ItemStack item1, ItemStack item2)
+    {
         if (item1 == item2)
             return true;
         if (item1 == null || item2 == null)
@@ -91,7 +93,8 @@ public class ItemUtils {
      * @param in convertable ItemStack
      * @return the conversion output String or "0:-1 0" if the given ItemStack is null
      */
-    public static String itemToString(ItemStack in) {
+    public static String itemToString(ItemStack in)
+    {
         if (in == null)
             return "0:-1 0";
         StringBuilder out = new StringBuilder();
@@ -203,7 +206,8 @@ public class ItemUtils {
      * @param values - Array of storage format and values
      * @return The modified item
      */
-    public static ItemStack addLoreStorageMeta(ItemStack is, Object... values) {
+    public static ItemStack addLoreStorageMeta(ItemStack is, Object... values)
+    {
         if (is == null || is.getType() == Material.AIR)
             return is;
         is = is.clone();
@@ -248,7 +252,8 @@ public class ItemUtils {
      * @param is     checked ItemStack
      * @return True if the ItemStack iterable contains the checked ItemStack in any amount, false otherwise.
      */
-    public static boolean containsItem(Iterable<ItemStack> source, ItemStack is) {
+    public static boolean containsItem(Iterable<ItemStack> source, ItemStack is)
+    {
         for (ItemStack i : source) {
             if (itemSimilar(i, is))
                 return true;
@@ -263,7 +268,8 @@ public class ItemUtils {
      * @param is  - The countable item, the amount of the item is ignored (calculated as 1)
      * @return The amount of the item which is in the inventory
      */
-    public static int countItem(Inventory inv, ItemStack is) {
+    public static int countItem(Inventory inv, ItemStack is)
+    {
         int count = 0;
         int size = inv instanceof PlayerInventory ? 36 : inv.getSize();
         for (int i = 0; i < size; i++) {
@@ -282,7 +288,8 @@ public class ItemUtils {
      * @param maxStack - Maximal stack size of the item
      * @return The maximum amount
      */
-    public static int countItemSpace(Inventory inv, ItemStack is, int maxStack) {
+    public static int countItemSpace(Inventory inv, ItemStack is, int maxStack)
+    {
         int space = 0;
         int size = inv instanceof PlayerInventory ? 36 : inv.getSize();
         for (int i = 0; i < size; i++) {
@@ -303,7 +310,8 @@ public class ItemUtils {
      * @param def    - Default value to return if the meta was not found.
      * @return The first found compatible lore storage meta or def if not found any.
      */
-    public static String getLoreStorageMeta(ItemStack is, String format, String def) {
+    public static String getLoreStorageMeta(ItemStack is, String format, String def)
+    {
         if (is == null || is.getType() == Material.AIR || !is.hasItemMeta())
             return def;
         is = is.clone();
@@ -328,11 +336,13 @@ public class ItemUtils {
      * @return True if the two itemstack contains exactly the same abilities (id, count, durability, metadata), false
      * otherwise
      */
-    public static boolean itemEqual(ItemStack item1, ItemStack item2) {
+    public static boolean itemEqual(ItemStack item1, ItemStack item2)
+    {
         return itemToString(item1).equals(itemToString(item2));
     }
 
-    public static ItemStack makeItem(Material type, int amount, short sub, String name, String... lore) {
+    public static ItemStack makeItem(Material type, int amount, short sub, String name, String... lore)
+    {
         ItemStack is = new ItemStack(type, amount, sub);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
@@ -341,7 +351,8 @@ public class ItemUtils {
         return is;
     }
 
-    public static ItemStack makeItem(Material type, String name, String... lore) {
+    public static ItemStack makeItem(Material type, String name, String... lore)
+    {
         ItemStack is = new ItemStack(type, 1, (short) 0);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
@@ -350,7 +361,8 @@ public class ItemUtils {
         return is;
     }
 
-    public static ItemStack makeItem(Material type, int amount, short sub, String name, ArrayList<String> lore, Object... vars) {
+    public static ItemStack makeItem(Material type, int amount, short sub, String name, ArrayList<String> lore, Object... vars)
+    {
         ItemStack is = new ItemStack(type, amount, sub);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
@@ -370,7 +382,8 @@ public class ItemUtils {
      * @param vars - The fillable variables
      * @return A clone of the original ItemStack with filled variables
      */
-    public static ItemStack fillVariables(ItemStack is, Object... vars) {
+    public static ItemStack fillVariables(ItemStack is, Object... vars)
+    {
         if (is == null || is.getType() == Material.AIR)
             return is;
         is = is.clone();
@@ -436,7 +449,8 @@ public class ItemUtils {
      * @param is  - The removable item
      * @return The remaining amount of the removable item
      */
-    public static int removeItem(Inventory inv, ItemStack is) {
+    public static int removeItem(Inventory inv, ItemStack is)
+    {
         int left = is.getAmount();
         int size = inv instanceof PlayerInventory ? 36 : inv.getSize();
         for (int i = 0; i < size; i++) {
@@ -465,7 +479,8 @@ public class ItemUtils {
      * @param in string represantation of an ItemStack
      * @return The conversion output ItemStack, or null if the given string is null
      */
-    public static ItemStack stringToItemStack(String in) {
+    public static ItemStack stringToItemStack(String in)
+    {
         if (in == null)
             return null;
         String[] parts = in.split(" ");
@@ -667,7 +682,8 @@ public class ItemUtils {
      * @param name the case insensitive material name of the item or the numeric id of the item.
      * @return the numeric id of the requested item or 1, if the given name is incorrect or null
      */
-    public static BlockData getId(String name) {
+    public static BlockData getId(String name)
+    {
         try {
             return new BlockData(Material.valueOf(name.toUpperCase()).getId());
         } catch (Throwable e) {

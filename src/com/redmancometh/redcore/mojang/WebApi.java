@@ -10,7 +10,8 @@ import java.nio.charset.Charset;
  * Created by GyuriX on 2016. 06. 10..
  */
 public class WebApi {
-    public static String get(String urlString) {
+    public static String get(String urlString)
+    {
         try {
             URL url = new URL(urlString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -21,7 +22,8 @@ public class WebApi {
         }
     }
 
-    public static String post(String urlString, String req) {
+    public static String post(String urlString, String req)
+    {
         try {
             URL url = new URL(urlString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -35,7 +37,8 @@ public class WebApi {
         }
     }
 
-    public static String postWithHeader(String urlString, String headerKey, String headerValue, String req) {
+    public static String postWithHeader(String urlString, String headerKey, String headerValue, String req)
+    {
         try {
             URL url = new URL(urlString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

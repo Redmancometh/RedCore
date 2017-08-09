@@ -16,14 +16,8 @@ public class PacketPlayOutSpawnEntityExperienceOrb extends WrappedPacket {
     public double z;
 
     @Override
-    public Object getVanillaPacket() {
-        return Reflection.ver.isAbove(ServerVersion.v1_9) ?
-                PacketOutType.SpawnEntityExperienceOrb.newPacket(entityId, x, y, z, count) :
-                PacketOutType.SpawnEntityExperienceOrb.newPacket(entityId, (int) (x * 32), (int) (y * 32), (int) (z * 32), count);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.SpawnEntityExperienceOrb.getPacketData(packet);
         entityId = (int) d[0];
         if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
@@ -37,5 +31,13 @@ public class PacketPlayOutSpawnEntityExperienceOrb extends WrappedPacket {
         }
         count = (int) d[4];
 
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return Reflection.ver.isAbove(ServerVersion.v1_9) ?
+                PacketOutType.SpawnEntityExperienceOrb.newPacket(entityId, x, y, z, count) :
+                PacketOutType.SpawnEntityExperienceOrb.newPacket(entityId, (int) (x * 32), (int) (y * 32), (int) (z * 32), count);
     }
 }

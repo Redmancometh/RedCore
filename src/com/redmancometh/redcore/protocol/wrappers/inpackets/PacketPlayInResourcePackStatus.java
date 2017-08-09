@@ -12,14 +12,16 @@ public class PacketPlayInResourcePackStatus
     public ResourcePackStatus status;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.ResourcePackStatus.getPacketData(packet);
         hash = (String) data[0];
         status = ResourcePackStatus.valueOf(data[1].toString());
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketInType.ResourcePackStatus.newPacket(hash, status.toVanillaRPStatus());
     }
 
@@ -35,10 +37,12 @@ public class PacketPlayInResourcePackStatus
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInResourcePackStatus$EnumResourcePackStatus"), "valueOf", String.class);
         }
 
-        ResourcePackStatus() {
+        ResourcePackStatus()
+        {
         }
 
-        public Object toVanillaRPStatus() {
+        public Object toVanillaRPStatus()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

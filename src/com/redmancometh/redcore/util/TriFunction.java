@@ -22,18 +22,7 @@ import java.util.function.Function;
  * @author Steve Chaloner (steve@objectify.be)
  */
 @FunctionalInterface
-public interface TriFunction<T, U, V, R>
-{
-
-    /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @return the function result
-     */
-    R apply(T t, U u, V v);
+public interface TriFunction<T, U, V, R> {
 
     /**
      * Returns a composed function that first applies this function to
@@ -53,4 +42,14 @@ public interface TriFunction<T, U, V, R>
         Objects.requireNonNull(after);
         return (T t, U u, V v) -> after.apply(apply(t, u, v));
     }
+
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @param v the third function argument
+     * @return the function result
+     */
+    R apply(T t, U u, V v);
 }

@@ -28,7 +28,8 @@ public class ChatAPI {
     /**
      * Initializes the ChatAPI. Do not use this method.
      */
-    public static void init() {
+    public static void init()
+    {
         try {
             icbcClass = Reflection.getNMSClass("IChatBaseComponent");
             for (Class c : icbcClass.getClasses()) {
@@ -48,7 +49,8 @@ public class ChatAPI {
      * @param msg  - The json message
      * @param pls  -  The receiver list, if it is empty then all the online players will get the message
      */
-    public static void sendJsonMsg(ChatMessageType type, String msg, Player... pls) {
+    public static void sendJsonMsg(ChatMessageType type, String msg, Player... pls)
+    {
         if (pls.length == 0) {
             sendJsonMsg(type, msg, Bukkit.getOnlinePlayers());
             return;
@@ -64,7 +66,8 @@ public class ChatAPI {
      * @param msg  - The json message
      * @param pls  -  The receiver list, if it is empty then all the online players will get the message
      */
-    public static void sendJsonMsg(ChatMessageType type, String msg, Collection<? extends Player> pls) {
+    public static void sendJsonMsg(ChatMessageType type, String msg, Collection<? extends Player> pls)
+    {
         String json = type == ChatMessageType.ACTION_BAR ? quoteJson(msg) : TextToJson(msg);
         sendRawJson(type, json, pls);
     }
@@ -75,7 +78,8 @@ public class ChatAPI {
      * @param value - The convertable String
      * @return The conversion result
      */
-    public static String quoteJson(String value) {
+    public static String quoteJson(String value)
+    {
         return "{\"text\":\"" + JsonAPI.escape(value) + "\"}";
     }
 
@@ -85,7 +89,8 @@ public class ChatAPI {
      * @param msg - The message
      * @return The conversion result raw json
      */
-    public static String TextToJson(String msg) {
+    public static String TextToJson(String msg)
+    {
         return ChatTag.fromExtraText(msg).toString();
     }
 
@@ -96,7 +101,8 @@ public class ChatAPI {
      * @param json - The raw json
      * @param pls  - The receiver list
      */
-    public static void sendRawJson(ChatMessageType type, String json, Player... pls) {
+    public static void sendRawJson(ChatMessageType type, String json, Player... pls)
+    {
         Object packet = new PacketPlayOutChat((byte) type.ordinal(), JsonAPI.deserialize(json, ChatTag.class)).getVanillaPacket();
         for (Player p : pls)
             SU.tp.sendPacket(p, packet);
@@ -109,7 +115,8 @@ public class ChatAPI {
      * @param json - The raw json
      * @param pls  - The receiver list
      */
-    public static void sendRawJson(ChatMessageType type, String json, Collection<? extends Player> pls) {
+    public static void sendRawJson(ChatMessageType type, String json, Collection<? extends Player> pls)
+    {
         Object packet = new PacketPlayOutChat((byte) type.ordinal(), JsonAPI.deserialize(json, ChatTag.class)).getVanillaPacket();
         for (Player p : pls)
             SU.tp.sendPacket(p, packet);
@@ -121,7 +128,8 @@ public class ChatAPI {
      * @param json - The raw json
      * @return The vanilla IChatBaseComponent
      */
-    public static Object toICBC(String json) {
+    public static Object toICBC(String json)
+    {
         try {
             if (json == null) {
                 return null;
@@ -140,7 +148,8 @@ public class ChatAPI {
      * @param icbc - The vanilla IChatBaseComponent
      * @return The raw json message
      */
-    public static String toJson(Object icbc) {
+    public static String toJson(Object icbc)
+    {
         try {
             if (icbc == null) {
                 return null;
@@ -158,7 +167,8 @@ public class ChatAPI {
      * @param ch - The escapeable character
      * @return The unicode escaped character in String
      */
-    public static String unicodeEscape(char ch) {
+    public static String unicodeEscape(char ch)
+    {
         StringBuilder sb = new StringBuilder();
         sb.append("\\u");
         String hex = Integer.toHexString(ch);
@@ -177,7 +187,8 @@ public class ChatAPI {
         SYSTEM,
         ACTION_BAR;
 
-        ChatMessageType() {
+        ChatMessageType()
+        {
         }
     }
 }

@@ -15,34 +15,40 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
     public MultiBlockChangeInfo[] infos;
     public XZ xz;
 
-    public PacketPlayOutMultiBlockChange() {
+    public PacketPlayOutMultiBlockChange()
+    {
     }
 
-    public PacketPlayOutMultiBlockChange(XZ xz, MultiBlockChangeInfo... infos) {
+    public PacketPlayOutMultiBlockChange(XZ xz, MultiBlockChangeInfo... infos)
+    {
         this.xz = xz;
         this.infos = infos;
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public void loadVanillaPacket(Object packet)
+    {
+        Object[] d = PacketOutType.MultiBlockChange.getPacketData(packet);
+        xz = new XZ(d[0]);
+        infos = loadNMSInfos((Object[]) d[1]);
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
         return PacketOutType.MultiBlockChange.newPacket(xz.toNMS(), getNMSInfos());
     }
 
-    public Object[] getNMSInfos() {
+    public Object[] getNMSInfos()
+    {
         Object[] d = new Object[infos.length];
         for (int i = 0; i < d.length; ++i)
             d[i] = infos[i].toNMS();
         return d;
     }
 
-    @Override
-    public void loadVanillaPacket(Object packet) {
-        Object[] d = PacketOutType.MultiBlockChange.getPacketData(packet);
-        xz = new XZ(d[0]);
-        infos = loadNMSInfos((Object[]) d[1]);
-    }
-
-    public MultiBlockChangeInfo[] loadNMSInfos(Object[] infos) {
+    public MultiBlockChangeInfo[] loadNMSInfos(Object[] infos)
+    {
         MultiBlockChangeInfo[] d = new MultiBlockChangeInfo[infos.length];
         for (int i = 0; i < d.length; ++i)
             d[i] = d[i] = new MultiBlockChangeInfo(infos[i]);
@@ -57,11 +63,13 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
         public int blockId;
         public short pos;
 
-        public MultiBlockChangeInfo() {
+        public MultiBlockChangeInfo()
+        {
 
         }
 
-        public MultiBlockChangeInfo(Object nms) {
+        public MultiBlockChangeInfo(Object nms)
+        {
             try {
                 pos = posF.getShort(nms);
                 Object nmsBl = blockDataF.get(nms);
@@ -72,20 +80,24 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
             }
         }
 
-        public byte getRelX() {
+        public byte getRelX()
+        {
             return (byte) (pos >> 12 & 15);
         }
 
-        public byte getRelZ() {
+        public byte getRelZ()
+        {
             return (byte) (pos >> 8 & 15);
         }
 
-        public int getY() {
+        public int getY()
+        {
             return pos & 255;
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return nmsConst.newInstance(pos, BlockUtils.getNMSBlock(blockId, blockData));
             } catch (Throwable e) {

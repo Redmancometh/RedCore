@@ -22,14 +22,16 @@ public class BarData {
     protected String title;
     protected boolean visible = true;
 
-    public BarData(String barname, String title, ScoreboardDisplayMode displayMode, boolean visible) {
+    public BarData(String barname, String title, ScoreboardDisplayMode displayMode, boolean visible)
+    {
         this.barname = barname;
         this.title = title;
         this.displayMode = displayMode;
         this.visible = visible;
     }
 
-    public BarData clone() {
+    public BarData clone()
+    {
         BarData out = new BarData(barname, title, displayMode, visible);
         for (Map.Entry<String, TeamData> e : teams.entrySet())
             out.teams.put(e.getKey(), e.getValue().clone());
@@ -38,7 +40,8 @@ public class BarData {
         return out;
     }
 
-    public void load(Player plr) {
+    public void load(Player plr)
+    {
         SU.tp.sendPacket(plr, new PacketPlayOutScoreboardObjective(barname, title, displayMode, 0));
         for (Map.Entry<String, TeamData> e : teams.entrySet())
             SU.tp.sendPacket(plr, e.getValue().getCreatePacket());
@@ -46,13 +49,15 @@ public class BarData {
             SU.tp.sendPacket(plr, new PacketPlayOutScoreboardScore(CHANGE, barname, e.getKey(), e.getValue()));
     }
 
-    public void unload(Player plr) {
+    public void unload(Player plr)
+    {
         SU.tp.sendPacket(plr, new PacketPlayOutScoreboardObjective(barname, title, displayMode, 1));
         for (Map.Entry<String, TeamData> e : teams.entrySet())
             SU.tp.sendPacket(plr, e.getValue().getRemovePacket());
     }
 
-    public void update(Player plr, BarData old) {
+    public void update(Player plr, BarData old)
+    {
         if (!old.title.equals(title) || old.displayMode != displayMode)
             SU.tp.sendPacket(plr, new PacketPlayOutScoreboardObjective(barname, title, displayMode, 2));
         for (Map.Entry<String, Integer> e : old.scores.entrySet()) {

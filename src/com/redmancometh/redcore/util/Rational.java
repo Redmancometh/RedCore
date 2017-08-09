@@ -1,134 +1,151 @@
 package com.redmancometh.redcore.util;
 
 public class Rational implements Comparable<Rational> {
-	private static Rational zero = new Rational(0, 1);
+    private static Rational zero = new Rational(0, 1);
+    private int den;
+    private int num;
 
-	private int num;
-	private int den;
+    public Rational(int numerator, int denominator)
+    {
+        int g = gcd(numerator, denominator);
+        num = numerator / g;
+        den = denominator / g;
+        if (den < 0) {
+            den = -den;
+            num = -num;
+        }
+    }
 
-	public Rational(int numerator, int denominator) {
-		int g = gcd(numerator, denominator);
-		num = numerator / g;
-		den = denominator / g;
-		if (den < 0) {
-			den = -den;
-			num = -num;
-		}
-	}
+    private static int gcd(int m, int n)
+    {
+        if (m < 0)
+            m = -m;
+        if (n < 0)
+            n = -n;
+        if (0 == n)
+            return m;
+        else
+            return gcd(n, m % n);
+    }
 
-	public int numerator() {
-		return num;
-	}
+    private static int lcm(int m, int n)
+    {
+        if (m < 0)
+            m = -m;
+        if (n < 0)
+            n = -n;
+        return m * (n / gcd(m, n));
+    }
 
-	public int denominator() {
-		return den;
-	}
+    public static Rational mediant(Rational r, Rational s)
+    {
+        return new Rational(r.num + s.num, r.den + s.den);
+    }
 
-	public double toDouble() {
-		return (double) num / den;
-	}
+    public Rational abs()
+    {
+        if (num >= 0)
+            return this;
+        else
+            return negate();
+    }
 
-	public String toString() {
-		if (den == 1)
-			return num + "";
-		else
-			return num + "/" + den;
-	}
+    public Rational negate()
+    {
+        return new Rational(-num, den);
+    }
 
-	public int compareTo(Rational b) {
-		Rational a = this;
-		int lhs = a.num * b.den;
-		int rhs = a.den * b.num;
-		if (lhs < rhs)
-			return -1;
-		if (lhs > rhs)
-			return +1;
-		return 0;
-	}
+    public int denominator()
+    {
+        return den;
+    }
 
-	public boolean equals(Object y) {
-		if (y == null)
-			return false;
-		if (y.getClass() != this.getClass())
-			return false;
-		Rational b = (Rational) y;
-		return compareTo(b) == 0;
-	}
+    public Rational divides(Rational b)
+    {
+        Rational a = this;
+        return a.times(b.reciprocal());
+    }
 
-	public int hashCode() {
-		return this.toString().hashCode();
-	}
+    public Rational times(Rational b)
+    {
+        Rational a = this;
 
-	public static Rational mediant(Rational r, Rational s) {
-		return new Rational(r.num + s.num, r.den + s.den);
-	}
+        Rational c = new Rational(a.num, b.den);
+        Rational d = new Rational(b.num, a.den);
+        return new Rational(c.num * d.num, c.den * d.den);
+    }
 
-	private static int gcd(int m, int n) {
-		if (m < 0)
-			m = -m;
-		if (n < 0)
-			n = -n;
-		if (0 == n)
-			return m;
-		else
-			return gcd(n, m % n);
-	}
+    public Rational reciprocal()
+    {
+        return new Rational(den, num);
+    }
 
-	private static int lcm(int m, int n) {
-		if (m < 0)
-			m = -m;
-		if (n < 0)
-			n = -n;
-		return m * (n / gcd(m, n));
-	}
+    public int hashCode()
+    {
+        return this.toString().hashCode();
+    }
 
-	public Rational times(Rational b) {
-		Rational a = this;
+    public boolean equals(Object y)
+    {
+        if (y == null)
+            return false;
+        if (y.getClass() != this.getClass())
+            return false;
+        Rational b = (Rational) y;
+        return compareTo(b) == 0;
+    }
 
-		Rational c = new Rational(a.num, b.den);
-		Rational d = new Rational(b.num, a.den);
-		return new Rational(c.num * d.num, c.den * d.den);
-	}
+    public String toString()
+    {
+        if (den == 1)
+            return num + "";
+        else
+            return num + "/" + den;
+    }
 
-	public Rational plus(Rational b) {
-		Rational a = this;
+    public int compareTo(Rational b)
+    {
+        Rational a = this;
+        int lhs = a.num * b.den;
+        int rhs = a.den * b.num;
+        if (lhs < rhs)
+            return -1;
+        if (lhs > rhs)
+            return +1;
+        return 0;
+    }
 
-		if (a.compareTo(zero) == 0)
-			return b;
-		if (b.compareTo(zero) == 0)
-			return a;
+    public Rational minus(Rational b)
+    {
+        Rational a = this;
+        return a.plus(b.negate());
+    }
 
-		int f = gcd(a.num, b.num);
-		int g = gcd(a.den, b.den);
+    public int numerator()
+    {
+        return num;
+    }
 
-		Rational s = new Rational((a.num / f) * (b.den / g) + (b.num / f) * (a.den / g), lcm(a.den, b.den));
+    public Rational plus(Rational b)
+    {
+        Rational a = this;
 
-		s.num *= f;
-		return s;
-	}
+        if (a.compareTo(zero) == 0)
+            return b;
+        if (b.compareTo(zero) == 0)
+            return a;
 
-	public Rational negate() {
-		return new Rational(-num, den);
-	}
+        int f = gcd(a.num, b.num);
+        int g = gcd(a.den, b.den);
 
-	public Rational abs() {
-		if (num >= 0)
-			return this;
-		else
-			return negate();
-	}
+        Rational s = new Rational((a.num / f) * (b.den / g) + (b.num / f) * (a.den / g), lcm(a.den, b.den));
 
-	public Rational minus(Rational b) {
-		Rational a = this;
-		return a.plus(b.negate());
-	}
+        s.num *= f;
+        return s;
+    }
 
-	public Rational reciprocal() {
-		return new Rational(den, num);
-	}
-
-	public Rational divides(Rational b) {
-		Rational a = this;
-		return a.times(b.reciprocal());
-	}
+    public double toDouble()
+    {
+        return (double) num / den;
+    }
 }

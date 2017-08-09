@@ -1,17 +1,14 @@
 package com.redmancometh.redcore.commands;
 
+import com.hazelcast.util.function.BiConsumer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.hazelcast.util.function.BiConsumer;
-
-public class ServerCommand implements CommandExecutor
-{
+public class ServerCommand implements CommandExecutor {
     private BiConsumer<CommandSender, String[]> action;
-    private boolean opCommand = false;
     private String command;
+    private boolean opCommand = false;
 
     public ServerCommand(String command, JavaPlugin registering)
     {
@@ -26,14 +23,6 @@ public class ServerCommand implements CommandExecutor
         this.setCommand(command);
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-    {
-        if (opCommand && !sender.isOp()) return true;
-        action.accept(sender, args);
-        return true;
-    }
-
     public BiConsumer<CommandSender, String[]> getAction()
     {
         return action;
@@ -42,6 +31,16 @@ public class ServerCommand implements CommandExecutor
     public void setAction(BiConsumer<CommandSender, String[]> action)
     {
         this.action = action;
+    }
+
+    public String getCommand()
+    {
+        return command;
+    }
+
+    public void setCommand(String command)
+    {
+        this.command = command;
     }
 
     public boolean isOpCommand()
@@ -54,14 +53,12 @@ public class ServerCommand implements CommandExecutor
         this.opCommand = opCommand;
     }
 
-    public String getCommand()
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        return command;
-    }
-
-    public void setCommand(String command)
-    {
-        this.command = command;
+        if (opCommand && !sender.isOp()) return true;
+        action.accept(sender, args);
+        return true;
     }
 
 }

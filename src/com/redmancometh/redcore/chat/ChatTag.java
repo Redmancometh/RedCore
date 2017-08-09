@@ -19,15 +19,18 @@ public class ChatTag {
     public String text, translate, selector, insertion;
     public ArrayList<ChatTag> with;
 
-    public ChatTag() {
+    public ChatTag()
+    {
 
     }
 
-    public ChatTag(String in) {
+    public ChatTag(String in)
+    {
         text = in;
     }
 
-    public static ChatTag fromBaseComponents(BaseComponent[] comps) {
+    public static ChatTag fromBaseComponents(BaseComponent[] comps)
+    {
         StringBuilder data = new StringBuilder();
         for (BaseComponent bc : comps) {
             data.append(bc.toLegacyText());
@@ -35,7 +38,8 @@ public class ChatTag {
         return fromColoredText(data.toString());
     }
 
-    public static ChatTag fromColoredText(String colText) {
+    public static ChatTag fromColoredText(String colText)
+    {
         colText = SU.optimizeColorCodes(colText);
         ArrayList<ChatTag> ctl = new ArrayList<>();
         ChatTag ct = new ChatTag();
@@ -88,7 +92,8 @@ public class ChatTag {
         return fromSeveralTag(ctl);
     }
 
-    public ChatTag cloneFormat(ChatTag target) {
+    public ChatTag cloneFormat(ChatTag target)
+    {
         target.bold = bold;
         target.italic = italic;
         target.underlined = underlined;
@@ -98,7 +103,8 @@ public class ChatTag {
         return target;
     }
 
-    public static ChatTag fromSeveralTag(ArrayList<ChatTag> ctl) {
+    public static ChatTag fromSeveralTag(ArrayList<ChatTag> ctl)
+    {
         if (ctl.size() == 1)
             return ctl.iterator().next();
         ChatTag out = new ChatTag("");
@@ -106,7 +112,8 @@ public class ChatTag {
         return out;
     }
 
-    public static ChatTag fromExtraText(String extraText) {
+    public static ChatTag fromExtraText(String extraText)
+    {
         String[] parts = extraText.split("\\\\\\|");
         ArrayList<ChatTag> tags = new ArrayList<>();
         for (String part : parts) {
@@ -140,7 +147,8 @@ public class ChatTag {
      *                  \@ - Selector
      * @return This chat tag
      */
-    public ChatTag setExtra(char extraType, String value) {
+    public ChatTag setExtra(char extraType, String value)
+    {
         if (extraType == '+')
             insertion = value;
         else if (extraType == '@') {
@@ -159,11 +167,13 @@ public class ChatTag {
         return this;
     }
 
-    public static ChatTag fromICBC(Object icbc) {
+    public static ChatTag fromICBC(Object icbc)
+    {
         return JsonAPI.deserialize(ChatAPI.toJson(icbc), ChatTag.class);
     }
 
-    public static String stripExtras(String extraText) {
+    public static String stripExtras(String extraText)
+    {
         String[] parts = extraText.split("\\\\\\|");
         StringBuilder out = new StringBuilder();
         for (String p : parts) {
@@ -172,12 +182,14 @@ public class ChatTag {
         return out.toString();
     }
 
-    public boolean isSimpleText() {
+    public boolean isSimpleText()
+    {
         return translate == null && selector == null && insertion == null && with == null && score == null && extra == null &&
                 !(bold == italic == underlined == strikethrough == obfuscated) && color == null && clickEvent == null && hoverEvent == null;
     }
 
-    public String toColoredString() {
+    public String toColoredString()
+    {
         ArrayList<ChatTag> tags = extra == null ? Lists.newArrayList(this) : extra;
         StringBuilder out = new StringBuilder();
         for (ChatTag tag : tags) {
@@ -189,7 +201,8 @@ public class ChatTag {
         return SU.optimizeColorCodes(out.toString());
     }
 
-    public String getFormatPrefix() {
+    public String getFormatPrefix()
+    {
         StringBuilder pref = new StringBuilder();
         if (color != null)
             pref.append('§').append(color.id);
@@ -206,7 +219,8 @@ public class ChatTag {
         return pref.toString();
     }
 
-    public String toFormatlessString() {
+    public String toFormatlessString()
+    {
         ArrayList<ChatTag> tags = extra == null ? Lists.newArrayList(this) : extra;
         StringBuilder out = new StringBuilder();
         for (ChatTag tag : tags) {
@@ -216,12 +230,14 @@ public class ChatTag {
         return out.toString();
     }
 
-    public Object toICBC() {
+    public Object toICBC()
+    {
         return ChatAPI.toICBC(JsonAPI.serialize(this));
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return JsonAPI.serialize(this);
     }
 }

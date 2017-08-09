@@ -11,18 +11,21 @@ public class PacketPlayOutUpdateEntityNBT extends WrappedPacket {
     public int entityId;
     public NBTCompound nbt;
 
-    public PacketPlayOutUpdateEntityNBT() {
+    public PacketPlayOutUpdateEntityNBT()
+    {
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.UpdateEntityNBT.getPacketData(obj);
         entityId = (int) data[0];
         nbt = new NBTCompound(data[1]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.UpdateEntityNBT.newPacket(entityId, nbt.toNMS());
     }
 }

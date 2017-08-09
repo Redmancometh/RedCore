@@ -21,7 +21,8 @@ public class SidebarLine {
     public TeamData team, oldTeam;
     public String teamName;
 
-    public SidebarLine(Sidebar bar, char ch, String text, int number) {
+    public SidebarLine(Sidebar bar, char ch, String text, int number)
+    {
         this.bar = bar;
         uniqueChar = ch;
         teamName = bar.teamNamePrefix + "§" + uniqueChar;
@@ -34,11 +35,13 @@ public class SidebarLine {
         bar.currentData.teams.put(team.name, team);
     }
 
-    public String getText() {
+    public String getText()
+    {
         return team.prefix + team.players.iterator().next() + team.suffix;
     }
 
-    public void setText(String text) {
+    public void setText(String text)
+    {
         oldTeam = team.clone();
         String[] set = ScoreboardAPI.specialSplit(text, uniqueChar);
         team.prefix = set[0];
@@ -80,7 +83,8 @@ public class SidebarLine {
         }
     }
 
-    public boolean hide() {
+    public boolean hide()
+    {
         if (hidden)
             return false;
         String user = team.players.iterator().next();
@@ -93,7 +97,8 @@ public class SidebarLine {
         return true;
     }
 
-    public void setNumber(int value) {
+    public void setNumber(int value)
+    {
         if (number == value)
             return;
         number = value;
@@ -108,7 +113,8 @@ public class SidebarLine {
         }
     }
 
-    public boolean show() {
+    public boolean show()
+    {
         if (!hidden)
             return false;
         String user = team.players.iterator().next();

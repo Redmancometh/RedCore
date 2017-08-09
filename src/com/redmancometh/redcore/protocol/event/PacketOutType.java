@@ -111,7 +111,8 @@ public enum PacketOutType {
      * @param packet - The outgoing packet
      * @return The type of the given packet
      */
-    public static PacketOutType getType(Object packet) {
+    public static PacketOutType getType(Object packet)
+    {
         Class cl = packet.getClass();
         while (cl != null && cl != Object.class) {
             String cn = cl.getName();
@@ -134,7 +135,8 @@ public enum PacketOutType {
     /**
      * Initializes the PacketOutType, DO NOT USE THIS METHOD
      */
-    public static void init() {
+    public static void init()
+    {
         for (PacketOutType t : PacketOutType.values()) {
             String name = t.name();
             String cln = "Packet" + (name.startsWith("LoginOut") || name.startsWith("Status") ? name : "PlayOut" + name);
@@ -166,7 +168,8 @@ public enum PacketOutType {
      * @param packet - The packet
      * @return The contents of all the non static fields of the packet
      */
-    public Object[] getPacketData(Object packet) {
+    public Object[] getPacketData(Object packet)
+    {
         Object[] out = new Object[fs.size()];
         try {
             for (int i = 0; i < fs.size(); ++i) {
@@ -184,7 +187,8 @@ public enum PacketOutType {
      *
      * @return True if it is supported, false otherwise
      */
-    public boolean isSupported() {
+    public boolean isSupported()
+    {
         return supported;
     }
 
@@ -194,7 +198,8 @@ public enum PacketOutType {
      * @param data - Data to fill packet fields with
      * @return The crafted packet
      */
-    public Object newPacket(Object... data) {
+    public Object newPacket(Object... data)
+    {
         try {
             Object out = emptyConst.newInstance();
             fillPacket(out, data);
@@ -211,7 +216,8 @@ public enum PacketOutType {
      * @param packet - The fillable packet
      * @param data   - The filling data
      */
-    public void fillPacket(Object packet, Object... data) {
+    public void fillPacket(Object packet, Object... data)
+    {
         ArrayList<Field> fields = Lists.newArrayList(fs);
         for (Object d : data) {
             for (int f = 0; f < fields.size(); f++) {
@@ -233,7 +239,8 @@ public enum PacketOutType {
      * @param nmsPacket - The NMS packet
      * @return The wrapper of the given NMS packet
      */
-    public WrappedPacket wrap(Object nmsPacket) {
+    public WrappedPacket wrap(Object nmsPacket)
+    {
         try {
             WrappedPacket wp = wrapper.newInstance();
             wp.loadVanillaPacket(nmsPacket);

@@ -24,17 +24,20 @@ public class Vector implements WrappedData {
     public double y;
     public double z;
 
-    public Vector() {
+    public Vector()
+    {
 
     }
 
-    public Vector(double x, double y, double z) {
+    public Vector(double x, double y, double z)
+    {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Vector(Object vanillaVector) {
+    public Vector(Object vanillaVector)
+    {
         try {
             x = (Double) xf.get(vanillaVector);
             y = (Double) yf.get(vanillaVector);
@@ -45,7 +48,8 @@ public class Vector implements WrappedData {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return con.newInstance(x, y, z);
         } catch (Throwable e) {

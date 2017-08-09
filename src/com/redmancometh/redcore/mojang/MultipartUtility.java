@@ -25,7 +25,8 @@ public class MultipartUtility {
      * @param method     - The type of the HTTP request, usually POST
      * @throws IOException - The type of the HTTP request
      */
-    public MultipartUtility(String requestURL, String method) throws IOException {
+    public MultipartUtility(String requestURL, String method) throws IOException
+    {
         charset = charset;
 
         // creates a unique boundary based on time stamp
@@ -47,7 +48,8 @@ public class MultipartUtility {
      * @param uploadFile - the uploadable File
      * @throws IOException - The error what can happen during the operation
      */
-    public void addFilePart(String fieldName, File uploadFile) throws IOException {
+    public void addFilePart(String fieldName, File uploadFile) throws IOException
+    {
         String fileName = uploadFile.getName();
         writer.append("--").append(boundary).append(LINE_FEED);
         writer.append("Content-Disposition: form-data; name=\"").append(fieldName).append("\"; filename=\"").append(fileName).append("\"")
@@ -76,7 +78,8 @@ public class MultipartUtility {
      * @param name  field name
      * @param value field value
      */
-    public void addFormField(String name, String value) {
+    public void addFormField(String name, String value)
+    {
         writer.append("--").append(boundary).append(LINE_FEED);
         writer.append("Content-Disposition: form-data; name=\"").append(name).append("\"")
                 .append(LINE_FEED);
@@ -92,7 +95,8 @@ public class MultipartUtility {
      * @param name  - name of the header field
      * @param value - value of the header field
      */
-    public void addHeaderField(String name, String value) {
+    public void addHeaderField(String name, String value)
+    {
         writer.append(name).append(": ").append(value).append(LINE_FEED);
         writer.flush();
     }
@@ -104,7 +108,8 @@ public class MultipartUtility {
      * status OK, otherwise an exception is thrown.
      * @throws IOException - The ewrror what can happen during the operation
      */
-    public String finish() throws IOException {
+    public String finish() throws IOException
+    {
         writer.append(LINE_FEED).append("--").append(boundary).append("--").append(LINE_FEED);
         writer.close();
         byte[] data = outputStream.toByteArray();

@@ -20,12 +20,8 @@ public class PacketPlayOutWorldBorder
     public int warningTime;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.WorldBorder.newPacket(action.toNMS(), portalTeleportBoundary, centerX, centerZ, newRadius, oldRadius, time, warningTime, warningBlocks);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketOutType.WorldBorder.getPacketData(packet);
         action = WorldBorderAction.valueOf(data[0].toString());
         portalTeleportBoundary = (Integer) data[1];
@@ -38,6 +34,12 @@ public class PacketPlayOutWorldBorder
         warningBlocks = (Integer) data[8];
     }
 
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.WorldBorder.newPacket(action.toNMS(), portalTeleportBoundary, centerX, centerZ, newRadius, oldRadius, time, warningTime, warningBlocks);
+    }
+
     public enum WorldBorderAction implements WrappedData {
         SET_SIZE,
         LERP_SIZE,
@@ -48,7 +50,8 @@ public class PacketPlayOutWorldBorder
 
         private static final Method valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayOutWorldBorder$EnumWorldBorderAction"), "valueOf", String.class);
 
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

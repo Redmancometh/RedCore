@@ -14,11 +14,13 @@ import static com.redmancometh.redcore.protocol.Reflection.newInstance;
 public class JsonAPI {
     public static final Type[] emptyTypeArray = new Type[0];
 
-    public static int HextoDec(char c) {
+    public static int HextoDec(char c)
+    {
         return c >= '0' && c <= '9' ? c - 48 : c >= 'A' && c <= 'F' ? c - 55 : c - 87;
     }
 
-    private static Object deserialize(Object parent, StringReader in, Class cl, Type... params) throws Throwable {
+    private static Object deserialize(Object parent, StringReader in, Class cl, Type... params) throws Throwable
+    {
         cl = Primitives.wrap(cl);
         char c = '-';
         if (in.hasNext())
@@ -133,7 +135,8 @@ public class JsonAPI {
         }
     }
 
-    public static <T> T deserialize(String json, Class<T> cl, Type... params) {
+    public static <T> T deserialize(String json, Class<T> cl, Type... params)
+    {
         if (json == null)
             return null;
         StringReader sr = new StringReader(json);
@@ -146,11 +149,13 @@ public class JsonAPI {
         }
     }
 
-    public static String escape(String s) {
+    public static String escape(String s)
+    {
         return s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
-    public static String readString(StringReader in) {
+    public static String readString(StringReader in)
+    {
         int start = in.id;
         int end = -1;
         boolean esc = false;
@@ -179,7 +184,8 @@ public class JsonAPI {
         return unescape(new String(in.str, start, end - start));
     }
 
-    private static void serialize(StringBuilder sb, Object o) {
+    private static void serialize(StringBuilder sb, Object o)
+    {
         if (o == null) {
             sb.append("null");
             return;
@@ -257,7 +263,8 @@ public class JsonAPI {
         }
     }
 
-    public static String serialize(Object o) {
+    public static String serialize(Object o)
+    {
         StringBuilder sb = new StringBuilder();
         try {
             serialize(sb, o);
@@ -269,7 +276,8 @@ public class JsonAPI {
         }
     }
 
-    public static String unescape(String s) {
+    public static String unescape(String s)
+    {
         boolean esc = false;
         int utf = -1;
         int utfc = -1;

@@ -30,7 +30,8 @@ public class PlayerData {
     public Tabbar tabBar;
     public float xp, saturation, exhausion, walkSpeed, flySpeed;
 
-    public PlayerData(Player plr, GameMode setGm, Location setLoc) {
+    public PlayerData(Player plr, GameMode setGm, Location setLoc)
+    {
         pln = plr.getName();
         loc = plr.getLocation();
         xp = plr.getExp();
@@ -65,7 +66,8 @@ public class PlayerData {
         plr.setFoodLevel(20);
     }
 
-    public void restore() {
+    public void restore()
+    {
         Player plr = SU.getPlayer(pln);
         plr.teleport(loc);
         plr.setLevel(level);

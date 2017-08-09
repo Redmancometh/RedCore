@@ -17,7 +17,8 @@ public class ClientSession {
     public ArrayList<ClientProfile> availableProfiles;
     public ClientProfile selectedProfile;
 
-    public void changeSkin(String newSkinURL, boolean slimModel) {
+    public void changeSkin(String newSkinURL, boolean slimModel)
+    {
         try {
             postWithHeader("https://api.mojang.com/user/profile/" + selectedProfile.id + "/skin", "Authorization", "Bearer " + accessToken,
                     "model=" + (slimModel ? "slim&url=" : "&url=") + URLEncoder.encode(newSkinURL, "UTF-8"));
@@ -26,7 +27,8 @@ public class ClientSession {
         }
     }
 
-    public boolean invalidate() {
+    public boolean invalidate()
+    {
         try {
             post("https://authserver.mojang.com/invalidate",
                     "{\"accessToken\": \"" + accessToken + "\"," +
@@ -37,7 +39,8 @@ public class ClientSession {
         }
     }
 
-    public boolean refresh() {
+    public boolean refresh()
+    {
         try {
             String s = post("https://authserver.mojang.com/refresh",
                     "{\"accessToken\": \"" + accessToken + "\"," +
@@ -50,7 +53,8 @@ public class ClientSession {
         }
     }
 
-    public boolean signOut() {
+    public boolean signOut()
+    {
         try {
             post("https://authserver.mojang.com/signout",
                     "{\"username\": \"" + username + "\"," +
@@ -61,7 +65,8 @@ public class ClientSession {
         }
     }
 
-    public boolean uploadSkin(File f, boolean slimModel) {
+    public boolean uploadSkin(File f, boolean slimModel)
+    {
         try {
             MultipartUtility mu = new MultipartUtility("https://api.mojang.com/user/profile/" + selectedProfile.id + "/skin", "PUT");
             mu.addHeaderField("Authorization", "Bearer " + accessToken);
@@ -75,7 +80,8 @@ public class ClientSession {
         }
     }
 
-    public boolean validate() {
+    public boolean validate()
+    {
         try {
             post("https://authserver.mojang.com/validate",
                     "{\"accessToken\": \"" + accessToken + "\"," +

@@ -14,7 +14,8 @@ public class LocationData implements StringSerializable {
     public float yaw;
     public double z;
 
-    public LocationData(String in) {
+    public LocationData(String in)
+    {
         String[] d = in.split(" ");
         switch (d.length) {
             case 3:
@@ -46,14 +47,17 @@ public class LocationData implements StringSerializable {
         }
     }
 
-    public LocationData() {
+    public LocationData()
+    {
     }
 
-    public LocationData(LocationData ld) {
+    public LocationData(LocationData ld)
+    {
         this(ld.world, ld.x, ld.y, ld.z, ld.yaw, ld.pitch);
     }
 
-    public LocationData(String world, double x, double y, double z, float yaw, float pitch) {
+    public LocationData(String world, double x, double y, double z, float yaw, float pitch)
+    {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -62,68 +66,82 @@ public class LocationData implements StringSerializable {
         this.pitch = pitch;
     }
 
-    public LocationData(BlockLocation bl) {
+    public LocationData(BlockLocation bl)
+    {
         this(bl.x, bl.y, bl.z);
     }
 
-    public LocationData(double x, double y, double z) {
+    public LocationData(double x, double y, double z)
+    {
         this(null, x, y, z, 0.0f, 0.0f);
     }
 
-    public LocationData(Vector v) {
+    public LocationData(Vector v)
+    {
         this(v.getX(), v.getY(), v.getZ());
     }
 
-    public LocationData(String world, double x, double y, double z) {
+    public LocationData(String world, double x, double y, double z)
+    {
         this(world, x, y, z, 0.0f, 0.0f);
     }
 
-    public LocationData(double x, double y, double z, float yaw, float pitch) {
+    public LocationData(double x, double y, double z, float yaw, float pitch)
+    {
         this(null, x, y, z, yaw, pitch);
     }
 
-    public LocationData(Block bl) {
+    public LocationData(Block bl)
+    {
         this(bl.getWorld().getName(), bl.getX(), bl.getY(), bl.getZ(), 0.0f, 0.0f);
     }
 
-    public LocationData(Location loc) {
+    public LocationData(Location loc)
+    {
         this(loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
     }
 
-    public LocationData add(LocationData ld) {
+    public LocationData add(LocationData ld)
+    {
         return ld == null ? this : add(ld.x, ld.y, ld.z);
     }
 
-    public LocationData add(double nx, double ny, double nz) {
+    public LocationData add(double nx, double ny, double nz)
+    {
         x += nx;
         y += ny;
         z += nz;
         return this;
     }
 
-    public LocationData add(double num) {
+    public LocationData add(double num)
+    {
         x += num;
         y += num;
         z += num;
         return this;
     }
 
-    public Block getBlock() {
+    public Block getBlock()
+    {
         if (!isAvailable()) {
             return null;
         }
         return Bukkit.getWorld(world).getBlockAt((int) (x < 0 ? x - 0.999 : x), (int) y, (int) (z < 0 ? z - 0.999 : z));
     }
 
-    public boolean isAvailable() {
+    public boolean isAvailable()
+    {
         return world != null && Bukkit.getWorld(world) != null;
     }
 
-    public BlockLocation getBlockLocation() {
+    public BlockLocation getBlockLocation()
+    {
         return new BlockLocation((int) x, (int) y, (int) z);
     }
 
-    public Vector getDirection() {
+    public Vector getDirection()
+    {
         Vector vector = new Vector();
         vector.setY(-Math.sin(Math.toRadians(pitch)));
         double xz = Math.cos(Math.toRadians(pitch));
@@ -132,7 +150,8 @@ public class LocationData implements StringSerializable {
         return vector;
     }
 
-    public LocationData setDirection(Vector vector) {
+    public LocationData setDirection(Vector vector)
+    {
         double x = vector.getX();
         double z = vector.getZ();
         if (x == 0.0 && z == 0.0) {
@@ -148,19 +167,23 @@ public class LocationData implements StringSerializable {
         return this;
     }
 
-    public Location getLocation() {
+    public Location getLocation()
+    {
         return new Location(world == null ? null : Bukkit.getWorld(world), x, y, z, yaw, pitch);
     }
 
-    public Location getLocation(World w) {
+    public Location getLocation(World w)
+    {
         return new Location(w, x, y, z, yaw, pitch);
     }
 
-    public World getWorld() {
+    public World getWorld()
+    {
         return Bukkit.getWorld(world);
     }
 
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 57 + (world != null ? world.hashCode() : 0);
         hash = 19 * hash + (int) (Double.doubleToLongBits(x) ^ Double.doubleToLongBits(x) >>> 32);
         hash = 19 * hash + (int) (Double.doubleToLongBits(y) ^ Double.doubleToLongBits(y) >>> 32);
@@ -170,7 +193,8 @@ public class LocationData implements StringSerializable {
         return hash;
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (obj == null || !(obj instanceof LocationData)) {
             return false;
         }
@@ -178,12 +202,14 @@ public class LocationData implements StringSerializable {
         return (world == null && ld.world == null || world != null && ld.world != null && world.equals(ld.world)) && x == ld.x && y == ld.y && z == ld.z && yaw == ld.yaw && pitch == ld.pitch;
     }
 
-    public LocationData clone() {
+    public LocationData clone()
+    {
         return new LocationData(this);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder out = new StringBuilder();
         if (world != null) {
             out.append(' ').append(world);
@@ -194,49 +220,57 @@ public class LocationData implements StringSerializable {
         return out.substring(1);
     }
 
-    public LocationData multiple(LocationData ld) {
+    public LocationData multiple(LocationData ld)
+    {
         return ld == null ? this : multiple(ld.x, ld.y, ld.z);
     }
 
-    public LocationData multiple(double nx, double ny, double nz) {
+    public LocationData multiple(double nx, double ny, double nz)
+    {
         x *= nx;
         y *= ny;
         z *= nz;
         return this;
     }
 
-    public LocationData multiple(double num) {
+    public LocationData multiple(double num)
+    {
         x *= num;
         y *= num;
         z *= num;
         return this;
     }
 
-    public LocationData subtract(LocationData ld) {
+    public LocationData subtract(LocationData ld)
+    {
         return ld == null ? this : subtract(ld.x, ld.y, ld.z);
     }
 
-    public LocationData subtract(double nx, double ny, double nz) {
+    public LocationData subtract(double nx, double ny, double nz)
+    {
         x -= nx;
         y -= ny;
         z -= nz;
         return this;
     }
 
-    public LocationData subtract(double num) {
+    public LocationData subtract(double num)
+    {
         x -= num;
         y -= num;
         z -= num;
         return this;
     }
 
-    public String toLongString() {
+    public String toLongString()
+    {
         StringBuilder out = new StringBuilder();
         out.append(world).append(' ').append(x).append(' ').append(y).append(' ').append(z).append(' ').append(yaw).append(' ').append(pitch);
         return out.substring(1);
     }
 
-    public Vector toVector() {
+    public Vector toVector()
+    {
         return new Vector(x, y, z);
     }
 }

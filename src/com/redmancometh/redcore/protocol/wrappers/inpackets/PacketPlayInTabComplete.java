@@ -13,7 +13,8 @@ public class PacketPlayInTabComplete
     public String text;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.TabComplete.getPacketData(packet);
         text = (String) data[0];
         if (Reflection.ver.isAbove(ServerVersion.v1_10)) {
@@ -24,7 +25,8 @@ public class PacketPlayInTabComplete
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         if (Reflection.ver.isAbove(ServerVersion.v1_10))
             return PacketInType.TabComplete.newPacket(text, assumeCommand, block == null ? null : block.toNMS());
         return PacketInType.TabComplete.newPacket(text, block == null ? null : block.toNMS());

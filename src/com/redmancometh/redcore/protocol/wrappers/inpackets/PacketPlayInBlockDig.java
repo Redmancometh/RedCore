@@ -13,16 +13,18 @@ public class PacketPlayInBlockDig extends WrappedPacket {
     public Direction direction;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.BlockDig.newPacket(block.toNMS(), direction == null ? null : direction.toNMS(), digType.toVanillaDigType());
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.BlockDig.getPacketData(packet);
         block = new BlockLocation(data[0]);
         direction = data[1] == null ? null : Direction.valueOf(data[1].toString().toUpperCase());
         digType = DigType.valueOf(data[2].toString());
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketInType.BlockDig.newPacket(block.toNMS(), direction == null ? null : direction.toNMS(), digType.toVanillaDigType());
     }
 
     public enum DigType {
@@ -39,10 +41,12 @@ public class PacketPlayInBlockDig extends WrappedPacket {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInBlockDig$EnumPlayerDigType"), "valueOf", String.class);
         }
 
-        DigType() {
+        DigType()
+        {
         }
 
-        public Object toVanillaDigType() {
+        public Object toVanillaDigType()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

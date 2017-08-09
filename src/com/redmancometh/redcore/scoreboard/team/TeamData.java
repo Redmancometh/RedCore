@@ -18,7 +18,8 @@ public class TeamData {
     public NameTagVisibility nameTagVisibility;
     public ConcurrentSkipListSet<String> players = new ConcurrentSkipListSet<>();
 
-    public TeamData(String name, String displayName, String prefix, String suffix, boolean friendlyFire, boolean seeInvisible, NameTagVisibility nameTagVisibility, CollisionRule collisionRule, int color, ConcurrentSkipListSet<String> players) {
+    public TeamData(String name, String displayName, String prefix, String suffix, boolean friendlyFire, boolean seeInvisible, NameTagVisibility nameTagVisibility, CollisionRule collisionRule, int color, ConcurrentSkipListSet<String> players)
+    {
         this.name = name;
         this.displayName = displayName;
         this.prefix = prefix;
@@ -31,11 +32,13 @@ public class TeamData {
         this.players = players;
     }
 
-    public TeamData(PacketPlayOutScoreboardTeam p) {
+    public TeamData(PacketPlayOutScoreboardTeam p)
+    {
         apply(p);
     }
 
-    public void apply(PacketPlayOutScoreboardTeam p) {
+    public void apply(PacketPlayOutScoreboardTeam p)
+    {
         switch (p.action) {
             case 0: //create team
                 name = p.name;
@@ -67,15 +70,18 @@ public class TeamData {
         }
     }
 
-    public TeamData clone() {
+    public TeamData clone()
+    {
         return new TeamData(name, displayName, prefix, suffix, friendlyFire, seeInvisible, nameTagVisibility, collisionRule, color, new ConcurrentSkipListSet<>(players));
     }
 
-    public PacketPlayOutScoreboardTeam getRemovePacket() {
+    public PacketPlayOutScoreboardTeam getRemovePacket()
+    {
         return new PacketPlayOutScoreboardTeam(name, 1);
     }
 
-    public void update(Player plr, TeamData oldTeam) {
+    public void update(Player plr, TeamData oldTeam)
+    {
         if (oldTeam == null) {
             SU.tp.sendPacket(plr, getCreatePacket());
             return;
@@ -101,12 +107,14 @@ public class TeamData {
             SU.tp.sendPacket(plr, new PacketPlayOutScoreboardTeam(name, 3, list));
     }
 
-    public PacketPlayOutScoreboardTeam getCreatePacket() {
+    public PacketPlayOutScoreboardTeam getCreatePacket()
+    {
         return new PacketPlayOutScoreboardTeam(name, displayName, prefix, suffix, nameTagVisibility, collisionRule, color,
                 new ArrayList<>(players), 0, (friendlyFire ? 1 : 0) + (seeInvisible ? 2 : 0));
     }
 
-    public PacketPlayOutScoreboardTeam getUpdatePacket() {
+    public PacketPlayOutScoreboardTeam getUpdatePacket()
+    {
         return new PacketPlayOutScoreboardTeam(name, displayName, prefix, suffix, nameTagVisibility, collisionRule, color,
                 null, 2, (friendlyFire ? 1 : 0) + (seeInvisible ? 2 : 0));
     }

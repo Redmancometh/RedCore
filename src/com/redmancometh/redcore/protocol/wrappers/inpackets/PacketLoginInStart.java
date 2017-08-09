@@ -11,12 +11,14 @@ public class PacketLoginInStart extends WrappedPacket {
     public GameProfile gp;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.LoginInStart.newPacket(gp.toNMS());
+    public void loadVanillaPacket(Object packet)
+    {
+        gp = new GameProfile(PacketInType.LoginInStart.getPacketData(packet)[0]);
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        gp = new GameProfile(PacketInType.LoginInStart.getPacketData(packet)[0]);
+    public Object getVanillaPacket()
+    {
+        return PacketInType.LoginInStart.newPacket(gp.toNMS());
     }
 }

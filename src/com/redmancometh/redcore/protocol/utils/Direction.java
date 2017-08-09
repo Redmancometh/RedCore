@@ -13,48 +13,58 @@ public enum Direction implements WrappedData {
     private Vector v;
     private float yaw, pitch;
 
-    Direction(Vector v) {
+    Direction(Vector v)
+    {
         this.v = v;
         yaw = BlockUtils.getYaw(v);
         pitch = BlockUtils.getPitch(v);
     }
 
-    public static Direction get(int id) {
+    public static Direction get(int id)
+    {
         if (id >= 0 && id < 6)
             return Direction.values()[id];
         return null;
     }
 
-    public static Direction get(BlockFace face) {
+    public static Direction get(BlockFace face)
+    {
         return valueOf(face.name());
     }
 
-    public static Direction get(Vector v) {
+    public static Direction get(Vector v)
+    {
         return get(BlockUtils.getYaw(v), BlockUtils.getPitch(v));
     }
 
-    private static Direction get(float yaw, float pitch) {
+    private static Direction get(float yaw, float pitch)
+    {
         yaw = (yaw + 405) % 360;
         return pitch > 45 ? DOWN : pitch < -45 ? UP : yaw < 90 ? SOUTH : yaw < 180 ? WEST : yaw < 270 ? NORTH : EAST;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
     }
 
-    public float getPitch() {
+    public float getPitch()
+    {
         return pitch;
     }
 
-    public float getYaw() {
+    public float getYaw()
+    {
         return yaw;
     }
 
-    public BlockFace toBlockFace() {
+    public BlockFace toBlockFace()
+    {
         return BlockFace.valueOf(name());
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return valueOf.invoke(null, name());
         } catch (Throwable e) {
@@ -63,7 +73,8 @@ public enum Direction implements WrappedData {
         }
     }
 
-    public Vector toVector() {
+    public Vector toVector()
+    {
         return v.clone();
     }
 }

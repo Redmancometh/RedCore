@@ -14,24 +14,28 @@ public class PacketPlayOutEntityMetadata extends WrappedPacket {
     public int entityId;
     public ArrayList<WrappedItem> meta = new ArrayList<>();
 
-    public PacketPlayOutEntityMetadata() {
+    public PacketPlayOutEntityMetadata()
+    {
 
     }
 
-    public PacketPlayOutEntityMetadata(int entityId, ArrayList<WrappedItem> meta) {
+    public PacketPlayOutEntityMetadata(int entityId, ArrayList<WrappedItem> meta)
+    {
         this.entityId = entityId;
         this.meta = meta;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.EntityMetadata.getPacketData(packet);
         entityId = (int) d[0];
         meta = DataWatcher.wrapNMSItems((List) d[1]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.EntityMetadata.newPacket(entityId, DataWatcher.convertToNmsItems(meta));
 
     }

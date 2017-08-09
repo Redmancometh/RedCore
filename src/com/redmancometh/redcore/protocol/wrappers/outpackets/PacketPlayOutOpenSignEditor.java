@@ -10,22 +10,26 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 public class PacketPlayOutOpenSignEditor extends WrappedPacket {
     public BlockLocation loc;
 
-    public PacketPlayOutOpenSignEditor() {
+    public PacketPlayOutOpenSignEditor()
+    {
 
     }
 
-    public PacketPlayOutOpenSignEditor(BlockLocation loc) {
+    public PacketPlayOutOpenSignEditor(BlockLocation loc)
+    {
         this.loc = loc;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.OpenSignEditor.getPacketData(packet);
         loc = new BlockLocation(d[0]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.OpenSignEditor.newPacket(loc.toNMS());
     }
 }

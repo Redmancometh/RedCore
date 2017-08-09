@@ -16,15 +16,17 @@ public class PacketPlayOutEntityEquipment extends WrappedPacket {
     public int slot;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.EntityEquipment.newPacket(entityId, slot, item.toNMS());
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.EntityEquipment.getPacketData(packet);
         entityId = (int) d[0];
         slot = (int) d[1];
         item = new ItemStackWrapper(d[2]);
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.EntityEquipment.newPacket(entityId, slot, item.toNMS());
     }
 }

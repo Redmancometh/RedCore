@@ -23,7 +23,8 @@ public class PacketPlayOutEntityEffect extends WrappedPacket {
     public byte particles;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.EntityEffect.getPacketData(packet);
         entityId = (int) d[0];
         effectId = (byte) d[1];
@@ -33,7 +34,8 @@ public class PacketPlayOutEntityEffect extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.EntityEffect.newPacket(entityId, effectId, amplifier, duration, particles);
     }
 }

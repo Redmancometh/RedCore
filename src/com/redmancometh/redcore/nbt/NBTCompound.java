@@ -13,15 +13,18 @@ public class NBTCompound extends NBTTag {
     static Class nmsClass;
     public HashMap<String, NBTTag> map = new HashMap<>();
 
-    public NBTCompound() {
+    public NBTCompound()
+    {
     }
 
-    public NBTCompound(Object nmsTag) {
+    public NBTCompound(Object nmsTag)
+    {
         loadFromNMS(nmsTag);
     }
 
     @Override
-    public void loadFromNMS(Object tag) {
+    public void loadFromNMS(Object tag)
+    {
         try {
             Map<?, ?> m = (Map) mapField.get(tag);
             for (Entry<?, ?> e : m.entrySet()) {
@@ -41,7 +44,8 @@ public class NBTCompound extends NBTTag {
         }
     }
 
-    public void write(ByteBuf buf) {
+    public void write(ByteBuf buf)
+    {
         for (Entry<String, NBTTag> e : map.entrySet()) {
             buf.writeByte(NBTApi.getType(e.getValue()));
             byte[] a = e.getKey().getBytes(utf8);
@@ -52,7 +56,8 @@ public class NBTCompound extends NBTTag {
         buf.writeByte(0);
     }
 
-    public NBTCompound addAll(Map<?, ?> o) {
+    public NBTCompound addAll(Map<?, ?> o)
+    {
         for (Entry e : o.entrySet()) {
             if (e.getKey() == null || e.getValue() == null) continue;
             map.put(e.getKey().toString(), NBTTag.make(e.getValue()));
@@ -60,12 +65,14 @@ public class NBTCompound extends NBTTag {
         return this;
     }
 
-    public boolean getBoolean(String key) {
+    public boolean getBoolean(String key)
+    {
         NBTTag tag = map.get(key);
         return tag != null && tag instanceof NBTPrimitive && (Byte) ((NBTPrimitive) tag).data == 1;
     }
 
-    public NBTCompound getCompound(String key) {
+    public NBTCompound getCompound(String key)
+    {
         NBTTag tag = map.get(key);
         if (tag == null || !(tag instanceof NBTCompound)) {
             tag = new NBTCompound();
@@ -74,7 +81,8 @@ public class NBTCompound extends NBTTag {
         return (NBTCompound) tag;
     }
 
-    public NBTList getList(String key) {
+    public NBTList getList(String key)
+    {
         NBTTag tag = map.get(key);
         if (tag == null || !(tag instanceof NBTList)) {
             tag = new NBTList();
@@ -83,7 +91,8 @@ public class NBTCompound extends NBTTag {
         return (NBTList) tag;
     }
 
-    public NBTCompound set(String key, Object value) {
+    public NBTCompound set(String key, Object value)
+    {
         if (value == null) {
             map.remove(key);
         } else {
@@ -93,7 +102,8 @@ public class NBTCompound extends NBTTag {
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             Object tag = nmsClass.newInstance();
             Map m = (Map) mapField.get(tag);
@@ -107,7 +117,8 @@ public class NBTCompound extends NBTTag {
         }
     }
 
-    public String toString() {
+    public String toString()
+    {
         StringBuilder sb = new StringBuilder();
         for (Entry<String, NBTTag> e : map.entrySet()) {
             sb.append("\n\u00a7e").append((Object) e.getKey()).append(":\u00a7b ").append(e.getValue());

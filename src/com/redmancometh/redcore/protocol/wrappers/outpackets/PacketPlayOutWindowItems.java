@@ -16,34 +16,40 @@ public class PacketPlayOutWindowItems extends WrappedPacket {
     public int inventoryId;
     public ArrayList<ItemStackWrapper> items = new ArrayList<>();
 
-    public PacketPlayOutWindowItems() {
+    public PacketPlayOutWindowItems()
+    {
     }
 
-    public PacketPlayOutWindowItems(int inventoryId, ArrayList<ItemStackWrapper> items) {
+    public PacketPlayOutWindowItems(int inventoryId, ArrayList<ItemStackWrapper> items)
+    {
         this.inventoryId = inventoryId;
         this.items = items;
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.WindowItems.getPacketData(obj);
         inventoryId = (int) data[0];
         items = wrapItemList((Object[]) data[1]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.WindowItems.newPacket(inventoryId, makeNMSItemList());
     }
 
-    private Object[] makeNMSItemList() {
+    private Object[] makeNMSItemList()
+    {
         Object[] d = (Object[]) Array.newInstance(itemClass, items.size());
         for (int i = 0; i < items.size(); i++)
             d[i] = items.get(i).toNMS();
         return d;
     }
 
-    private ArrayList<ItemStackWrapper> wrapItemList(Object[] nms) {
+    private ArrayList<ItemStackWrapper> wrapItemList(Object[] nms)
+    {
         ArrayList<ItemStackWrapper> items = new ArrayList<>();
         for (Object o : nms)
             items.add(new ItemStackWrapper(o));

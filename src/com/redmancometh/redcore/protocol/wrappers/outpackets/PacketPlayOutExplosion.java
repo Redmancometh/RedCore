@@ -20,7 +20,8 @@ public class PacketPlayOutExplosion extends WrappedPacket {
     public double z;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.Explosion.getPacketData(packet);
         x = (double) d[0];
         y = (double) d[1];
@@ -33,18 +34,21 @@ public class PacketPlayOutExplosion extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.Explosion.newPacket(x, y, z, radius, toVanillaBlockLocations(), pushX, pushY, pushZ);
     }
 
-    public List toVanillaBlockLocations() {
+    public List toVanillaBlockLocations()
+    {
         List out = new ArrayList();
         for (BlockLocation bl : blocks)
             out.add(bl.toNMS());
         return out;
     }
 
-    public void fromVanillaBlockLocations(List l) {
+    public void fromVanillaBlockLocations(List l)
+    {
         blocks = new ArrayList<>();
         for (Object o : l) {
             blocks.add(new BlockLocation(o));

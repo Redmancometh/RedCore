@@ -36,7 +36,8 @@ public class TPSMeter implements Runnable {
     public static int zeroTpsCount = 0;
 
     @Override
-    public void run() {
+    public void run()
+    {
         tps = ticks * 1000.0 / checkTime;
         ticks = 0;
         if (tps < limit)
@@ -52,7 +53,8 @@ public class TPSMeter implements Runnable {
                         "\n");
                 TreeMap<Thread, StackTraceElement[]> map = new TreeMap<>(new java.util.Comparator<Thread>() {
                     @Override
-                    public int compare(Thread o1, Thread o2) {
+                    public int compare(Thread o1, Thread o2)
+                    {
                         return o1.getName().compareTo(o2.getName());
                     }
                 });
@@ -77,7 +79,8 @@ public class TPSMeter implements Runnable {
 
     }
 
-    public void start() {
+    public void start()
+    {
         meter = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this, checkTime, checkTime, TimeUnit.MILLISECONDS);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(SU.pl(), () -> ++ticks, 0, 1);
     }

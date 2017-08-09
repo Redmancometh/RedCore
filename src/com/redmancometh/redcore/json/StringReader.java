@@ -4,19 +4,23 @@ public class StringReader {
     public int id;
     public char[] str;
 
-    public StringReader(String in) {
+    public StringReader(String in)
+    {
         str = in.toCharArray();
     }
 
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return id < str.length;
     }
 
-    public char last() {
+    public char last()
+    {
         return str[id - 1];
     }
 
-    public char next() {
+    public char next()
+    {
         return str[id++];
     }
 }

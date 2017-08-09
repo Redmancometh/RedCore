@@ -1,16 +1,11 @@
 package com.redmancometh.redcore.listener;
 
+import com.redmancometh.redcore.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
-import com.redmancometh.redcore.RedCore;
-import com.redmancometh.redcore.RedPlugins;
-
-public class LoginListeners implements Listener
-{
+public class LoginListeners implements Listener {
     @EventHandler
     public void onLogin(PlayerJoinEvent e)
     {

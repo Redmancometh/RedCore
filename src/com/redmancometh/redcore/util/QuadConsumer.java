@@ -1,14 +1,10 @@
-
 package com.redmancometh.redcore.util;
 
 import java.util.Objects;
 
 @FunctionalInterface
-public interface QuadConsumer<T, U, V, Y>
-{
-    public void accept(T t, U u, V v, Y y);
-
-    public default QuadConsumer<T, U, V, Y> andThen(QuadConsumer<? super T, ? super U, ? super V, ? super Y> after)
+public interface QuadConsumer<T, U, V, Y> {
+    default QuadConsumer<T, U, V, Y> andThen(QuadConsumer<? super T, ? super U, ? super V, ? super Y> after)
     {
         Objects.requireNonNull(after);
         return (a, b, c, d) ->
@@ -17,4 +13,6 @@ public interface QuadConsumer<T, U, V, Y>
             after.accept(a, b, c, d);
         };
     }
+
+    void accept(T t, U u, V v, Y y);
 }

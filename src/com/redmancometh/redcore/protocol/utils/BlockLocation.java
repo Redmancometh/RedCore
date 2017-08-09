@@ -20,38 +20,45 @@ public class BlockLocation implements WrappedData, StringSerializable {
     public int y;
     public int z;
 
-    public BlockLocation() {
+    public BlockLocation()
+    {
 
     }
 
-    public BlockLocation(String in) {
+    public BlockLocation(String in)
+    {
         String[] d = in.split(" ", 3);
         x = Integer.valueOf(d[0]);
         y = Integer.valueOf(d[1]);
         z = Integer.valueOf(d[2]);
     }
 
-    public BlockLocation(Block bl) {
+    public BlockLocation(Block bl)
+    {
         this(bl.getX(), bl.getY(), bl.getZ());
     }
 
-    public BlockLocation(int x, int y, int z) {
+    public BlockLocation(int x, int y, int z)
+    {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public BlockLocation(Location loc) {
+    public BlockLocation(Location loc)
+    {
         this(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
-    public BlockLocation(LocationData loc) {
+    public BlockLocation(LocationData loc)
+    {
         this.x = (int) loc.x;
         this.y = (int) loc.y;
         this.z = (int) loc.z;
     }
 
-    public BlockLocation(Object nmsData) {
+    public BlockLocation(Object nmsData)
+    {
         try {
             x = (int) getX.invoke(nmsData);
             y = (int) getY.invoke(nmsData);
@@ -61,42 +68,50 @@ public class BlockLocation implements WrappedData, StringSerializable {
         }
     }
 
-    public Block getBlock(World w) {
+    public Block getBlock(World w)
+    {
         return w.getBlockAt(x, y, z);
     }
 
-    public Location getLocation(World w) {
+    public Location getLocation(World w)
+    {
         return new Location(w, x, y, z);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return (x << 20) + (y << 12) + z;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (!(obj instanceof BlockLocation))
             return false;
         BlockLocation bl = (BlockLocation) obj;
         return bl.x == x && bl.y == y && bl.z == z;
     }
 
-    public BlockLocation clone() {
+    public BlockLocation clone()
+    {
         return new BlockLocation(x, y, z);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return x + " " + y + ' ' + z;
     }
 
-    public boolean isDefined() {
+    public boolean isDefined()
+    {
         return x != 0 || y != 0 || z != 0;
     }
 
     @Override
-    public Object toNMS() {
+    public Object toNMS()
+    {
         try {
             return con.newInstance(x, y, z);
         } catch (Throwable e) {

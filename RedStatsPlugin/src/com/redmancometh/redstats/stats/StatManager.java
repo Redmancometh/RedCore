@@ -1,20 +1,23 @@
 package com.redmancometh.redstats.stats;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.entity.Player;
-
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.databasing.SubDatabase;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 import com.redmancometh.redstats.PlayerStatRecord;
+import org.bukkit.entity.Player;
 
-public class StatManager
-{
-    private SubDatabase<UUID, PlayerStatRecord> getSubDB()
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+public class StatManager {
+    public void incrementStat(Player p, StatType type)
     {
-        return RedCore.getInstance().getMasterDB().getSubDBForType(PlayerStatRecord.class);
+        incrementStat(p, type, 1);
+    }
+
+    public void incrementStat(Player p, StatType type, int increment)
+    {
+        getRecord(p.getUniqueId()).thenAccept((record) -> record.getStatMap().compute(type, (t, amount) -> amount + increment));
     }
 
     public CompletableFuture<PlayerStatRecord> getRecord(UUID uuid)
@@ -22,15 +25,9 @@ public class StatManager
         return getSubDB().getObject(uuid);
     }
 
-    public void incrementStat(Player p, StatType type)
+    private SubDatabase<UUID, PlayerStatRecord> getSubDB()
     {
-        incrementStat(p, type, 1);
-    }
-
-    public void subtractFromStat(Player p, StatType type, int amount)
-    {
-        UUID uuid = p.getUniqueId();
-        getSubDB().getObject(uuid).thenAccept((record) -> record.setStat(type, record.getStat(type) - 1));
+        return RedCore.getInstance().getMasterDB().getSubDBForType(PlayerStatRecord.class);
     }
 
     public CompletableFuture<Void> save(Player p)
@@ -48,20 +45,18 @@ public class StatManager
         UUID uuid = p.getUniqueId();
         getSubDB().getObject(uuid).thenAccept((record) ->
         {
-            try
-            {
+            try {
                 getSubDB().saveAndPurge(record);
-            }
-            catch (ObjectNotPresentException e)
-            {
+            } catch (ObjectNotPresentException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public void incrementStat(Player p, StatType type, int increment)
+    public void subtractFromStat(Player p, StatType type, int amount)
     {
-        getRecord(p.getUniqueId()).thenAccept((record) -> record.getStatMap().compute(type, (t, amount) -> amount + increment));
+        UUID uuid = p.getUniqueId();
+        getSubDB().getObject(uuid).thenAccept((record) -> record.setStat(type, record.getStat(type) - 1));
     }
 
 }

@@ -8,13 +8,15 @@ public class PacketPlayInKeepAlive
     public int id;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.KeepAlive.newPacket(id);
+    public void loadVanillaPacket(Object packet)
+    {
+        id = (Integer) PacketInType.KeepAlive.getPacketData(packet)[0];
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        id = (Integer) PacketInType.KeepAlive.getPacketData(packet)[0];
+    public Object getVanillaPacket()
+    {
+        return PacketInType.KeepAlive.newPacket(id);
     }
 }
 

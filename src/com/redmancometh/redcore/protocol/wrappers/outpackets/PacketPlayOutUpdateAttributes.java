@@ -16,29 +16,34 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
     public ArrayList<Attribute> attributes;
     public int entityId;
 
-    public PacketPlayOutUpdateAttributes() {
+    public PacketPlayOutUpdateAttributes()
+    {
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] d = PacketOutType.UpdateAttributes.getPacketData(obj);
         entityId = (int) d[0];
         loadNMSAttributes((Iterable<Object>) d[1]);
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.UpdateAttributes.newPacket(entityId, getNMSAttributes());
     }
 
-    public ArrayList<Object> getNMSAttributes() {
+    public ArrayList<Object> getNMSAttributes()
+    {
         ArrayList<Object> out = new ArrayList<>();
         for (Attribute a : attributes)
             out.add(a.toNMS());
         return out;
     }
 
-    public void loadNMSAttributes(Iterable<Object> nms) {
+    public void loadNMSAttributes(Iterable<Object> nms)
+    {
         attributes = new ArrayList<>();
         for (Object o : nms)
             attributes.add(new Attribute(o));
@@ -53,13 +58,15 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         public String name;
         public double value;
 
-        public Attribute(String name, double value, ArrayList<AttributeModifier> modifiers) {
+        public Attribute(String name, double value, ArrayList<AttributeModifier> modifiers)
+        {
             this.name = name;
             this.value = value;
             this.modifiers.addAll(modifiers);
         }
 
-        public Attribute(Object nms) {
+        public Attribute(Object nms)
+        {
             try {
                 name = (String) nameField.get(nms);
                 value = (double) valueField.get(nms);
@@ -72,7 +79,8 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object nms = Reflection.newInstance(nmsClass);
                 nameField.set(nms, name);
@@ -100,7 +108,8 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         public String name;
         public int operation;
 
-        public AttributeModifier(Object nms) {
+        public AttributeModifier(Object nms)
+        {
             try {
                 amount = amountField.getDouble(nms);
                 id = (UUID) idField.get(nms);
@@ -112,7 +121,8 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object nms = Reflection.newInstance(nmsClass);
                 amountField.set(nms, amount);

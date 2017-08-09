@@ -323,7 +323,8 @@ public class Command implements StringSerializable {
     public int delay = -1;
     public String type = "CONSOLE";
 
-    public Command(String in) {
+    public Command(String in)
+    {
         if (in.startsWith("{")) {
             int id = in.indexOf('}');
             delay = Integer.valueOf(in.substring(1, id));
@@ -338,7 +339,8 @@ public class Command implements StringSerializable {
         }
     }
 
-    public static boolean executeAll(CommandSender sender, ArrayList<Command> list, Object... args) {
+    public static boolean executeAll(CommandSender sender, ArrayList<Command> list, Object... args)
+    {
         if (sender == null || list == null)
             return false;
         for (Command c : list)
@@ -347,7 +349,8 @@ public class Command implements StringSerializable {
         return true;
     }
 
-    public boolean execute(CommandSender sender, Object... args) {
+    public boolean execute(CommandSender sender, Object... args)
+    {
         if (sender == null)
             return false;
         if (delay < 0)
@@ -356,7 +359,8 @@ public class Command implements StringSerializable {
         return true;
     }
 
-    public boolean executeNow(CommandSender sender, Object... args) {
+    public boolean executeNow(CommandSender sender, Object... args)
+    {
         if (sender == null)
             return false;
         Player plr = sender instanceof Player ? (Player) sender : null;
@@ -375,7 +379,8 @@ public class Command implements StringSerializable {
         }
     }
 
-    public static boolean executeAll(Iterable<String> plns, ArrayList<Command> list, Object... args) {
+    public static boolean executeAll(Iterable<String> plns, ArrayList<Command> list, Object... args)
+    {
         if (plns == null || list == null)
             return false;
         for (String pln : plns) {
@@ -388,7 +393,8 @@ public class Command implements StringSerializable {
         return true;
     }
 
-    public static boolean executeAll(Iterable<Entity> pls, Entity plr, ArrayList<Command> list, Object... args) {
+    public static boolean executeAll(Iterable<Entity> pls, Entity plr, ArrayList<Command> list, Object... args)
+    {
         if (list == null || pls == null)
             return false;
         for (Entity p : pls) {
@@ -400,7 +406,8 @@ public class Command implements StringSerializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return (delay > -1 ? "{" + delay + '}' + type : type) + ':' + cmd;
     }
 }

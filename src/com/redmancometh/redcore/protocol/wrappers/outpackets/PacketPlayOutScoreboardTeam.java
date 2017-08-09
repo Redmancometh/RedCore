@@ -35,7 +35,8 @@ public class PacketPlayOutScoreboardTeam extends WrappedPacket {
     public String prefix = "";
     public String suffix = "";
 
-    public PacketPlayOutScoreboardTeam(String name, String displayName, String prefix, String suffix, NameTagVisibility nameTagVisibility, CollisionRule collisionRule, int color, ArrayList<String> players, int action, int friendFlags) {
+    public PacketPlayOutScoreboardTeam(String name, String displayName, String prefix, String suffix, NameTagVisibility nameTagVisibility, CollisionRule collisionRule, int color, ArrayList<String> players, int action, int friendFlags)
+    {
         this.name = name;
         this.displayName = displayName;
         this.prefix = prefix;
@@ -48,23 +49,27 @@ public class PacketPlayOutScoreboardTeam extends WrappedPacket {
         this.friendFlags = friendFlags;
     }
 
-    public PacketPlayOutScoreboardTeam() {
+    public PacketPlayOutScoreboardTeam()
+    {
 
     }
 
-    public PacketPlayOutScoreboardTeam(String name, int action) {
+    public PacketPlayOutScoreboardTeam(String name, int action)
+    {
         this.name = name;
         this.action = action;
     }
 
-    public PacketPlayOutScoreboardTeam(String name, int action, ArrayList<String> players) {
+    public PacketPlayOutScoreboardTeam(String name, int action, ArrayList<String> players)
+    {
         this.name = name;
         this.action = action;
         this.players = players;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = ScoreboardTeam.getPacketData(packet);
         name = (String) d[0];
         displayName = (String) d[1];
@@ -86,7 +91,8 @@ public class PacketPlayOutScoreboardTeam extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         if (Reflection.ver.isAbove(ServerVersion.v1_9))
             return ScoreboardTeam.newPacket(name, displayName, prefix, suffix, nameTagVisibility == null ? null : nameTagVisibility.name(), collisionRule == null ? null : collisionRule.name(), color, players == null ? new ArrayList<>() : new ArrayList<>(players), action, friendFlags);
         else if (Reflection.ver.isAbove(ServerVersion.v1_8))

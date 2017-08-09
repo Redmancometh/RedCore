@@ -35,7 +35,8 @@ public class ItemWrapper implements Cloneable {
      *
      * @param in - The input item String
      */
-    public ItemWrapper(String in) {
+    public ItemWrapper(String in)
+    {
         this(ItemUtils.stringToItemStack(in));
     }
 
@@ -44,7 +45,8 @@ public class ItemWrapper implements Cloneable {
      *
      * @param is - Convertable ItemStack
      */
-    public ItemWrapper(ItemStack is) {
+    public ItemWrapper(ItemStack is)
+    {
         if (is == null || is.getType() == Material.AIR) {
             material = Material.AIR;
             dataValue = -1;
@@ -105,7 +107,8 @@ public class ItemWrapper implements Cloneable {
      * @return The cloned ItemWrapper
      */
     @Override
-    public ItemWrapper clone() {
+    public ItemWrapper clone()
+    {
         return ConfigManager.gson.fromJson(ConfigManager.gson.toJson(this), ItemWrapper.class);
     }
 
@@ -115,29 +118,9 @@ public class ItemWrapper implements Cloneable {
      * @return The conversion result
      */
     @Override
-    public String toString() {
+    public String toString()
+    {
         return ItemUtils.itemToString(getItem());
-    }
-
-    /**
-     * Get the item with extra lore added and filled with the given variables
-     *
-     * @param extraLore - The addable extra lore
-     * @param vars      - The fillable variables
-     * @return The ItemStack with the added variable filled lore.
-     */
-    public ItemStack getItem(Iterable<String> extraLore, Object... vars) {
-        ItemStack is = getItem();
-        if (is == null || is.getType() == Material.AIR)
-            return is;
-        ItemMeta meta = is.getItemMeta();
-        List<String> cur = meta.getLore();
-        if (cur == null)
-            cur = new ArrayList<>();
-        cur.addAll(SU.fillVariables(extraLore, vars));
-        meta.setLore(cur);
-        is.setItemMeta(meta);
-        return is;
     }
 
     /**
@@ -145,7 +128,8 @@ public class ItemWrapper implements Cloneable {
      *
      * @return The Bukkit ItemStack
      */
-    public ItemStack getItem() {
+    public ItemStack getItem()
+    {
         try {
             ItemStack is = new ItemStack(material, amount, dataValue);
             ItemMeta meta = is.getItemMeta();
@@ -193,5 +177,27 @@ public class ItemWrapper implements Cloneable {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return ItemUtil.buildItem(Material.REDSTONE, "§cFailed to load item", lore);
+    }
+
+    /**
+     * Get the item with extra lore added and filled with the given variables
+     *
+     * @param extraLore - The addable extra lore
+     * @param vars      - The fillable variables
+     * @return The ItemStack with the added variable filled lore.
+     */
+    public ItemStack getItem(Iterable<String> extraLore, Object... vars)
+    {
+        ItemStack is = getItem();
+        if (is == null || is.getType() == Material.AIR)
+            return is;
+        ItemMeta meta = is.getItemMeta();
+        List<String> cur = meta.getLore();
+        if (cur == null)
+            cur = new ArrayList<>();
+        cur.addAll(SU.fillVariables(extraLore, vars));
+        meta.setLore(cur);
+        is.setItemMeta(meta);
+        return is;
     }
 }

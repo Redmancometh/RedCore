@@ -15,18 +15,21 @@ public class PacketPlayOutBlockBreakAnimation extends WrappedPacket {
     public int destroyStage;
     public int entityId;
 
-    public PacketPlayOutBlockBreakAnimation() {
+    public PacketPlayOutBlockBreakAnimation()
+    {
 
     }
 
-    public PacketPlayOutBlockBreakAnimation(int entityId, BlockLocation block, int destroyStage) {
+    public PacketPlayOutBlockBreakAnimation(int entityId, BlockLocation block, int destroyStage)
+    {
         this.entityId = entityId;
         this.block = block;
         this.destroyStage = destroyStage;
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.BlockBreakAnimation.getPacketData(packet);
         entityId = (int) d[0];
         block = new BlockLocation(d[1]);
@@ -34,7 +37,8 @@ public class PacketPlayOutBlockBreakAnimation extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.BlockBreakAnimation.newPacket(entityId, block.toNMS(), destroyStage);
     }
 }

@@ -10,14 +10,16 @@ public class DelayedCommandExecutor implements Runnable {
     private final Command c;
     private final CommandSender sender;
 
-    public DelayedCommandExecutor(Command c, CommandSender sender, Object[] args) {
+    public DelayedCommandExecutor(Command c, CommandSender sender, Object[] args)
+    {
         this.args = args;
         this.sender = sender;
         this.c = c;
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         c.executeNow(sender, args);
     }
 }

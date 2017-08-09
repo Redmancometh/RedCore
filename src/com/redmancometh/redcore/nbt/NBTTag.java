@@ -8,7 +8,8 @@ import java.util.*;
 
 public abstract class NBTTag implements WrappedData, StringSerializable {
 
-    public static NBTTag make(Object o) {
+    public static NBTTag make(Object o)
+    {
         if (o instanceof NBTTag) {
             return (NBTTag) o;
         }

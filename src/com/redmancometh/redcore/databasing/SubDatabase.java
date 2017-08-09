@@ -8,10 +8,10 @@ import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
+import java.lang.InstantiationException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Function;
-import java.lang.InstantiationException;
 
 /**
  * @param <V> This is the type of object persisted
@@ -19,14 +19,15 @@ import java.lang.InstantiationException;
  * @author Redmancometh
  */
 public class SubDatabase<K extends Serializable, V extends Defaultable> {
-    private SessionFactory factory;
     private final Class<V> type;
     public Function<K, V> defaultObjectBuilder;
-    private boolean criteriaClass = false;
     private List<Criterion> criteria;
+    private boolean criteriaClass = false;
+    private SessionFactory factory;
     LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>() {
         @Override
-        public SpecialFuture<V> load(K key) {
+        public SpecialFuture<V> load(K key)
+        {
             return SpecialFuture.supplyAsync(() -> {
                 try (Session session = factory.openSession()) {
                     if (criteriaClass) {
@@ -44,7 +45,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
         }
     });
 
-    public SubDatabase(Class<V> type, SessionFactory factory) {
+    public SubDatabase(Class<V> type, SessionFactory factory)
+    {
         super();
         this.factory = factory;
         this.type = type;
@@ -61,7 +63,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
         };
     }
 
-    public void deleteObject(V e) {
+    public void deleteObject(V e)
+    {
         try (Session s = factory.openSession()) {
             s.delete(e);
         }
@@ -74,26 +77,31 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      * @param e
      * @return
      */
-    public V get(K e) {
+    public V get(K e)
+    {
 
         SpecialFuture<V> future = cache.asMap().get(e);
         if (future == null) System.out.println("DAFUQ");
         return future.get();
     }
 
-    public List<Criterion> getCriteria() {
+    public List<Criterion> getCriteria()
+    {
         return criteria;
     }
 
-    public void setCriteria(List<Criterion> criteria) {
+    public void setCriteria(List<Criterion> criteria)
+    {
         this.criteria = criteria;
     }
 
-    public SessionFactory getFactory() {
+    public SessionFactory getFactory()
+    {
         return factory;
     }
 
-    public Class<V> getMyType() {
+    public Class<V> getMyType()
+    {
         return this.type;
     }
 
@@ -104,7 +112,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      * @param e
      * @return
      */
-    public SpecialFuture<V> getObject(K e) {
+    public SpecialFuture<V> getObject(K e)
+    {
         try {
             return cache.get(e);
         } catch (ExecutionException e1) {
@@ -113,7 +122,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
         return null;
     }
 
-    public SpecialFuture<V> getWithCriteria(K e, Criteria... criteria) {
+    public SpecialFuture<V> getWithCriteria(K e, Criteria... criteria)
+    {
         try {
             return cache.get(e);
         } catch (ExecutionException e1) {
@@ -122,20 +132,24 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
         return null;
     }
 
-    public void insertObject(K key, V value) {
+    public void insertObject(K key, V value)
+    {
         System.out.println("Inserting: " + value + " AT: " + key);
         cache.asMap().put(key, SpecialFuture.supplyAsync(() -> value));
     }
 
-    public boolean isCriteriaClass() {
+    public boolean isCriteriaClass()
+    {
         return criteriaClass;
     }
 
-    public void setCriteriaClass(boolean criteriaClass) {
+    public void setCriteriaClass(boolean criteriaClass)
+    {
         this.criteriaClass = criteriaClass;
     }
 
-    public Session newSession() {
+    public Session newSession()
+    {
         return factory.openSession();
     }
 
@@ -145,7 +159,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      *
      * @param e
      */
-    public void purgeObject(K e) {
+    public void purgeObject(K e)
+    {
         cache.asMap().remove(e);
     }
 
@@ -156,7 +171,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      * @return
      * @throws ObjectNotPresentException
      */
-    public SpecialFuture<?> saveAndPurge(V e, UUID uuid) throws ObjectNotPresentException {
+    public SpecialFuture<?> saveAndPurge(V e, UUID uuid) throws ObjectNotPresentException
+    {
         return saveObject(e).thenRun(() -> cache.asMap().remove(uuid));
     }
 
@@ -166,7 +182,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      * @param e
      * @return
      */
-    public SpecialFuture<?> saveObject(V e) {
+    public SpecialFuture<?> saveObject(V e)
+    {
         return SpecialFuture.runAsync(() ->
         {
             try (Session session = factory.openSession()) {
@@ -184,7 +201,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      * @return
      * @throws ObjectNotPresentException
      */
-    public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException {
+    public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
+    {
         if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
         return CompletableFuture.runAsync(() ->
         {

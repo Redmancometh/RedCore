@@ -38,27 +38,32 @@ public class PacketPlayOutPosition extends WrappedPacket {
     public float yaw;
     public double z;
 
-    public PacketPlayOutPosition() {
+    public PacketPlayOutPosition()
+    {
     }
 
-    public PacketPlayOutPosition(double x, double y, double z) {
+    public PacketPlayOutPosition(double x, double y, double z)
+    {
         flags = coordFlags;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public PacketPlayOutPosition(float yaw, float pitch) {
+    public PacketPlayOutPosition(float yaw, float pitch)
+    {
         flags = rotationFlags;
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
-    public PacketPlayOutPosition(Location loc) {
+    public PacketPlayOutPosition(Location loc)
+    {
         setLocation(loc);
     }
 
-    public void setLocation(Location loc) {
+    public void setLocation(Location loc)
+    {
         flags = allFlags;
         x = loc.getX();
         y = loc.getY();
@@ -67,12 +72,14 @@ public class PacketPlayOutPosition extends WrappedPacket {
         pitch = loc.getPitch();
     }
 
-    public PacketPlayOutPosition(Object packet) {
+    public PacketPlayOutPosition(Object packet)
+    {
         loadVanillaPacket(packet);
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.Position.getPacketData(packet);
         x = (double) d[0];
         y = (double) d[1];
@@ -85,19 +92,22 @@ public class PacketPlayOutPosition extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags(), teleportId) :
                 PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags());
     }
 
-    public HashSet<Object> getVanillaFlags() {
+    public HashSet<Object> getVanillaFlags()
+    {
         HashSet<Object> out = new HashSet<>();
         for (PlayerTeleportFlag f : flags)
             out.add(f.toNMS());
         return out;
     }
 
-    private void setVanillaFlags(Set set) {
+    private void setVanillaFlags(Set set)
+    {
         flags = new HashSet<>();
         for (Object o : set)
             flags.add(fromVanillaPTF(o));
@@ -112,12 +122,14 @@ public class PacketPlayOutPosition extends WrappedPacket {
         private static final Class cl = Reflection.getNMSClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
         private static final Method valueOf = Reflection.getMethod(cl, "valueOf", String.class);
 
-        public static PlayerTeleportFlag fromVanillaPTF(Object nms) {
+        public static PlayerTeleportFlag fromVanillaPTF(Object nms)
+        {
             return valueOf(nms.toString());
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return valueOf.invoke(null, name());
             } catch (Throwable e) {

@@ -11,13 +11,15 @@ public class PacketPlayOutSpawnPosition extends WrappedPacket {
     public BlockLocation location;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         location = new BlockLocation(PacketOutType.SpawnPosition.getPacketData(packet)[0]);
 
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.SpawnPosition.newPacket(location.toNMS());
     }
 

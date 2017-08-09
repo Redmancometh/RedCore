@@ -16,12 +16,8 @@ public class PacketHandshakingInSetProtocol extends WrappedPacket {
     public int version;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketInType.HandshakingInSetProtocol.newPacket(version, hostName, port, nextState.getVanillaEnumProtocol());
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketInType.HandshakingInSetProtocol.getPacketData(packet);
         version = (int) d[0];
         hostName = (String) d[1];
@@ -29,16 +25,24 @@ public class PacketHandshakingInSetProtocol extends WrappedPacket {
         nextState = EnumProtocol.valueOf(d[3].toString());
     }
 
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketInType.HandshakingInSetProtocol.newPacket(version, hostName, port, nextState.getVanillaEnumProtocol());
+    }
+
     public enum EnumProtocol {
         HANDSHAKING(-1), PLAY(0), STATUS(1), LOGIN(2);
         private static Method vanilla = Reflection.getMethod(Reflection.getNMSClass("EnumProtocol"), "valueOf", String.class);
         public int id;
 
-        EnumProtocol(int id) {
+        EnumProtocol(int id)
+        {
             this.id = id;
         }
 
-        public Object getVanillaEnumProtocol() {
+        public Object getVanillaEnumProtocol()
+        {
             try {
                 return vanilla.invoke(null, name());
             } catch (Throwable e) {

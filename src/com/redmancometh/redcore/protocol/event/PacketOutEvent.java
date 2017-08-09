@@ -5,23 +5,27 @@ import org.bukkit.entity.Player;
 public class PacketOutEvent extends PacketEvent {
     private final PacketOutType type;
 
-    public PacketOutEvent(Object channel, Player plr, Object packet) {
+    public PacketOutEvent(Object channel, Player plr, Object packet)
+    {
         super(channel, plr, packet);
         type = PacketOutType.getType(packet);
     }
 
     @Override
-    public Object[] getPacketData() {
+    public Object[] getPacketData()
+    {
         return type.getPacketData(packet);
     }
 
     @Override
-    public void setPacketData(Object... data) {
+    public void setPacketData(Object... data)
+    {
         type.fillPacket(packet, data);
     }
 
     @Override
-    public boolean setPacketData(int id, Object o) {
+    public boolean setPacketData(int id, Object o)
+    {
         try {
             type.fs.get(id).set(packet, o);
             return true;
@@ -31,7 +35,8 @@ public class PacketOutEvent extends PacketEvent {
         }
     }
 
-    public PacketOutType getType() {
+    public PacketOutType getType()
+    {
         return type;
     }
 }

@@ -1,20 +1,18 @@
 package com.redmancometh.redcore.mediators;
 
-import java.util.UUID;
+import com.redmancometh.redcore.RedCore;
+import com.redmancometh.redcore.util.SpecialFuture;
 import org.bukkit.entity.Player;
 
-import com.redmancometh.redcore.RedCore;
-import com.redmancometh.redcore.mediators.ObjectManager;
-import com.redmancometh.redcore.util.SpecialFuture;
+import java.util.UUID;
 
-public class NulledObjectManager extends ObjectManager
-{
+public class NulledObjectManager extends ObjectManager {
 
     public NulledObjectManager()
     {
         super(RedCore.class);
     }
-        
+
     @Override
     public SpecialFuture<?> getRecord(UUID uuid)
     {

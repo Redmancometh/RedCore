@@ -9,7 +9,8 @@ public class Frame implements StringSerializable {
     public ArrayList<Long> repeats;
     public String text;
 
-    public Frame(String in) {
+    public Frame(String in)
+    {
         if (in.startsWith("{")) {
             delays = new ArrayList();
             repeats = new ArrayList();
@@ -31,7 +32,8 @@ public class Frame implements StringSerializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         if (delays == null || delays.isEmpty()) {
             return text;
         }

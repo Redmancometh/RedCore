@@ -12,7 +12,8 @@ public class VariableAPI {
     private static final HashSet<String> errorVars = new HashSet<>();
     private static final HashSet<String> missingHandlers = new HashSet<>();
 
-    public static ArrayList<Object> fill(String msg, int from, Player plr, Object[] oArgs) {
+    public static ArrayList<Object> fill(String msg, int from, Player plr, Object[] oArgs)
+    {
         int l = msg.length();
         int sid = from;
         ArrayList<Object> out = new ArrayList<>();
@@ -43,7 +44,8 @@ public class VariableAPI {
         return out;
     }
 
-    public static Object fillVar(Player plr, List<Object> inside, Object[] oArgs) {
+    public static Object fillVar(Player plr, List<Object> inside, Object[] oArgs)
+    {
         StringBuilder sb = new StringBuilder();
         int l = inside.size();
         for (int c = 0; c < l; ++c) {
@@ -62,14 +64,16 @@ public class VariableAPI {
         return handle(sb.toString(), plr, emptyList, oArgs);
     }
 
-    public static String fillVariables(String msg, Player plr, Object... oArgs) {
+    public static String fillVariables(String msg, Player plr, Object... oArgs)
+    {
         ArrayList<Object> out = fill(msg.replace("\\<", "\u0000").replace("\\>", "\u0001"), 0, plr, oArgs);
         out.remove(0);
         String s = StringUtils.join(out, "").replace('\u0000', '<').replace('\u0001', '>');
         return s;
     }
 
-    private static Object handle(String var, Player plr, ArrayList<Object> inside, Object[] oArgs) {
+    private static Object handle(String var, Player plr, ArrayList<Object> inside, Object[] oArgs)
+    {
         VariableHandler vh = handlers.get(var);
         if (vh == null) {
             if (missingHandlers.add(var))

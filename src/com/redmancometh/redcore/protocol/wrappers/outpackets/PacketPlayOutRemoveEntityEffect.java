@@ -17,14 +17,16 @@ public class PacketPlayOutRemoveEntityEffect extends WrappedPacket {
     public int entityId;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.RemoveEntityEffect.getPacketData(packet);
         entityId = (int) d[0];
         effectId = (byte) (int) d[1];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.RemoveEntityEffect.newPacket(entityId, effectId);
     }
 }

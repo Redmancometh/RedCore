@@ -10,12 +10,14 @@ public class PacketPlayOutEntity extends WrappedPacket {
     public int entityId;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.Entity.newPacket(entityId);
+    public void loadVanillaPacket(Object packet)
+    {
+        entityId = (int) PacketOutType.Entity.getPacketData(packet)[0];
     }
 
     @Override
-    public void loadVanillaPacket(Object packet) {
-        entityId = (int) PacketOutType.Entity.getPacketData(packet)[0];
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.Entity.newPacket(entityId);
     }
 }

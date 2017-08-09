@@ -12,7 +12,8 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
     private ArrayList<Long> repeat = new ArrayList();
     private String text;
 
-    public BlinkEffect(String in) {
+    public BlinkEffect(String in)
+    {
         if (in.startsWith("{")) {
             for (String s : in.substring(1, in.indexOf("}")).split(" ")) {
                 if (s.equals("A")) {
@@ -29,11 +30,13 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
         remaining = data.next();
     }
 
-    public BlinkEffect() {
+    public BlinkEffect()
+    {
     }
 
     @Override
-    public CustomEffect clone() {
+    public CustomEffect clone()
+    {
         BlinkEffect be = new BlinkEffect();
         be.active = active;
         be.data = data;
@@ -44,7 +47,8 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder out = new StringBuilder();
         out.append("{");
         if (!active) {
@@ -58,17 +62,20 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
     }
 
     @Override
-    public String getText() {
+    public String getText()
+    {
         return text;
     }
 
     @Override
-    public void setText(String newText) {
+    public void setText(String newText)
+    {
         text = newText;
     }
 
     @Override
-    public String next(String in) {
+    public String next(String in)
+    {
         --remaining;
         if (remaining == 0) {
             if (!data.hasNext()) {

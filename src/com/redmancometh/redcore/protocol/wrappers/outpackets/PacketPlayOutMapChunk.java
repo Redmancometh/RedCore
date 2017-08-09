@@ -18,17 +18,19 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
     public boolean groundUpContinuous;
 
     @Override
-    public Object getVanillaPacket() {
-        return PacketOutType.MapChunk.newPacket(chunkX, chunkZ, chunkMap.toNMS(), groundUpContinuous);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.MapChunk.getPacketData(packet);
         chunkX = (int) d[0];
         chunkZ = (int) d[1];
         chunkMap = new ChunkMap(d[2]);
         groundUpContinuous = (boolean) d[3];
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        return PacketOutType.MapChunk.newPacket(chunkX, chunkZ, chunkMap.toNMS(), groundUpContinuous);
     }
 
     public static class ChunkMap implements WrappedData {
@@ -38,11 +40,13 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
         public byte[] data;
         public int primaryBitMask;
 
-        public ChunkMap() {
+        public ChunkMap()
+        {
 
         }
 
-        public ChunkMap(Object o) {
+        public ChunkMap(Object o)
+        {
             try {
                 primaryBitMask = intF.getInt(o);
                 data = (byte[]) byteArrayF.get(o);
@@ -52,7 +56,8 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
         }
 
         @Override
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 Object out = nmsChunkMap.newInstance();
                 byteArrayF.set(out, data);

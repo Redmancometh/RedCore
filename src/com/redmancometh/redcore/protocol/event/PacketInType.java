@@ -52,7 +52,8 @@ public enum PacketInType {
     private Constructor emptyConst;
     private boolean supported;
 
-    PacketInType() {
+    PacketInType()
+    {
 
     }
 
@@ -63,7 +64,8 @@ public enum PacketInType {
      * @param packet - The incoming packet
      * @return The type of the given packet
      */
-    public static PacketInType getType(Object packet) {
+    public static PacketInType getType(Object packet)
+    {
         Class cl = packet.getClass();
         while (cl != null && cl != Object.class) {
             String cn = cl.getName();
@@ -86,7 +88,8 @@ public enum PacketInType {
     /**
      * Initializes the PacketInType, DO NOT USE THIS METHOD
      */
-    public static void init() {
+    public static void init()
+    {
         for (PacketInType t : PacketInType.values()) {
             String name = t.name();
             String cln = "Packet" + (name.startsWith("Login") || name.startsWith("Status") || name.startsWith("Handshaking") ? name : "PlayIn" + name);
@@ -118,7 +121,8 @@ public enum PacketInType {
      * @param packet - The packet
      * @return The contents of all the non static fields of the packet
      */
-    public Object[] getPacketData(Object packet) {
+    public Object[] getPacketData(Object packet)
+    {
         Object[] out = new Object[fs.size()];
         try {
             for (int i = 0; i < fs.size(); ++i) {
@@ -136,7 +140,8 @@ public enum PacketInType {
      *
      * @return True if it is supported, false otherwise
      */
-    public boolean isSupported() {
+    public boolean isSupported()
+    {
         return supported;
     }
 
@@ -146,7 +151,8 @@ public enum PacketInType {
      * @param data - Data to fill packet fields with
      * @return The crafted packet
      */
-    public Object newPacket(Object... data) {
+    public Object newPacket(Object... data)
+    {
         try {
             Object out = emptyConst.newInstance();
             fillPacket(out, data);
@@ -163,7 +169,8 @@ public enum PacketInType {
      * @param packet - The fillable packet
      * @param data   - The filling data
      */
-    public void fillPacket(Object packet, Object... data) {
+    public void fillPacket(Object packet, Object... data)
+    {
         ArrayList<Field> fields = Lists.newArrayList(fs);
         for (Object d : data) {
             for (int f = 0; f < fields.size(); f++) {
@@ -184,7 +191,8 @@ public enum PacketInType {
      * @param nmsPacket - The NMS packet
      * @return The wrapper of the given NMS packet
      */
-    public WrappedPacket wrap(Object nmsPacket) {
+    public WrappedPacket wrap(Object nmsPacket)
+    {
         try {
             WrappedPacket wp = wrapper.newInstance();
             wp.loadVanillaPacket(nmsPacket);

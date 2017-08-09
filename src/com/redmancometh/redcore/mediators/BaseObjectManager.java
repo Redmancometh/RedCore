@@ -1,15 +1,14 @@
 package com.redmancometh.redcore.mediators;
 
-import java.util.UUID;
-
 import com.redmancometh.redcore.Defaultable;
 import com.redmancometh.redcore.databasing.SubDatabase;
 
-public interface BaseObjectManager<T extends Defaultable<?>>
-{
-    public ObjectManager<T> getThis();
+import java.util.UUID;
 
-    public SubDatabase<UUID, T> getSubDB();
+public interface BaseObjectManager<T extends Defaultable<?>> {
+    SubDatabase<UUID, T> getSubDB();
 
-    public Class<T> getType();
+    ObjectManager<T> getThis();
+
+    Class<T> getType();
 }

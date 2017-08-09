@@ -15,19 +15,8 @@ public class PacketPlayInUpdateSign extends WrappedPacket {
     public ChatTag[] lines;
 
     @Override
-    public Object getVanillaPacket() {
-        Object[] lines = (Object[]) Array.newInstance(ChatAPI.icbcClass, 4);
-        if (Reflection.ver.isAbove(ServerVersion.v1_9))
-            for (int i = 0; i < 4; ++i)
-                lines[i] = this.lines[i].toColoredString();
-        else
-            for (int i = 0; i < 4; ++i)
-                lines[i] = this.lines[i].toICBC();
-        return PacketInType.UpdateSign.newPacket(block.toNMS(), lines);
-    }
-
-    @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] data = PacketInType.UpdateSign.getPacketData(packet);
         block = new BlockLocation(data[0]);
         lines = new ChatTag[4];
@@ -38,6 +27,19 @@ public class PacketPlayInUpdateSign extends WrappedPacket {
         else
             for (int i = 0; i < 4; ++i)
                 lines[i] = ChatTag.fromICBC(packetLines[i]);
+    }
+
+    @Override
+    public Object getVanillaPacket()
+    {
+        Object[] lines = (Object[]) Array.newInstance(ChatAPI.icbcClass, 4);
+        if (Reflection.ver.isAbove(ServerVersion.v1_9))
+            for (int i = 0; i < 4; ++i)
+                lines[i] = this.lines[i].toColoredString();
+        else
+            for (int i = 0; i < 4; ++i)
+                lines[i] = this.lines[i].toICBC();
+        return PacketInType.UpdateSign.newPacket(block.toNMS(), lines);
     }
 }
 

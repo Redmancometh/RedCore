@@ -15,7 +15,8 @@ public class TimeUtils {
      * @param time - Expire time
      * @return The language based time string
      */
-    public static String getExpire(Player plr, Long time) {
+    public static String getExpire(Player plr, Long time)
+    {
         if (time == null || time <= 0 || time == Long.MAX_VALUE) {
             return "never";
         }
@@ -29,7 +30,8 @@ public class TimeUtils {
      * @param time - The formatable time in milliseconds
      * @return The language based time string
      */
-    public static String getTime(Player plr, Long time) {
+    public static String getTime(Player plr, Long time)
+    {
         time /= 1000;
         if (time == null || time >= Long.MAX_VALUE / 1000) {
             return "never";
@@ -63,7 +65,8 @@ public class TimeUtils {
      * @param in  - The input string
      * @return The entered time in long
      */
-    public static long toTime(Player plr, String in) {
+    public static long toTime(Player plr, String in)
+    {
         in = in.replace(" ", "").replace(",", "");
         long out = 0;
         long cur = 0;

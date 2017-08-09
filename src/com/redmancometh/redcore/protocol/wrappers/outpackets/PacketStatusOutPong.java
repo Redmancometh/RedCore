@@ -10,12 +10,14 @@ public class PacketStatusOutPong extends WrappedPacket {
     public long id;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         id = (long) PacketOutType.StatusOutPong.getPacketData(packet)[0];
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.StatusOutPong.newPacket(id);
     }
 }

@@ -17,10 +17,12 @@ public class CuboidArea implements StringSerializable, Cloneable {
     public BlockLocation pos1, pos2;
     public String world;
 
-    public CuboidArea() {
+    public CuboidArea()
+    {
     }
 
-    public CuboidArea(String in) {
+    public CuboidArea(String in)
+    {
         try {
             String[] d = in.split(" ", 7);
             if (d.length == 1) {
@@ -40,7 +42,8 @@ public class CuboidArea implements StringSerializable, Cloneable {
         }
     }
 
-    public void fix() {
+    public void fix()
+    {
         int tmp;
         if (pos1.x > pos2.x) {
             tmp = pos1.x;
@@ -59,89 +62,107 @@ public class CuboidArea implements StringSerializable, Cloneable {
         }
     }
 
-    public CuboidArea(Selection sel, boolean saveWorld) {
+    public CuboidArea(Selection sel, boolean saveWorld)
+    {
         this(sel);
         if (saveWorld)
             world = sel.getWorld().getName();
     }
 
-    public CuboidArea(Selection sel) {
+    public CuboidArea(Selection sel)
+    {
         pos1 = new BlockLocation(sel.getMinimumPoint());
         pos2 = new BlockLocation(sel.getMaximumPoint());
         fix();
     }
 
-    public CuboidArea(String world, BlockLocation pos1, BlockLocation pos2) {
+    public CuboidArea(String world, BlockLocation pos1, BlockLocation pos2)
+    {
         this.world = world;
         this.pos1 = pos1;
         this.pos2 = pos2;
     }
 
 
-    public CuboidArea(LocationData pos1, LocationData pos2) {
+    public CuboidArea(LocationData pos1, LocationData pos2)
+    {
         this.pos1 = pos1.getBlockLocation();
         this.pos2 = pos2.getBlockLocation();
     }
 
-    public CuboidArea(BlockLocation pos1, BlockLocation pos2) {
+    public CuboidArea(BlockLocation pos1, BlockLocation pos2)
+    {
         this.pos1 = pos1;
         this.pos2 = pos2;
     }
 
-    public CuboidArea cloneFixed() {
+    public CuboidArea cloneFixed()
+    {
         CuboidArea area = clone();
         area.fix();
         return area;
     }
 
-    public CuboidArea clone() {
+    public CuboidArea clone()
+    {
         return new CuboidArea(world, pos1.clone(), pos2.clone());
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return world == null ? pos1 + " " + pos2 : world + ' ' + pos1 + ' ' + pos2;
     }
 
-    public boolean contains(Location loc) {
+    public boolean contains(Location loc)
+    {
         return loc.getX() + 0.5 >= pos1.x && loc.getY() >= pos1.y && loc.getZ() + 0.5 >= pos1.z && loc.getX() - 1.5 <= pos2.x && loc.getY() <= pos2.y && loc.getZ() - 1.5 <= pos2.z;
     }
 
-    public boolean contains(Block loc) {
+    public boolean contains(Block loc)
+    {
         return loc.getX() >= pos1.x && loc.getY() >= pos1.y && loc.getZ() >= pos1.z
                 && loc.getX() <= pos2.x && loc.getY() <= pos2.y && loc.getZ() <= pos2.z;
     }
 
-    public boolean contains(LocationData loc) {
+    public boolean contains(LocationData loc)
+    {
         return !(world != null && loc.world != null && !world.equals(loc.world)) && loc.x + 0.5 >= pos1.x && loc.y >= pos1.y && loc.z + 0.5 >= pos1.z && loc.x - 1.5 <= pos2.x && loc.y <= pos2.y && loc.z - 1.5 <= pos2.z;
     }
 
-    public boolean contains(BlockLocation loc) {
+    public boolean contains(BlockLocation loc)
+    {
         return loc.x >= pos1.x && loc.y >= pos1.y && loc.z >= pos1.z
                 && loc.x <= pos2.x && loc.y <= pos2.y && loc.z <= pos2.z;
     }
 
-    public boolean isBorder(int x, int z) {
+    public boolean isBorder(int x, int z)
+    {
         return (x == pos1.x || z == pos1.z || x == pos2.x || z == pos2.z) && contains(x, z);
     }
 
-    public boolean contains(int x, int z) {
+    public boolean contains(int x, int z)
+    {
         return pos1.x <= x && pos2.x >= x && pos1.z <= z && pos2.z >= z;
     }
 
-    public boolean isDefined() {
+    public boolean isDefined()
+    {
         return pos1 != null && pos2 != null && pos1.isDefined() && pos2.isDefined();
     }
 
-    public Location randomLoc(World w) {
+    public Location randomLoc(World w)
+    {
         return new Location(w, rand(pos1.x, pos2.x), rand(pos1.y, pos2.y), rand(pos1.z, pos2.z));
     }
 
-    public Location randomLoc() {
+    public Location randomLoc()
+    {
         return new Location(Bukkit.getWorld(world), rand(pos1.x, pos2.x), rand(pos1.y, pos2.y), rand(pos1.z, pos2.z));
     }
 
-    public void resetOutlineWithBlock(Player plr) {
+    public void resetOutlineWithBlock(Player plr)
+    {
         if (world != null && !plr.getWorld().getName().equals(world))
             return;
         World w = plr.getWorld();
@@ -165,11 +186,13 @@ public class CuboidArea implements StringSerializable, Cloneable {
         }
     }
 
-    public static void resetOutlineBlock(Block block, Player plr) {
+    public static void resetOutlineBlock(Block block, Player plr)
+    {
         plr.sendBlockChange(block.getLocation(), block.getTypeId(), block.getData());
     }
 
-    public void showOutlineWithBlock(Player plr, BlockData bd) {
+    public void showOutlineWithBlock(Player plr, BlockData bd)
+    {
         if (world != null && !plr.getWorld().getName().equals(world))
             return;
         World w = plr.getWorld();
@@ -193,11 +216,13 @@ public class CuboidArea implements StringSerializable, Cloneable {
         }
     }
 
-    public int size() {
+    public int size()
+    {
         return (pos2.x - pos1.x + 1) * (pos2.y - pos1.y + 1) * (pos2.z - pos1.z + 1);
     }
 
-    public UnlimitedYArea toUnlimitedYArea() {
+    public UnlimitedYArea toUnlimitedYArea()
+    {
         return new UnlimitedYArea(pos1 == null ? MIN_VALUE : pos1.x, pos1 == null ? MIN_VALUE : pos1.z, pos2 == null ? MIN_VALUE : pos2.x, pos2 == null ? MIN_VALUE : pos2.z);
     }
 }

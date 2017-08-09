@@ -17,7 +17,8 @@ public class PacketPlayOutSpawnEntityWeather extends WrappedPacket {
     public double z;
 
     @Override
-    public void loadVanillaPacket(Object packet) {
+    public void loadVanillaPacket(Object packet)
+    {
         Object[] d = PacketOutType.SpawnEntityWeather.getPacketData(packet);
         entityId = (int) d[0];
         x = (double) d[1];
@@ -27,7 +28,8 @@ public class PacketPlayOutSpawnEntityWeather extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.SpawnEntityWeather.newPacket(entityId, x, y, z, type);
     }
 }

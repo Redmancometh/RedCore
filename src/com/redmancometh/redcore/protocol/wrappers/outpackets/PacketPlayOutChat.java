@@ -28,16 +28,19 @@ public class PacketPlayOutChat extends WrappedPacket {
      */
     public byte type;
 
-    public PacketPlayOutChat() {
+    public PacketPlayOutChat()
+    {
     }
 
-    public PacketPlayOutChat(byte type, ChatTag tag) {
+    public PacketPlayOutChat(byte type, ChatTag tag)
+    {
         this.type = type;
         this.tag = tag;
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] data = PacketOutType.Chat.getPacketData(obj);
         if (data[1] != null) {
             tag = ChatTag.fromBaseComponents((BaseComponent[]) data[1]);
@@ -47,7 +50,8 @@ public class PacketPlayOutChat extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.Chat.newPacket(ChatAPI.toICBC(tag.toString()), null, Reflection.ver.isAbove(ServerVersion.v1_12) ? nmsValues[type] : type);
     }
 }

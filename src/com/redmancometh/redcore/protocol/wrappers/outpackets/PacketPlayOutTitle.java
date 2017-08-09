@@ -21,11 +21,13 @@ public class PacketPlayOutTitle extends WrappedPacket {
     public int fadeIn, showTime, fadeOut;
     public ChatTag tag;
 
-    public PacketPlayOutTitle() {
+    public PacketPlayOutTitle()
+    {
 
     }
 
-    public PacketPlayOutTitle(TitleAction action, ChatTag tag, int fadeIn, int showTime, int fadeOut) {
+    public PacketPlayOutTitle(TitleAction action, ChatTag tag, int fadeIn, int showTime, int fadeOut)
+    {
         this.action = action;
         this.tag = tag;
         this.fadeIn = fadeIn;
@@ -34,7 +36,8 @@ public class PacketPlayOutTitle extends WrappedPacket {
     }
 
     @Override
-    public void loadVanillaPacket(Object obj) {
+    public void loadVanillaPacket(Object obj)
+    {
         Object[] d = PacketOutType.Title.getPacketData(obj);
         action = TitleAction.valueOf(d[0].toString());
         tag = d[1] == null ? null : fromICBC(d[1]);
@@ -44,7 +47,8 @@ public class PacketPlayOutTitle extends WrappedPacket {
     }
 
     @Override
-    public Object getVanillaPacket() {
+    public Object getVanillaPacket()
+    {
         return PacketOutType.Title.newPacket(action.toNMS(), tag == null ? null : ChatAPI.toICBC(tag.toString()), fadeIn, showTime, fadeOut);
     }
 
@@ -57,7 +61,8 @@ public class PacketPlayOutTitle extends WrappedPacket {
         RESET;
         Method m = getMethod(getNMSClass("PacketPlayOutTitle$EnumTitleAction"), "valueOf", String.class);
 
-        public Object toNMS() {
+        public Object toNMS()
+        {
             try {
                 return m.invoke(null, name());
             } catch (Throwable e) {
