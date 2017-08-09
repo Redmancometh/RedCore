@@ -1,6 +1,5 @@
 package com.redmancometh.redcore.config;
 
-import com.google.gson.Gson;
 import com.redmancometh.redcore.spigotutils.*;
 import com.redmancometh.redcore.util.ItemUtil;
 import lombok.Data;
@@ -13,8 +12,11 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
+/**
+ * A complete, featureful wrapper for items having all the important usability features, including the possibility to be saved in the config.
+ */
 @Data
-public class ItemWrapper {
+public class ItemWrapper implements Cloneable {
     private int amount;
     private String color, owner, title, author;
     private short dataValue = 0;
@@ -97,7 +99,53 @@ public class ItemWrapper {
         }
     }
 
-    public ItemStack toItem() {
+    /**
+     * Creates a copy of this ItemWrapper, without leaving any reference towards the original one.
+     *
+     * @return The cloned ItemWrapper
+     */
+    @Override
+    public ItemWrapper clone() {
+        return ConfigManager.gson.fromJson(ConfigManager.gson.toJson(this), ItemWrapper.class);
+    }
+
+    /**
+     * Converts the ItemWrapper to a one line user readable String.
+     *
+     * @return The conversion result
+     */
+    @Override
+    public String toString() {
+        return ItemUtils.itemToString(getItem());
+    }
+
+    /**
+     * Get the item with extra lore added and filled with the given variables
+     *
+     * @param extraLore - The addable extra lore
+     * @param vars      - The fillable variables
+     * @return The ItemStack with the added variable filled lore.
+     */
+    public ItemStack getItem(Iterable<String> extraLore, Object... vars) {
+        ItemStack is = getItem();
+        if (is == null || is.getType() == Material.AIR)
+            return is;
+        ItemMeta meta = is.getItemMeta();
+        List<String> cur = meta.getLore();
+        if (cur == null)
+            cur = new ArrayList<>();
+        cur.addAll(SU.fillVariables(extraLore, vars));
+        meta.setLore(cur);
+        is.setItemMeta(meta);
+        return is;
+    }
+
+    /**
+     * Get the Bukkit ItemStack from this ItemWrapper
+     *
+     * @return The Bukkit ItemStack
+     */
+    public ItemStack getItem() {
         try {
             ItemStack is = new ItemStack(material, amount, dataValue);
             ItemMeta meta = is.getItemMeta();
@@ -145,10 +193,5 @@ public class ItemWrapper {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return ItemUtil.buildItem(Material.REDSTONE, "§cFailed to load item", lore);
-    }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
     }
 }

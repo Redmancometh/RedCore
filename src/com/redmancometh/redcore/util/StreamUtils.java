@@ -30,4 +30,9 @@ public class StreamUtils {
         is.close();
         return bos.toByteArray();
     }
+
+    public static void stringToStream(String s, OutputStream os) throws IOException {
+        os.write(s.getBytes(utf8));
+        os.close();
+    }
 }
