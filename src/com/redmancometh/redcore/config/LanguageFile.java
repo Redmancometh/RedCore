@@ -27,11 +27,15 @@ public class LanguageFile extends ConfigManager<HashMap<String, String>> {
 
     public void abmsg(CommandSender plr, String key, Object... vars)
     {
+        if (plr == null || key == null)
+            return;
         ChatAPI.sendJsonMsg(ACTION_BAR, get(plr, key, vars));
     }
 
     public String get(CommandSender plr, String key, Object... vars)
     {
+        if (plr == null || key == null)
+            return null;
         String lang = getLanguage(plr);
         String slang = getLanguage(plr);
         String str = data.get(lang + "." + key);
@@ -47,11 +51,17 @@ public class LanguageFile extends ConfigManager<HashMap<String, String>> {
 
     public void msg(String prefix, CommandSender plr, String key, Object... vars)
     {
+        if (prefix == null)
+            prefix = "";
+        if (plr == null || key == null)
+            return;
         ChatAPI.sendJsonMsg(SYSTEM, prefix + get(plr, key, vars));
     }
 
     public void msg(CommandSender plr, String key, Object... vars)
     {
+        if (plr == null || key == null)
+            return;
         ChatAPI.sendJsonMsg(SYSTEM, get(plr, "prefix") + get(plr, key, vars));
     }
 }

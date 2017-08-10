@@ -178,7 +178,7 @@ public class SpecialFuture<T> {
             return t;
         }
         BlockingQueue<T> queue = new ArrayBlockingQueue<>(1);
-        thenAccept(c -> queue.add(c));
+        thenAccept(queue::add);
         try {
             t = queue.poll(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
