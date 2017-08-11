@@ -240,7 +240,7 @@ public class ConfigManager<T> {
                 jsonReader.nextNull();
                 return null;
             }
-            String[] d = jsonReader.nextString().split(":", 4);
+            String[] d = jsonReader.nextString().split("[ :]", 4);
             PotionEffectType pet = PotionEffectType.getByName(d[0]);
             return new PotionEffect(pet, Integer.valueOf(d[1]), Integer.valueOf(d[2]),
                     d.length > 3 && d[3].contains("A"),

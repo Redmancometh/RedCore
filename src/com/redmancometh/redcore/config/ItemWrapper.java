@@ -76,7 +76,7 @@ public class ItemWrapper implements Cloneable {
                 PotionMeta pm = (PotionMeta) meta;
                 List<PotionEffect> ce = pm.getCustomEffects();
                 if (ce != null)
-                    effects.addAll(ce);
+                    effects = new LinkedHashSet<>(ce);
             } else if (meta instanceof SkullMeta)
                 owner = ((SkullMeta) meta).getOwner();
             else if (meta instanceof BookMeta) {

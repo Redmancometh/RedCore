@@ -393,7 +393,7 @@ public class Command implements StringSerializable {
         return true;
     }
 
-    public static boolean executeAll(Iterable<Entity> pls, Entity plr, ArrayList<Command> list, Object... args)
+    public static boolean executeAll(Iterable<? extends Entity> pls, Entity plr, ArrayList<Command> list, Object... args)
     {
         if (list == null || pls == null)
             return false;

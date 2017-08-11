@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.redmancometh</groupId>
     <artifactId>RedCore</artifactId>
-    <version>2.0</version>
+    <version>2.0.2</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
         <resources>
@@ -115,6 +115,10 @@
             <url>http://maven.sk89q.com/artifactory/repo</url>
         </repository>
         <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
             <releases/>
             <snapshots/>
             <id>mvnrepository</id>
@@ -127,6 +131,18 @@
             <artifactId>hazelcast</artifactId>
             <version>3.8.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bungeecord-chat</artifactId>
+                    <groupId>net.md-5</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.arkhamnetwork</groupId>

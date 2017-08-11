@@ -426,12 +426,14 @@ public final class SU {
 
     public static void init(RedCore redCore)
     {
+        pl = redCore;
         srv = getServer();
         pm = srv.getPluginManager();
         cs = srv.getConsoleSender();
         msg = srv.getMessenger();
         sm = srv.getServicesManager();
         sch = srv.getScheduler();
+        cs.sendMessage(pl.toString());
         js = new ScriptEngineManager().getEngineByName("JavaScript");
         pluginsF = Reflection.getField(pm.getClass(), "plugins");
         lookupNamesF = Reflection.getField(pm.getClass(), "lookupNames");
@@ -671,6 +673,7 @@ public final class SU {
 
     public static void postInit()
     {
+        System.out.println(pl);
         pm.registerEvents(new SUListener(), pl);
         SU.pm.registerEvents(SU.tp, pl);
         initOfflinePlayerManager();

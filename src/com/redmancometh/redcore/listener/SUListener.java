@@ -28,7 +28,9 @@ import static com.redmancometh.redcore.spigotutils.SU.*;
 public class SUListener implements Listener, CommandExecutor {
     public SUListener()
     {
-        SU.pl().getCommand("sl").setExecutor(this);
+        PluginCommand cmd = SU.pl().getCommand("sl");
+        System.out.println("Command = " + cmd);
+        cmd.setExecutor(this);
     }
 
     public static void onDisable()
