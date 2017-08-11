@@ -30,14 +30,13 @@ public class PlayerStatRecord implements Serializable, Defaultable<UUID> {
         return serialVersionUID;
     }
 
-    public UUID getOwner()
+    @Override
+    public void setDefaults(UUID key)
     {
-        return owner;
-    }
-
-    public void setOwner(UUID owner)
-    {
-        this.owner = owner;
+        owner = key;
+        Map<StatType, Long> statMap = new HashMap();
+        StatType.forEach((type) -> statMap.put(type, 1L));
+        this.statMap = statMap;
     }
 
     public long getStat(StatType type)
@@ -56,13 +55,9 @@ public class PlayerStatRecord implements Serializable, Defaultable<UUID> {
         this.statMap = statMap;
     }
 
-    @Override
-    public void setDefaults(UUID key)
+    public UUID getUniqueId()
     {
-        this.setOwner(key);
-        Map<StatType, Long> statMap = new HashMap();
-        StatType.forEach((type) -> statMap.put(type, 1L));
-        this.statMap = statMap;
+        return owner;
     }
 
     public long setStat(StatType type, long l)

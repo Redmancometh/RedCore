@@ -29,7 +29,6 @@ public class SUListener implements Listener, CommandExecutor {
     public SUListener()
     {
         PluginCommand cmd = SU.pl().getCommand("sl");
-        System.out.println("Command = " + cmd);
         cmd.setExecutor(this);
     }
 

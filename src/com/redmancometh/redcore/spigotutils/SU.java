@@ -673,7 +673,6 @@ public final class SU {
 
     public static void postInit()
     {
-        System.out.println(pl);
         pm.registerEvents(new SUListener(), pl);
         SU.pm.registerEvents(SU.tp, pl);
         initOfflinePlayerManager();
