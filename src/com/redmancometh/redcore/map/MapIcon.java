@@ -1,22 +1,26 @@
 package com.redmancometh.redcore.map;
 
-import com.redmancometh.redcore.json.*;
+import com.redmancometh.redcore.json.JsonAPI;
+import com.redmancometh.redcore.json.JsonSettings;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.utils.WrappedData;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 /**
  * Created by GyuriX on 2016. 07. 06..
  */
-public class MapIcon implements WrappedData {
+public class MapIcon implements WrappedData
+{
     @JsonSettings(serialize = false)
     private static final Constructor con;
     @JsonSettings(serialize = false)
     private static final Field fType, fX, fY, fRotation;
 
-    static {
+    static
+    {
         Class cl = Reflection.getNMSClass("MapIcon");
         con = Reflection.getConstructor(cl, byte.class, byte.class, byte.class, byte.class);
         fType = Reflection.getField(cl, "type");
@@ -32,12 +36,14 @@ public class MapIcon implements WrappedData {
 
     public MapIcon(Object nmsMapIcon)
     {
-        try {
+        try
+        {
             type = (byte) fType.get(nmsMapIcon);
             x = (byte) fX.get(nmsMapIcon);
             y = (byte) fY.get(nmsMapIcon);
             rotation = (byte) fRotation.get(nmsMapIcon);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
 
         }
     }
@@ -53,9 +59,11 @@ public class MapIcon implements WrappedData {
     @Override
     public Object toNMS()
     {
-        try {
+        try
+        {
             return con.newInstance(type, x, y, rotation);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }

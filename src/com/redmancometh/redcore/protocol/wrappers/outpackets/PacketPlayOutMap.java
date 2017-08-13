@@ -1,14 +1,16 @@
 package com.redmancometh.redcore.protocol.wrappers.outpackets;
 
 import com.redmancometh.redcore.json.JsonSettings;
-import com.redmancometh.redcore.map.*;
+import com.redmancometh.redcore.map.MapData;
+import com.redmancometh.redcore.map.MapIcon;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.redmancometh.redcore.protocol.Reflection.ver;
 import static com.redmancometh.redcore.spigotutils.ServerVersion.v1_9;
@@ -16,14 +18,15 @@ import static com.redmancometh.redcore.spigotutils.ServerVersion.v1_9;
 /**
  * Created by GyuriX on 2016. 07. 06..
  */
-public class PacketPlayOutMap extends WrappedPacket {
+public class PacketPlayOutMap extends WrappedPacket
+{
     @JsonSettings(serialize = false)
     private static final Constructor con;
     @JsonSettings(serialize = false)
-    private static final Class[] newer = new Class[]{int.class, byte.class, boolean.class, Collection.class, byte[].class, int.class, int.class, int.class, int.class},
-            v1_8 = new Class[]{int.class, byte.class, Collection.class, byte[].class, int.class, int.class, int.class, int.class};
+    private static final Class[] newer = new Class[]{int.class, byte.class, boolean.class, Collection.class, byte[].class, int.class, int.class, int.class, int.class}, v1_8 = new Class[]{int.class, byte.class, Collection.class, byte[].class, int.class, int.class, int.class, int.class};
 
-    static {
+    static
+    {
         con = Reflection.getConstructor(Reflection.getNMSClass("PacketPlayOutMap"), ver.isAbove(v1_9) ? newer : v1_8);
     }
 
@@ -70,8 +73,7 @@ public class PacketPlayOutMap extends WrappedPacket {
         mapId = (int) d[0];
         scale = (byte) d[1];
         int st = 2;
-        if (ver.isAbove(v1_9))
-            showIcons = (boolean) d[st++];
+        if (ver.isAbove(v1_9)) showIcons = (boolean) d[st++];
         Object[] nmsIcons = (Object[]) d[st++];
         icons.clear();
         for (int i = 0; i < nmsIcons.length; i++)
@@ -86,10 +88,11 @@ public class PacketPlayOutMap extends WrappedPacket {
     @Override
     public Object getVanillaPacket()
     {
-        try {
-            return ver.isAbove(v1_9) ? con.newInstance(mapId, scale, showIcons, getNMSIcons(), data, columns, rows, x, z)
-                    : con.newInstance(mapId, scale, getNMSIcons(), data, columns, rows, x, z);
-        } catch (Throwable e) {
+        try
+        {
+            return ver.isAbove(v1_9) ? con.newInstance(mapId, scale, showIcons, getNMSIcons(), data, columns, rows, x, z) : con.newInstance(mapId, scale, getNMSIcons(), data, columns, rows, x, z);
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -98,9 +101,9 @@ public class PacketPlayOutMap extends WrappedPacket {
     public ArrayList<Object> getNMSIcons()
     {
         ArrayList<Object> out = new ArrayList<>();
-        if (icons == null)
-            return out;
-        for (MapIcon ic : icons) {
+        if (icons == null) return out;
+        for (MapIcon ic : icons)
+        {
             out.add(ic.toNMS());
         }
         return out;

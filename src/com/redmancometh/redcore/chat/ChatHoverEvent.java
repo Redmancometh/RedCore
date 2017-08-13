@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.chat;
 
-public class ChatHoverEvent {
+public class ChatHoverEvent
+{
     public ChatHoverEventType action;
     public ChatTag value;
 

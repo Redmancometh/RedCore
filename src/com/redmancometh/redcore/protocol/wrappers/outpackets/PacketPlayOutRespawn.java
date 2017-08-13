@@ -4,14 +4,17 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.WorldType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.EntityUtils;
-import org.bukkit.*;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
+import org.bukkit.World;
 
 import static com.redmancometh.redcore.protocol.utils.WorldType.*;
 
 /**
  * Created by GyuriX on 2016.08.22..
  */
-public class PacketPlayOutRespawn extends WrappedPacket implements Cloneable {
+public class PacketPlayOutRespawn extends WrappedPacket implements Cloneable
+{
     public Difficulty difficulty;
     public int dimension;
     public GameMode gameMode;

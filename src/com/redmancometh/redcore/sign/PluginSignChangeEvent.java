@@ -6,10 +6,12 @@
 package com.redmancometh.redcore.sign;
 
 import org.bukkit.block.Block;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockEvent;
 
-public class PluginSignChangeEvent extends BlockEvent implements Cancellable {
+public class PluginSignChangeEvent extends BlockEvent implements Cancellable
+{
     private static final HandlerList handlers = new HandlerList();
     private final String[] lines;
     private boolean cancel;

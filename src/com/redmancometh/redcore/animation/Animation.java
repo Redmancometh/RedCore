@@ -2,11 +2,13 @@ package com.redmancometh.redcore.animation;
 
 import java.util.HashMap;
 
-public class Animation {
+public class Animation
+{
     public HashMap<String, HashMap<String, CustomEffect>> effects = new HashMap();
     public HashMap<String, String> init = new HashMap<>();
 
-    public static class AnimationSerializer {
+    public static class AnimationSerializer
+    {
         //TODO
 /*            implements Serializer {
         @Override

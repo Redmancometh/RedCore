@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.exceptions;
 
-public class ObjectNotPresentException extends Exception {
+public class ObjectNotPresentException extends Exception
+{
 
     private static final long serialVersionUID = 4976510636623464875L;
 

@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.03..
  */
-public class PacketLoginInStart extends WrappedPacket {
+public class PacketLoginInStart extends WrappedPacket
+{
     public GameProfile gp;
 
     @Override

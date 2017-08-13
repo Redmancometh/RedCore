@@ -3,21 +3,29 @@ package com.redmancometh.redcore.util;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Material;
-import org.bukkit.block.*;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ItemUtil {
+public class ItemUtil
+{
     public static List<Material> swords = Arrays.asList(Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.STONE_SWORD, Material.WOOD_SWORD);
 
     private static Map<EntityType, String> nameMap = new ConcurrentHashMap();
 
-    static {
+    static
+    {
         nameMap.put(EntityType.SKELETON, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Skeleton Spawner"));
         nameMap.put(EntityType.SLIME, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Slime Spawner"));
         nameMap.put(EntityType.BLAZE, ChatColor.translateAlternateColorCodes('&', ChatColor.ITALIC + "Blaze Spawner"));
@@ -56,7 +64,8 @@ public class ItemUtil {
     {
         ItemMeta meta = i.getItemMeta();
         List<String> loreList = i.getItemMeta().getLore();
-        if (loreList == null) {
+        if (loreList == null)
+        {
             loreList = new ArrayList<>();
         }
         loreList.add(lore);
@@ -69,7 +78,8 @@ public class ItemUtil {
     {
         ItemMeta meta = i.getItemMeta();
         List<String> loreList = i.getItemMeta().getLore();
-        if (loreList == null) {
+        if (loreList == null)
+        {
             loreList = new ArrayList();
         }
         loreList.addAll(Arrays.asList(lore));
@@ -131,7 +141,8 @@ public class ItemUtil {
     {
         ItemStack spawnerItem = new ItemStack(Material.MOB_SPAWNER);
         ItemMeta meta = spawnerItem.getItemMeta();
-        if (meta instanceof BlockStateMeta && ((BlockStateMeta) meta).getBlockState() instanceof CreatureSpawner) {
+        if (meta instanceof BlockStateMeta && ((BlockStateMeta) meta).getBlockState() instanceof CreatureSpawner)
+        {
             BlockState bs = ((BlockStateMeta) meta).getBlockState();
             ((CreatureSpawner) bs).setSpawnedType(type);
             ((BlockStateMeta) meta).setBlockState(bs);
@@ -154,8 +165,10 @@ public class ItemUtil {
 
     public static boolean isCookedFood(ItemStack item)
     {
-        if (item != null && item.getType() != Material.AIR) {
-            switch (item.getType()) {
+        if (item != null && item.getType() != Material.AIR)
+        {
+            switch (item.getType())
+            {
                 case COOKED_FISH:
                     return true;
                 case COOKED_BEEF:
@@ -175,10 +188,12 @@ public class ItemUtil {
 
     public static boolean isPick(ItemStack i)
     {
-        if (i == null) {
+        if (i == null)
+        {
             return false;
         }
-        switch (i.getType()) {
+        switch (i.getType())
+        {
             case WOOD_PICKAXE:
                 return true;
             case STONE_PICKAXE:
@@ -196,8 +211,10 @@ public class ItemUtil {
 
     public static boolean isRawFood(ItemStack item)
     {
-        if (item != null && item.getType() != Material.AIR) {
-            switch (item.getType()) {
+        if (item != null && item.getType() != Material.AIR)
+        {
+            switch (item.getType())
+            {
                 case RAW_FISH:
                     return true;
                 case RAW_BEEF:
@@ -238,11 +255,15 @@ public class ItemUtil {
 
     public static void takeOne(ItemStack i, Player p)
     {
-        for (ItemStack item : p.getInventory()) {
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+        for (ItemStack item : p.getInventory())
+        {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+            {
                 String name = item.getItemMeta().getDisplayName();
-                if (name.equals(i.getItemMeta().getDisplayName())) {
-                    if (item.getAmount() > 1) {
+                if (name.equals(i.getItemMeta().getDisplayName()))
+                {
+                    if (item.getAmount() > 1)
+                    {
                         item.setAmount(item.getAmount() - 1);
                         return;
                     }
@@ -256,10 +277,12 @@ public class ItemUtil {
 
     public void takeOne(Player p, ItemStack i)
     {
-        if (i.getAmount() <= 1) {
+        if (i.getAmount() <= 1)
+        {
             p.getInventory().removeItem(i);
         }
-        if (i.getAmount() > 1) {
+        if (i.getAmount() > 1)
+        {
             i.setAmount(i.getAmount() - 1);
         }
         p.updateInventory();

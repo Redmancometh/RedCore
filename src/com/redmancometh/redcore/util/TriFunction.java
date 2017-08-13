@@ -22,7 +22,8 @@ import java.util.function.Function;
  * @author Steve Chaloner (steve@objectify.be)
  */
 @FunctionalInterface
-public interface TriFunction<T, U, V, R> {
+public interface TriFunction<T, U, V, R>
+{
 
     /**
      * Returns a composed function that first applies this function to

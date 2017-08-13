@@ -1,16 +1,20 @@
 package com.redmancometh.redcore.util;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class WeightedChooser<T> extends ConcurrentHashMap<Pair<Double, Double>, T> {
+public class WeightedChooser<T> extends ConcurrentHashMap<Pair<Double, Double>, T>
+{
     private static final long serialVersionUID = 1L;
     private double upperBound = 0;
 
     public T getRandomElement()
     {
         double index = ThreadLocalRandom.current().nextDouble(0, upperBound);
-        for (Pair<Double, Double> range : this.keySet()) {
-            if (range.getKey() < index && range.getValue() > index) {
+        for (Pair<Double, Double> range : this.keySet())
+        {
+            if (range.getKey() < index && range.getValue() > index)
+            {
                 return this.get(range);
             }
         }

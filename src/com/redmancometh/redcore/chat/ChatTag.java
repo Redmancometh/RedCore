@@ -2,13 +2,16 @@ package com.redmancometh.redcore.chat;
 
 import com.google.common.collect.Lists;
 import com.redmancometh.redcore.api.ChatAPI;
-import com.redmancometh.redcore.json.*;
+import com.redmancometh.redcore.json.JsonAPI;
+import com.redmancometh.redcore.json.JsonSettings;
 import com.redmancometh.redcore.spigotutils.SU;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.ArrayList;
 
-public class ChatTag {
+public class ChatTag
+{
     @JsonSettings(defaultValue = "false")
     public boolean bold, italic, underlined, strikethrough, obfuscated;
     public ChatClickEvent clickEvent;
@@ -32,7 +35,8 @@ public class ChatTag {
     public static ChatTag fromBaseComponents(BaseComponent[] comps)
     {
         StringBuilder data = new StringBuilder();
-        for (BaseComponent bc : comps) {
+        for (BaseComponent bc : comps)
+        {
             data.append(bc.toLegacyText());
         }
         return fromColoredText(data.toString());
@@ -45,19 +49,23 @@ public class ChatTag {
         ChatTag ct = new ChatTag();
         boolean col = false;
         StringBuilder sb = new StringBuilder();
-        for (char c : colText.toCharArray()) {
-            if (col) {
+        for (char c : colText.toCharArray())
+        {
+            if (col)
+            {
                 ChatColor color = ChatColor.forId(c);
-                if (color == ChatColor.reset)
-                    color = ChatColor.white;
-                if (sb.length() != 0) {
+                if (color == ChatColor.reset) color = ChatColor.white;
+                if (sb.length() != 0)
+                {
                     ct.text = sb.toString();
                     sb.setLength(0);
                     ctl.add(ct);
                     ct = color.isFormat() ? ct.cloneFormat(new ChatTag()) : new ChatTag();
                 }
-                if (color.isFormat()) {
-                    switch (color) {
+                if (color.isFormat())
+                {
+                    switch (color)
+                    {
                         case obfuscated:
                             ct.obfuscated = true;
                             break;
@@ -74,19 +82,18 @@ public class ChatTag {
                             ct.italic = true;
                             break;
                     }
-                } else {
+                } else
+                {
                     ct.color = color;
                 }
                 col = false;
-            } else {
-                if (c == '§')
-                    col = true;
-                else
-                    sb.append(c);
+            } else
+            {
+                if (c == '§') col = true;
+                else sb.append(c);
             }
         }
-        if (col)
-            sb.append('§');
+        if (col) sb.append('§');
         ct.text = sb.toString();
         ctl.add(ct);
         return fromSeveralTag(ctl);
@@ -105,8 +112,7 @@ public class ChatTag {
 
     public static ChatTag fromSeveralTag(ArrayList<ChatTag> ctl)
     {
-        if (ctl.size() == 1)
-            return ctl.iterator().next();
+        if (ctl.size() == 1) return ctl.iterator().next();
         ChatTag out = new ChatTag("");
         out.extra = ctl;
         return out;
@@ -116,12 +122,13 @@ public class ChatTag {
     {
         String[] parts = extraText.split("\\\\\\|");
         ArrayList<ChatTag> tags = new ArrayList<>();
-        for (String part : parts) {
+        for (String part : parts)
+        {
             String[] sa = part.split("\\\\-");
             ChatTag tag = fromColoredText(SU.optimizeColorCodes(sa[0]));
-            for (int i = 1; i < sa.length; i++) {
-                if (sa[i].length() > 0)
-                    tag.setExtra(sa[i].charAt(0), SU.optimizeColorCodes(sa[i].substring(1)));
+            for (int i = 1; i < sa.length; i++)
+            {
+                if (sa[i].length() > 0) tag.setExtra(sa[i].charAt(0), SU.optimizeColorCodes(sa[i].substring(1)));
             }
             tags.add(tag);
         }
@@ -149,18 +156,20 @@ public class ChatTag {
      */
     public ChatTag setExtra(char extraType, String value)
     {
-        if (extraType == '+')
-            insertion = value;
-        else if (extraType == '@') {
+        if (extraType == '+') insertion = value;
+        else if (extraType == '@')
+        {
             text = null;
             selector = value;
-        } else {
+        } else
+        {
             ChatHoverEventType he = ChatHoverEventType.forId(extraType);
-            if (he == null) {
+            if (he == null)
+            {
                 ChatClickEventType ce = ChatClickEventType.forId(extraType);
-                if (ce != null)
-                    clickEvent = new ChatClickEvent(ce, value);
-            } else {
+                if (ce != null) clickEvent = new ChatClickEvent(ce, value);
+            } else
+            {
                 hoverEvent = new ChatHoverEvent(he, value);
             }
         }
@@ -176,7 +185,8 @@ public class ChatTag {
     {
         String[] parts = extraText.split("\\\\\\|");
         StringBuilder out = new StringBuilder();
-        for (String p : parts) {
+        for (String p : parts)
+        {
             out.append(p.split("\\\\-")[0]);
         }
         return out.toString();
@@ -184,16 +194,28 @@ public class ChatTag {
 
     public boolean isSimpleText()
     {
-        return translate == null && selector == null && insertion == null && with == null && score == null && extra == null &&
-                !(bold == italic == underlined == strikethrough == obfuscated) && color == null && clickEvent == null && hoverEvent == null;
+        return translate == null && selector == null && insertion == null && with == null && score == null && extra == null && !(bold == italic == underlined == strikethrough == obfuscated) && color == null && clickEvent == null && hoverEvent == null;
+    }
+
+    public BaseComponent[] toBaseComponents()
+    {
+        return ComponentSerializer.parse(toString());
+    }
+
+    @Override
+    public String toString()
+    {
+        return JsonAPI.serialize(this);
     }
 
     public String toColoredString()
     {
         ArrayList<ChatTag> tags = extra == null ? Lists.newArrayList(this) : extra;
         StringBuilder out = new StringBuilder();
-        for (ChatTag tag : tags) {
-            if (tag.text != null) {
+        for (ChatTag tag : tags)
+        {
+            if (tag.text != null)
+            {
                 out.append(tag.getFormatPrefix());
                 out.append(tag.text);
             }
@@ -204,18 +226,12 @@ public class ChatTag {
     public String getFormatPrefix()
     {
         StringBuilder pref = new StringBuilder();
-        if (color != null)
-            pref.append('§').append(color.id);
-        if (obfuscated)
-            pref.append("§k");
-        if (bold)
-            pref.append("§l");
-        if (strikethrough)
-            pref.append("§m");
-        if (underlined)
-            pref.append("§n");
-        if (italic)
-            pref.append("§o");
+        if (color != null) pref.append('§').append(color.id);
+        if (obfuscated) pref.append("§k");
+        if (bold) pref.append("§l");
+        if (strikethrough) pref.append("§m");
+        if (underlined) pref.append("§n");
+        if (italic) pref.append("§o");
         return pref.toString();
     }
 
@@ -223,9 +239,9 @@ public class ChatTag {
     {
         ArrayList<ChatTag> tags = extra == null ? Lists.newArrayList(this) : extra;
         StringBuilder out = new StringBuilder();
-        for (ChatTag tag : tags) {
-            if (tag.text != null)
-                out.append(tag.text);
+        for (ChatTag tag : tags)
+        {
+            if (tag.text != null) out.append(tag.text);
         }
         return out.toString();
     }
@@ -233,12 +249,6 @@ public class ChatTag {
     public Object toICBC()
     {
         return ChatAPI.toICBC(JsonAPI.serialize(this));
-    }
-
-    @Override
-    public String toString()
-    {
-        return JsonAPI.serialize(this);
     }
 }
 

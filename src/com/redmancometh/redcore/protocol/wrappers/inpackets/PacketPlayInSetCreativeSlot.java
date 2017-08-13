@@ -4,7 +4,8 @@ import com.redmancometh.redcore.protocol.event.PacketInType;
 import com.redmancometh.redcore.protocol.utils.ItemStackWrapper;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayInSetCreativeSlot extends WrappedPacket {
+public class PacketPlayInSetCreativeSlot extends WrappedPacket
+{
     public ItemStackWrapper itemStack;
     public int slot;
 

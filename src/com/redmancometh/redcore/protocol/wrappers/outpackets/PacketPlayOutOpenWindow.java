@@ -4,8 +4,8 @@ import com.redmancometh.redcore.chat.ChatTag;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayOutOpenWindow
-        extends WrappedPacket {
+public class PacketPlayOutOpenWindow extends WrappedPacket
+{
     public int entityId;
     public int slots;
     public ChatTag title;

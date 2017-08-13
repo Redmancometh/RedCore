@@ -120,7 +120,6 @@ D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\protocol\event\PacketE
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\commands\event\CommandExecuteEvent.java
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\animation\AnimationAPI.java
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\util\SextFunction.java
-D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\api\BungeeAPI.java
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\config\Icon.java
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\protocol\wrappers\outpackets\PacketPlayOutBlockChange.java
 D:\DEV\Java\Projects\RedCore\src\com\redmancometh\redcore\listener\LoginListeners.java

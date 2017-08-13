@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.animation;
 
-public interface CustomEffect {
+public interface CustomEffect
+{
     CustomEffect clone();
 
     String getText();

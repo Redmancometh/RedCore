@@ -1,26 +1,32 @@
 package com.redmancometh.redcore.protocol.utils;
 
 import com.redmancometh.redcore.config.StringSerializable;
-import com.redmancometh.redcore.nbt.*;
+import com.redmancometh.redcore.nbt.NBTCompound;
+import com.redmancometh.redcore.nbt.NBTPrimitive;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.redmancometh.redcore.protocol.Reflection.getFieldData;
 import static com.redmancometh.redcore.protocol.Reflection.getNMSClass;
 
-public class ItemStackWrapper implements WrappedData, StringSerializable {
+public class ItemStackWrapper implements WrappedData, StringSerializable
+{
     public static final Constructor bukkitStack;
     public static final Object cmnObj;
     public static final Method createStack, getType, nmsCopy, saveStack, getItem, getID;
     public static final Field itemName;
     public static final HashMap<Integer, String> itemNames = new HashMap<>();
 
-    static {
+    static
+    {
         Class nms = getNMSClass("ItemStack");
         Class nmsItem = getNMSClass("Item");
         Class nbt = getNMSClass("NBTTagCompound");
@@ -34,10 +40,13 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         getType = Reflection.getMethod(cmn, "getMaterialFromInternalName", String.class);
         getItem = Reflection.getMethod(cmn, "getItem", Material.class);
         getID = Reflection.getMethod(nmsItem, "getId", nmsItem);
-        for (Map.Entry<?, ?> e : ((Map<?, ?>) getFieldData(getNMSClass("RegistryMaterials"), "b", getFieldData(nmsItem, "REGISTRY"))).entrySet()) {
-            try {
+        for (Map.Entry<?, ?> e : ((Map<?, ?>) getFieldData(getNMSClass("RegistryMaterials"), "b", getFieldData(nmsItem, "REGISTRY"))).entrySet())
+        {
+            try
+            {
                 itemNames.put((Integer) getID.invoke(null, e.getKey()), e.getValue().toString());
-            } catch (Throwable err) {
+            } catch (Throwable err)
+            {
                 SU.error(SU.cs, err, "RedCore", "com.redmancometh");
             }
         }
@@ -56,16 +65,15 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         loadFromBukkitStack(is);
     }
 
-    public void loadFromBukkitStack(ItemStack is)
+    public short getDamage()
     {
-        try {
-            if (is != null) {
-                Object nms = nmsCopy.invoke(null, is);
-                if (nms != null)
-                    nbtData.loadFromNMS(saveStack.invoke(nms, new NBTCompound().toNMS()));
-            }
-        } catch (Throwable e) {
+        try
+        {
+            return (Short) ((NBTPrimitive) nbtData.map.get("Damage")).data;
+        } catch (Throwable e)
+        {
             e.printStackTrace();
+            return 0;
         }
     }
 
@@ -74,13 +82,15 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         loadFromVanillaStack(vanillaStack);
     }
 
-    public void loadFromVanillaStack(Object is)
+    public Material getType()
     {
-        try {
-            if (is != null)
-                nbtData.loadFromNMS(saveStack.invoke(is, new NBTCompound().toNMS()));
-        } catch (Throwable e) {
-            e.printStackTrace();
+        try
+        {
+            return (Material) getType.invoke(cmnObj, getId());
+        } catch (Throwable e)
+        {
+            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
+            return Material.AIR;
         }
     }
 
@@ -94,14 +104,10 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         nbtData.map.put("Count", new NBTPrimitive(count));
     }
 
-    public short getDamage()
+    public String getId()
     {
-        try {
-            return (Short) ((NBTPrimitive) nbtData.map.get("Damage")).data;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return 0;
-        }
+        if (nbtData.map.get("id") == null) return "minecraft:air";
+        return (String) ((NBTPrimitive) nbtData.map.get("id")).data;
     }
 
     public void setDamage(short damage)
@@ -114,30 +120,41 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
         return getType().getId();
     }
 
-    public void setNumericId(int newId)
+    public void loadFromBukkitStack(ItemStack is)
     {
-        try {
-            nbtData.map.put("id", new NBTPrimitive(itemNames.get(newId)));
-        } catch (Throwable e) {
+        try
+        {
+            if (is != null)
+            {
+                Object nms = nmsCopy.invoke(null, is);
+                if (nms != null) nbtData.loadFromNMS(saveStack.invoke(nms, new NBTCompound().toNMS()));
+            }
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }
 
-    public Material getType()
+    public void loadFromVanillaStack(Object is)
     {
-        try {
-            return (Material) getType.invoke(cmnObj, getId());
-        } catch (Throwable e) {
-            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-            return Material.AIR;
+        try
+        {
+            if (is != null) nbtData.loadFromNMS(saveStack.invoke(is, new NBTCompound().toNMS()));
+        } catch (Throwable e)
+        {
+            e.printStackTrace();
         }
     }
 
-    public String getId()
+    public void setNumericId(int newId)
     {
-        if (nbtData.map.get("id") == null)
-            return "minecraft:air";
-        return (String) ((NBTPrimitive) nbtData.map.get("id")).data;
+        try
+        {
+            nbtData.map.put("id", new NBTPrimitive(itemNames.get(newId)));
+        } catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void setId(String newId)
@@ -162,9 +179,11 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
 
     public void setUnbreakable(boolean unbreakable)
     {
-        if (unbreakable) {
+        if (unbreakable)
+        {
             getMetaData().map.put("Unbreakable", new NBTPrimitive(Byte.valueOf((byte) 1)));
-        } else {
+        } else
+        {
             getMetaData().map.remove("Unbreakable");
         }
     }
@@ -176,9 +195,11 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
 
     public ItemStack toBukkitStack()
     {
-        try {
+        try
+        {
             return (ItemStack) bukkitStack.newInstance(toNMS());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -187,9 +208,11 @@ public class ItemStackWrapper implements WrappedData, StringSerializable {
     @Override
     public Object toNMS()
     {
-        try {
+        try
+        {
             return createStack.invoke(null, nbtData.toNMS());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }

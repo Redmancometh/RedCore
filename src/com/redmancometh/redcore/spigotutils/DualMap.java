@@ -1,8 +1,12 @@
 package com.redmancometh.redcore.spigotutils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class DualMap<K, V> implements Map<K, V> {
+public class DualMap<K, V> implements Map<K, V>
+{
     final HashMap<K, V> keys = new HashMap<>();
     final HashMap<V, K> values = new HashMap<>();
 
@@ -87,7 +91,8 @@ public class DualMap<K, V> implements Map<K, V> {
 
     private void putAllValue(Map<K, V> m)
     {
-        for (Entry<K, V> e : m.entrySet()) {
+        for (Entry<K, V> e : m.entrySet())
+        {
             values.put(e.getValue(), e.getKey());
         }
     }

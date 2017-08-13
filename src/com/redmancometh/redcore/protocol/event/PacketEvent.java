@@ -2,9 +2,12 @@ package com.redmancometh.redcore.protocol.event;
 
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-public abstract class PacketEvent extends Event implements Cancellable {
+public abstract class PacketEvent extends Event implements Cancellable
+{
     private static final HandlerList hl = new HandlerList();
     private final Object channel;
     private final Player player;
@@ -38,9 +41,9 @@ public abstract class PacketEvent extends Event implements Cancellable {
         return packet;
     }
 
-    public void setPacket(WrappedPacket packet)
+    public void setPacket(Object packet)
     {
-        this.packet = packet.getVanillaPacket();
+        this.packet = packet;
     }
 
     public abstract Object[] getPacketData();
@@ -62,9 +65,9 @@ public abstract class PacketEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
-    public void setPacket(Object packet)
+    public void setPacket(WrappedPacket packet)
     {
-        this.packet = packet;
+        this.packet = packet.getVanillaPacket();
     }
 
     public abstract boolean setPacketData(int var1, Object var2);

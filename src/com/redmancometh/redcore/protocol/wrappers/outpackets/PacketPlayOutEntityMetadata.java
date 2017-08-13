@@ -5,12 +5,14 @@ import com.redmancometh.redcore.protocol.utils.DataWatcher;
 import com.redmancometh.redcore.protocol.utils.DataWatcher.WrappedItem;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityMetadata extends WrappedPacket {
+public class PacketPlayOutEntityMetadata extends WrappedPacket
+{
     public int entityId;
     public ArrayList<WrappedItem> meta = new ArrayList<>();
 

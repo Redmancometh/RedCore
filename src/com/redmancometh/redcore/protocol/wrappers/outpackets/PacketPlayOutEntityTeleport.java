@@ -3,12 +3,14 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
-import com.redmancometh.redcore.spigotutils.*;
+import com.redmancometh.redcore.spigotutils.LocationData;
+import com.redmancometh.redcore.spigotutils.ServerVersion;
 
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityTeleport extends WrappedPacket {
+public class PacketPlayOutEntityTeleport extends WrappedPacket
+{
     public int entityId;
     public boolean onGround;
     public byte pitch;
@@ -42,19 +44,20 @@ public class PacketPlayOutEntityTeleport extends WrappedPacket {
     {
         Object[] d = PacketOutType.EntityTeleport.getPacketData(packet);
         entityId = (int) d[0];
-        if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_9))
+        {
             x = (double) d[1];
             y = (double) d[2];
             z = (double) d[3];
-        } else {
+        } else
+        {
             x = (int) d[1] / 32.0;
             y = (int) d[2] / 32.0;
             z = (int) d[3] / 32.0;
         }
         yaw = (byte) d[4];
         pitch = (byte) d[5];
-        if (Reflection.ver.isAbove(ServerVersion.v1_8))
-            onGround = (boolean) d[6];
+        if (Reflection.ver.isAbove(ServerVersion.v1_8)) onGround = (boolean) d[6];
     }
 
     @Override

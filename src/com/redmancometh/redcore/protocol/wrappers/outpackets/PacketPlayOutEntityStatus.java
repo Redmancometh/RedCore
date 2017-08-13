@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityStatus extends WrappedPacket {
+public class PacketPlayOutEntityStatus extends WrappedPacket
+{
     public int entityId;
     /**
      * 1 	Sent when resetting a mob spawn minecart's timer — appears to be unused by the client 2 	Living Entity hurt 3

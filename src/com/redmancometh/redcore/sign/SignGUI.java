@@ -2,10 +2,13 @@ package com.redmancometh.redcore.sign;
 
 import com.redmancometh.redcore.chat.ChatTag;
 import com.redmancometh.redcore.protocol.Protocol.PacketInListener;
-import com.redmancometh.redcore.protocol.event.*;
+import com.redmancometh.redcore.protocol.event.PacketInEvent;
+import com.redmancometh.redcore.protocol.event.PacketInType;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
 import com.redmancometh.redcore.protocol.wrappers.inpackets.PacketPlayInUpdateSign;
-import com.redmancometh.redcore.protocol.wrappers.outpackets.*;
+import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutBlockChange;
+import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutOpenSignEditor;
+import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutUpdateSign;
 import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -20,7 +23,8 @@ import static com.redmancometh.redcore.spigotutils.SU.tp;
 /**
  * SignGUI, which can be used
  */
-public class SignGUI implements PacketInListener {
+public class SignGUI implements PacketInListener
+{
     public static final HashMap<String, SignGUI> openSignGUIs = new HashMap<>();
     public final String[] initialLines;
     public final String[] result = new String[]{"", "", "", ""};
@@ -55,9 +59,7 @@ public class SignGUI implements PacketInListener {
         Location loc = plr.getLocation();
         bl = new BlockLocation(loc.getBlockX(), loc.getBlockY() > 128 ? 0 : 255, loc.getBlockZ());
         tp.sendPacket(plr, new PacketPlayOutBlockChange(bl, 63, (byte) 0));
-        tp.sendPacket(plr, new PacketPlayOutUpdateSign(bl, new ChatTag[]{
-                fromColoredText(initialLines[0]), fromColoredText(initialLines[1]),
-                fromColoredText(initialLines[2]), fromColoredText(initialLines[3])}));
+        tp.sendPacket(plr, new PacketPlayOutUpdateSign(bl, new ChatTag[]{fromColoredText(initialLines[0]), fromColoredText(initialLines[1]), fromColoredText(initialLines[2]), fromColoredText(initialLines[3])}));
         tp.registerIncomingListener(pl(), this, PacketInType.UpdateSign);
         tp.sendPacket(plr, new PacketPlayOutOpenSignEditor(bl));
     }
@@ -67,17 +69,20 @@ public class SignGUI implements PacketInListener {
     {
         PacketPlayInUpdateSign packet = new PacketPlayInUpdateSign();
         packet.loadVanillaPacket(e.getPacket());
-        if (e.getPlayer() == plr) {
+        if (e.getPlayer() == plr)
+        {
             e.setCancelled(true);
             for (int i = 0; i < 4; ++i)
                 result[i] = packet.lines[i].toColoredString();
             SU.sch.scheduleSyncDelayedTask(pl(), () -> {
-                try {
+                try
+                {
                     cancel();
                     Block b = plr.getWorld().getBlockAt(bl.x, bl.y, bl.z);
                     tp.sendPacket(plr, new PacketPlayOutBlockChange(bl, b.getTypeId(), b.getData()));
                     dr.done(SignGUI.this);
-                } catch (Throwable e1) {
+                } catch (Throwable e1)
+                {
                     SU.error(SU.cs, e1, "SignGUI", "com.redmancometh");
                 }
             });

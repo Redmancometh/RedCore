@@ -2,13 +2,15 @@ package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.config.StringSerializable;
 import org.bukkit.Material;
-import org.bukkit.block.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Class used for storing the data of a block, or an item
  */
-public class BlockData implements StringSerializable, Comparable<BlockData> {
+public class BlockData implements StringSerializable, Comparable<BlockData>
+{
     public boolean anydata = true;
     public short data;
     public int id;
@@ -68,22 +70,27 @@ public class BlockData implements StringSerializable, Comparable<BlockData> {
     public BlockData(String in)
     {
         String[] s = in.split(":", 2);
-        try {
-            try {
+        try
+        {
+            try
+            {
                 id = Material.getMaterial(s[0].toUpperCase()).getId();
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 id = Integer.valueOf(s[0]);
             }
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
-        if (s.length == 2)
-            try {
-                data = Byte.valueOf(s[1]);
-                anydata = false;
-            } catch (Throwable e) {
-                SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-            }
+        if (s.length == 2) try
+        {
+            data = Byte.valueOf(s[1]);
+            anydata = false;
+        } catch (Throwable e)
+        {
+            SU.error(SU.cs, e, "RedCore", "com.redmancometh");
+        }
     }
 
     @Override
@@ -99,7 +106,8 @@ public class BlockData implements StringSerializable, Comparable<BlockData> {
 
     public boolean equals(Object obj)
     {
-        if (obj == null || obj.getClass() != BlockData.class) {
+        if (obj == null || obj.getClass() != BlockData.class)
+        {
             return false;
         }
         BlockData bd = (BlockData) obj;

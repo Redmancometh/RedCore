@@ -4,23 +4,27 @@ import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.WrappedData;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
-import com.redmancometh.redcore.spigotutils.*;
+import com.redmancometh.redcore.spigotutils.SU;
+import com.redmancometh.redcore.spigotutils.ServerVersion;
 import org.bukkit.Location;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutPosition.PlayerTeleportFlag.*;
 
 /**
  * Created by GyuriX on 2016.08.23..
  */
-public class PacketPlayOutPosition extends WrappedPacket {
+public class PacketPlayOutPosition extends WrappedPacket
+{
     public static final HashSet<PlayerTeleportFlag> allFlags = new HashSet<>();
     public static final HashSet<PlayerTeleportFlag> coordFlags = new HashSet<>();
     public static final HashSet<PlayerTeleportFlag> rotationFlags = new HashSet<>();
 
-    static {
+    static
+    {
         coordFlags.add(X);
         coordFlags.add(Y);
         coordFlags.add(Z);
@@ -87,15 +91,13 @@ public class PacketPlayOutPosition extends WrappedPacket {
         yaw = (float) d[3];
         pitch = (float) d[4];
         setVanillaFlags((Set) d[5]);
-        if (Reflection.ver.isAbove(ServerVersion.v1_9))
-            teleportId = (int) d[6];
+        if (Reflection.ver.isAbove(ServerVersion.v1_9)) teleportId = (int) d[6];
     }
 
     @Override
     public Object getVanillaPacket()
     {
-        return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags(), teleportId) :
-                PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags());
+        return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags(), teleportId) : PacketOutType.Position.newPacket(x, y, z, yaw, pitch, getVanillaFlags());
     }
 
     public HashSet<Object> getVanillaFlags()
@@ -113,12 +115,9 @@ public class PacketPlayOutPosition extends WrappedPacket {
             flags.add(fromVanillaPTF(o));
     }
 
-    public enum PlayerTeleportFlag implements WrappedData {
-        X,
-        Y,
-        Z,
-        Y_ROT,
-        X_ROT;
+    public enum PlayerTeleportFlag implements WrappedData
+    {
+        X, Y, Z, Y_ROT, X_ROT;
         private static final Class cl = Reflection.getNMSClass("PacketPlayOutPosition$EnumPlayerTeleportFlags");
         private static final Method valueOf = Reflection.getMethod(cl, "valueOf", String.class);
 
@@ -130,9 +129,11 @@ public class PacketPlayOutPosition extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;

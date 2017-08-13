@@ -1,16 +1,23 @@
 package com.redmancometh.redcore.databasing;
 
-import com.google.common.cache.*;
-import com.redmancometh.redcore.*;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.redmancometh.redcore.Defaultable;
+import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 import com.redmancometh.redcore.util.SpecialFuture;
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
-import java.lang.InstantiationException;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
@@ -18,26 +25,31 @@ import java.util.function.Function;
  * @param <K> This is the type for the key which is used to lookup the object in both the cache and database.
  * @author Redmancometh
  */
-public class SubDatabase<K extends Serializable, V extends Defaultable> {
+public class SubDatabase<K extends Serializable, V extends Defaultable>
+{
     private final Class<V> type;
     public Function<K, V> defaultObjectBuilder;
     private List<Criterion> criteria;
     private boolean criteriaClass = false;
     private SessionFactory factory;
-    LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>() {
+    LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>()
+    {
         @Override
         public SpecialFuture<V> load(K key)
         {
             return SpecialFuture.supplyAsync(() -> {
-                try (Session session = factory.openSession()) {
-                    if (criteriaClass) {
+                try (Session session = factory.openSession())
+                {
+                    if (criteriaClass)
+                    {
                         Criteria c = session.createCriteria(type);
                         criteria.forEach(c::add);
                     }
                     V result = session.get(type, key);
                     if (result == null) return defaultObjectBuilder.apply(key);
                     return result;
-                } catch (SecurityException | IllegalArgumentException e) {
+                } catch (SecurityException | IllegalArgumentException e)
+                {
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
@@ -50,13 +62,14 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
         super();
         this.factory = factory;
         this.type = type;
-        this.defaultObjectBuilder = (key) ->
-        {
-            try {
+        this.defaultObjectBuilder = (key) -> {
+            try
+            {
                 V v = type.newInstance();
                 v.setDefaults(key);
                 return v;
-            } catch (InstantiationException | IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException e)
+            {
                 e.printStackTrace();
             }
             return null;
@@ -65,7 +78,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 
     public void deleteObject(V e)
     {
-        try (Session s = factory.openSession()) {
+        try (Session s = factory.openSession())
+        {
             s.delete(e);
         }
     }
@@ -114,9 +128,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
      */
     public SpecialFuture<V> getObject(K e)
     {
-        try {
+        try
+        {
             return cache.get(e);
-        } catch (ExecutionException e1) {
+        } catch (ExecutionException e1)
+        {
             e1.printStackTrace();
         }
         return null;
@@ -124,9 +140,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 
     public SpecialFuture<V> getWithCriteria(K e, Criteria... criteria)
     {
-        try {
+        try
+        {
             return cache.get(e);
-        } catch (ExecutionException e1) {
+        } catch (ExecutionException e1)
+        {
             e1.printStackTrace();
         }
         return null;
@@ -177,24 +195,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
     }
 
     /**
-     * Save an object without purging it
-     *
-     * @param e
-     * @return
-     */
-    public SpecialFuture<?> saveObject(V e)
-    {
-        return SpecialFuture.runAsync(() ->
-        {
-            try (Session session = factory.openSession()) {
-                session.beginTransaction();
-                session.saveOrUpdate(e);
-                session.getTransaction().commit();
-            }
-        });
-    }
-
-    /**
      * This is ONLY saved if the key is found in the cache!
      *
      * @param e
@@ -204,21 +204,41 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
     public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
     {
         if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
-        return CompletableFuture.runAsync(() ->
-        {
-            try (Session session = factory.openSession()) {
-                try {
+        return CompletableFuture.runAsync(() -> {
+            try (Session session = factory.openSession())
+            {
+                try
+                {
                     session.beginTransaction();
                     cache.get(e).thenAccept(session::saveOrUpdate);
                     session.getTransaction().commit();
                     session.flush();
-                } catch (Exception e2) {
+                } catch (Exception e2)
+                {
                     e2.printStackTrace();
                 }
 
             }
         }, RedCore.getInstance().getPool());
 
+    }
+
+    /**
+     * Save an object without purging it
+     *
+     * @param e
+     * @return
+     */
+    public SpecialFuture<?> saveObject(V e)
+    {
+        return SpecialFuture.runAsync(() -> {
+            try (Session session = factory.openSession())
+            {
+                session.beginTransaction();
+                session.saveOrUpdate(e);
+                session.getTransaction().commit();
+            }
+        });
     }
 
 }

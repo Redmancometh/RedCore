@@ -1,11 +1,14 @@
 package com.redmancometh.redcore.util;
 
-import com.google.common.cache.*;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class CooldownUtil {
+public class CooldownUtil
+{
     /**
      * TODO: implement custom LoadingCache, and custom CacheBuilder specifically for cooldowns.
      */
@@ -16,7 +19,8 @@ public class CooldownUtil {
      */
     public static LoadingCache buildCooldownCache(long l)
     {
-        return CacheBuilder.newBuilder().expireAfterWrite(l, TimeUnit.SECONDS).build(new CacheLoader<UUID, Boolean>() {
+        return CacheBuilder.newBuilder().expireAfterWrite(l, TimeUnit.SECONDS).build(new CacheLoader<UUID, Boolean>()
+        {
             @Override
             public Boolean load(UUID key)
             {
@@ -27,7 +31,8 @@ public class CooldownUtil {
 
     public static LoadingCache buildCooldownCache(TimeUnit units, int seconds)
     {
-        return CacheBuilder.newBuilder().expireAfterWrite(seconds, units).build(new CacheLoader<UUID, Boolean>() {
+        return CacheBuilder.newBuilder().expireAfterWrite(seconds, units).build(new CacheLoader<UUID, Boolean>()
+        {
             @Override
             public Boolean load(UUID key)
             {

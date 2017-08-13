@@ -11,7 +11,8 @@ import java.util.ArrayList;
 /**
  * Created by com.redmancometh on 25/11/2015.
  */
-public class PacketPlayOutWindowItems extends WrappedPacket {
+public class PacketPlayOutWindowItems extends WrappedPacket
+{
     private static final Class itemClass = Reflection.getNMSClass("ItemStack");
     public int inventoryId;
     public ArrayList<ItemStackWrapper> items = new ArrayList<>();

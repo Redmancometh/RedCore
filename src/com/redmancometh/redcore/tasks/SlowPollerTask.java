@@ -3,7 +3,8 @@ package com.redmancometh.redcore.tasks;
 import com.redmancometh.redcore.RedCore;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class SlowPollerTask extends BukkitRunnable {
+public class SlowPollerTask extends BukkitRunnable
+{
     @Override
     public void run()
     {

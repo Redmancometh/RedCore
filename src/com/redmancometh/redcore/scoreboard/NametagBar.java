@@ -1,14 +1,19 @@
 package com.redmancometh.redcore.scoreboard;
 
-import com.redmancometh.redcore.scoreboard.team.*;
+import com.redmancometh.redcore.scoreboard.team.CollisionRule;
+import com.redmancometh.redcore.scoreboard.team.NameTagVisibility;
+import com.redmancometh.redcore.scoreboard.team.TeamData;
 import org.bukkit.Bukkit;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.redmancometh.redcore.scoreboard.ScoreboardAPI.id;
 
-public class NametagBar extends ScoreboardBar {
+public class NametagBar extends ScoreboardBar
+{
     int nextId = 0;
 
     public NametagBar()
@@ -26,7 +31,8 @@ public class NametagBar extends ScoreboardBar {
     private TeamData getTeam(String team)
     {
         TeamData curTeam = currentData.teams.get(team);
-        if (curTeam == null) {
+        if (curTeam == null)
+        {
             curTeam = new TeamData(currentData.barname + "-" + ++nextId, team, "", "", false, true, NameTagVisibility.always, CollisionRule.always, 0, new ConcurrentSkipListSet<String>());
             currentData.teams.put(team, curTeam);
         }
@@ -37,7 +43,8 @@ public class NametagBar extends ScoreboardBar {
     {
         active.keySet().removeIf((p) -> Bukkit.getPlayerExact(p) == null);
         loaded.keySet().removeIf((p) -> Bukkit.getPlayerExact(p) == null);
-        for (Map.Entry<String, BarData> e : active.entrySet()) {
+        for (Map.Entry<String, BarData> e : active.entrySet())
+        {
             BarData oldBar = e.getValue();
             TeamData old = oldBar.teams.get(team);
             td.update(Bukkit.getPlayerExact(e.getKey()), old);

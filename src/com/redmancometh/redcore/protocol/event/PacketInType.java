@@ -5,46 +5,14 @@ import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public enum PacketInType {
-    HandshakingInSetProtocol,
-    LoginInEncryptionBegin,
-    LoginInStart,
-    Abilities,
-    Advancements,
-    AdvancementTab,
-    ArmAnimation,
-    AutoRecipe,
-    BlockDig,
-    BlockPlace,
-    BoatMove,
-    Chat,
-    ClientCommand,
-    CloseWindow,
-    CustomPayload,
-    EnchantItem,
-    EntityAction,
-    Flying,
-    HeldItemSlot,
-    KeepAlive,
-    RecipeDisplayed,
-    ResourcePackStatus,
-    SetCreativeSlot,
-    Settings,
-    Spectate,
-    SteerVehicle,
-    TabComplete,
-    TeleportAccept,
-    Transaction,
-    UpdateSign,
-    UseEntity,
-    UseItem,
-    VehicleMove,
-    WindowClick,
-    StatusInPing,
-    StatusInStart;
+public enum PacketInType
+{
+    HandshakingInSetProtocol, LoginInEncryptionBegin, LoginInStart, Abilities, Advancements, AdvancementTab, ArmAnimation, AutoRecipe, BlockDig, BlockPlace, BoatMove, Chat, ClientCommand, CloseWindow, CustomPayload, EnchantItem, EntityAction, Flying, HeldItemSlot, KeepAlive, RecipeDisplayed, ResourcePackStatus, SetCreativeSlot, Settings, Spectate, SteerVehicle, TabComplete, TeleportAccept, Transaction, UpdateSign, UseEntity, UseItem, VehicleMove, WindowClick, StatusInPing, StatusInStart;
 
     private static final HashMap<Class, PacketInType> packets = new HashMap<>();
     public Class<? extends WrappedPacket> wrapper;
@@ -67,19 +35,22 @@ public enum PacketInType {
     public static PacketInType getType(Object packet)
     {
         Class cl = packet.getClass();
-        while (cl != null && cl != Object.class) {
+        while (cl != null && cl != Object.class)
+        {
             String cn = cl.getName();
-            while (cn.contains("$")) {
-                try {
+            while (cn.contains("$"))
+            {
+                try
+                {
                     cl = Class.forName(cn.substring(0, cn.indexOf("$")));
                     cn = cl.getName();
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e)
+                {
                     e.printStackTrace();
                 }
             }
             PacketInType type = packets.get(cl);
-            if (type != null)
-                return type;
+            if (type != null) return type;
             cl = cl.getSuperclass();
         }
         return null;
@@ -90,27 +61,32 @@ public enum PacketInType {
      */
     public static void init()
     {
-        for (PacketInType t : PacketInType.values()) {
+        for (PacketInType t : PacketInType.values())
+        {
             String name = t.name();
             String cln = "Packet" + (name.startsWith("Login") || name.startsWith("Status") || name.startsWith("Handshaking") ? name : "PlayIn" + name);
-            try {
+            try
+            {
                 Class cl = Reflection.getNMSClass(cln);
-                if (cl == null)
-                    continue;
+                if (cl == null) continue;
                 packets.put(cl, t);
                 t.emptyConst = cl.getConstructor();
                 t.fs = new ArrayList();
-                for (Field f : cl.getDeclaredFields()) {
+                for (Field f : cl.getDeclaredFields())
+                {
                     if ((f.getModifiers() & 8) != 0) continue;
                     Reflection.setFieldAccessible(f);
                     t.fs.add(f);
                 }
                 t.supported = true;
-            } catch (Throwable ignored) {
+            } catch (Throwable ignored)
+            {
             }
-            try {
+            try
+            {
                 t.wrapper = (Class<? extends WrappedPacket>) Class.forName("com.redmancometh.redcore.protocol.wrappers.inpackets." + cln);
-            } catch (Throwable ignored) {
+            } catch (Throwable ignored)
+            {
             }
         }
     }
@@ -124,12 +100,15 @@ public enum PacketInType {
     public Object[] getPacketData(Object packet)
     {
         Object[] out = new Object[fs.size()];
-        try {
-            for (int i = 0; i < fs.size(); ++i) {
+        try
+        {
+            for (int i = 0; i < fs.size(); ++i)
+            {
                 out[i] = fs.get(i).get(packet);
             }
             return out;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -153,11 +132,13 @@ public enum PacketInType {
      */
     public Object newPacket(Object... data)
     {
-        try {
+        try
+        {
             Object out = emptyConst.newInstance();
             fillPacket(out, data);
             return out;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }
@@ -172,14 +153,18 @@ public enum PacketInType {
     public void fillPacket(Object packet, Object... data)
     {
         ArrayList<Field> fields = Lists.newArrayList(fs);
-        for (Object d : data) {
-            for (int f = 0; f < fields.size(); f++) {
-                try {
+        for (Object d : data)
+        {
+            for (int f = 0; f < fields.size(); f++)
+            {
+                try
+                {
                     Field ff = fields.get(f);
                     ff.set(packet, d);
                     fields.remove(f--);
                     break;
-                } catch (Throwable e) {
+                } catch (Throwable e)
+                {
                 }
             }
         }
@@ -193,11 +178,13 @@ public enum PacketInType {
      */
     public WrappedPacket wrap(Object nmsPacket)
     {
-        try {
+        try
+        {
             WrappedPacket wp = wrapper.newInstance();
             wp.loadVanillaPacket(nmsPacket);
             return wp;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.log(SU.pl(), "§4[§cPacketAPI§4] §eError on wrapping §c" + name() + "§e out packet.");
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;

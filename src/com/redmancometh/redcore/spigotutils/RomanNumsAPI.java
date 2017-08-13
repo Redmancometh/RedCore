@@ -1,15 +1,19 @@
 package com.redmancometh.redcore.spigotutils;
 
-import java.util.*;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 /**
  * An API for converting latin numbers to roman and vice versa
  */
-public class RomanNumsAPI {
+public class RomanNumsAPI
+{
     private static NavigableMap<Integer, String> reversed;
     private static TreeMap<Integer, String> romanNums = new TreeMap<>();
 
-    static {
+    static
+    {
         romanNums.put(1, "I");
         romanNums.put(4, "IV");
         romanNums.put(5, "V");
@@ -48,10 +52,12 @@ public class RomanNumsAPI {
     {
         roman = roman.toUpperCase();
         int out = 0;
-        for (Map.Entry<Integer, String> e : reversed.entrySet()) {
+        for (Map.Entry<Integer, String> e : reversed.entrySet())
+        {
             String st = e.getValue();
             int am = e.getKey();
-            while (roman.startsWith(st)) {
+            while (roman.startsWith(st))
+            {
                 out += am;
                 roman = roman.substring(st.length());
             }
@@ -68,7 +74,8 @@ public class RomanNumsAPI {
     public static String toRoman(int num)
     {
         StringBuilder out = new StringBuilder();
-        while (num > 0) {
+        while (num > 0)
+        {
             Map.Entry<Integer, String> e = romanNums.floorEntry(num);
             num -= e.getKey();
             out.append(e.getValue());

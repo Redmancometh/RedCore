@@ -1,12 +1,16 @@
 package com.redmancometh.redcore.spigotutils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 /**
  * Created by GyuriX on 2015.12.29..
  */
-public class Orderable<K, V extends Comparable> implements Comparable<Orderable<K, V>> {
+public class Orderable<K, V extends Comparable> implements Comparable<Orderable<K, V>>
+{
     public final K key;
     public final V value;
 
@@ -20,7 +24,8 @@ public class Orderable<K, V extends Comparable> implements Comparable<Orderable<
     {
         HashMap<K, Integer> map = new HashMap<>();
         int id = 1;
-        for (Orderable<K, V> o : topList) {
+        for (Orderable<K, V> o : topList)
+        {
             map.put(o.key, id++);
         }
         return map;
@@ -29,7 +34,8 @@ public class Orderable<K, V extends Comparable> implements Comparable<Orderable<
     public static <K, V extends Comparable> TreeSet<Orderable<K, V>> order(Map<K, V> data)
     {
         TreeSet<Orderable<K, V>> out = new TreeSet<>();
-        for (Entry<K, V> e : data.entrySet()) {
+        for (Entry<K, V> e : data.entrySet())
+        {
             out.add(new Orderable(e.getKey(), e.getValue()));
         }
         return out;
@@ -38,8 +44,7 @@ public class Orderable<K, V extends Comparable> implements Comparable<Orderable<
     @Override
     public int compareTo(Orderable<K, V> o)
     {
-        if (value.compareTo(o.value) == 0)
-            return key.toString().compareTo(o.key.toString());
+        if (value.compareTo(o.value) == 0) return key.toString().compareTo(o.key.toString());
         return 0 - value.compareTo(o.value);
     }
 

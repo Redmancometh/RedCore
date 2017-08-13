@@ -5,99 +5,14 @@ import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public enum PacketOutType {
-    Abilities,
-    Advancements,
-    Animation,
-    AttachEntity,
-    Bed,
-    Boss,
-    BlockAction,
-    BlockBreakAnimation,
-    BlockChange,
-    Camera,
-    Chat,
-    CloseWindow,
-    Collect,
-    CombatEvent,
-    CustomPayload,
-    CustomSoundEffect,
-    Entity,
-    EntityDestroy,
-    EntityEffect,
-    EntityEquipment,
-    EntityHeadRotation,
-    EntityLook,
-    EntityMetadata,
-    EntityStatus,
-    EntityTeleport,
-    EntityVelocity,
-    Experience,
-    Explosion,
-    GameStateChange,
-    HeldItemSlot,
-    KeepAlive,
-    KickDisconnect,
-    Login,
-    LoginOutDisconnect,
-    LoginOutEncryptionBegin,
-    LoginOutSetCompression,
-    LoginOutSuccess,
-    Map,
-    MapChunk,
-    MapChunkBulk,
-    Mount,
-    MultiBlockChange,
-    NamedEntitySpawn,
-    NamedSoundEffect,
-    OpenSignEditor,
-    OpenWindow,
-    PlayerInfo,
-    PlayerListHeaderFooter,
-    Position,
-    RelEntityMove,
-    RelEntityMoveLook,
-    Recipes,
-    RemoveEntityEffect,
-    ResourcePackSend,
-    Respawn,
-    ScoreboardDisplayObjective,
-    ScoreboardObjective,
-    ScoreboardScore,
-    ScoreboardTeam,
-    SelectAdvancementTab,
-    ServerDifficulty,
-    SetCompression,
-    SetCooldown,
-    SetSlot,
-    SpawnEntity,
-    SpawnEntityExperienceOrb,
-    SpawnEntityLiving,
-    SpawnEntityPainting,
-    SpawnEntityWeather,
-    SpawnPosition,
-    Statistic,
-    TabComplete,
-    TileEntityData,
-    Title,
-    Transaction,
-    UnloadChunk,
-    UpdateAttributes,
-    UpdateEntityNBT,
-    UpdateHealth,
-    UpdateSign,
-    UpdateTime,
-    VehicleMove,
-    WindowData,
-    WindowItems,
-    WorldBorder,
-    WorldEvent,
-    WorldParticles,
-    StatusOutPong,
-    StatusOutServerInfo;
+public enum PacketOutType
+{
+    Abilities, Advancements, Animation, AttachEntity, Bed, Boss, BlockAction, BlockBreakAnimation, BlockChange, Camera, Chat, CloseWindow, Collect, CombatEvent, CustomPayload, CustomSoundEffect, Entity, EntityDestroy, EntityEffect, EntityEquipment, EntityHeadRotation, EntityLook, EntityMetadata, EntityStatus, EntityTeleport, EntityVelocity, Experience, Explosion, GameStateChange, HeldItemSlot, KeepAlive, KickDisconnect, Login, LoginOutDisconnect, LoginOutEncryptionBegin, LoginOutSetCompression, LoginOutSuccess, Map, MapChunk, MapChunkBulk, Mount, MultiBlockChange, NamedEntitySpawn, NamedSoundEffect, OpenSignEditor, OpenWindow, PlayerInfo, PlayerListHeaderFooter, Position, RelEntityMove, RelEntityMoveLook, Recipes, RemoveEntityEffect, ResourcePackSend, Respawn, ScoreboardDisplayObjective, ScoreboardObjective, ScoreboardScore, ScoreboardTeam, SelectAdvancementTab, ServerDifficulty, SetCompression, SetCooldown, SetSlot, SpawnEntity, SpawnEntityExperienceOrb, SpawnEntityLiving, SpawnEntityPainting, SpawnEntityWeather, SpawnPosition, Statistic, TabComplete, TileEntityData, Title, Transaction, UnloadChunk, UpdateAttributes, UpdateEntityNBT, UpdateHealth, UpdateSign, UpdateTime, VehicleMove, WindowData, WindowItems, WorldBorder, WorldEvent, WorldParticles, StatusOutPong, StatusOutServerInfo;
 
     private static final HashMap<Class, PacketOutType> packets = new HashMap<>();
     public Class<? extends WrappedPacket> wrapper;
@@ -114,19 +29,22 @@ public enum PacketOutType {
     public static PacketOutType getType(Object packet)
     {
         Class cl = packet.getClass();
-        while (cl != null && cl != Object.class) {
+        while (cl != null && cl != Object.class)
+        {
             String cn = cl.getName();
-            while (cn.contains("$")) {
-                try {
+            while (cn.contains("$"))
+            {
+                try
+                {
                     cl = Class.forName(cn.substring(0, cn.indexOf("$")));
                     cn = cl.getName();
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException e)
+                {
                     e.printStackTrace();
                 }
             }
             PacketOutType type = packets.get(cl);
-            if (type != null)
-                return type;
+            if (type != null) return type;
             cl = cl.getSuperclass();
         }
         return null;
@@ -137,27 +55,32 @@ public enum PacketOutType {
      */
     public static void init()
     {
-        for (PacketOutType t : PacketOutType.values()) {
+        for (PacketOutType t : PacketOutType.values())
+        {
             String name = t.name();
             String cln = "Packet" + (name.startsWith("LoginOut") || name.startsWith("Status") ? name : "PlayOut" + name);
-            try {
+            try
+            {
                 Class cl = Reflection.getNMSClass(cln);
-                if (cl == null)
-                    continue;
+                if (cl == null) continue;
                 packets.put(cl, t);
                 t.emptyConst = cl.getConstructor();
                 t.fs = new ArrayList();
-                for (Field f : cl.getDeclaredFields()) {
+                for (Field f : cl.getDeclaredFields())
+                {
                     if ((f.getModifiers() & 8) != 0) continue;
                     f.setAccessible(true);
                     t.fs.add(f);
                 }
                 t.supported = true;
-            } catch (Throwable ignored) {
+            } catch (Throwable ignored)
+            {
             }
-            try {
+            try
+            {
                 t.wrapper = (Class<? extends WrappedPacket>) Class.forName("com.redmancometh.redcore.protocol.wrappers.outpackets." + cln);
-            } catch (Throwable ignored) {
+            } catch (Throwable ignored)
+            {
             }
         }
     }
@@ -171,12 +94,15 @@ public enum PacketOutType {
     public Object[] getPacketData(Object packet)
     {
         Object[] out = new Object[fs.size()];
-        try {
-            for (int i = 0; i < fs.size(); ++i) {
+        try
+        {
+            for (int i = 0; i < fs.size(); ++i)
+            {
                 out[i] = fs.get(i).get(packet);
             }
             return out;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -200,11 +126,13 @@ public enum PacketOutType {
      */
     public Object newPacket(Object... data)
     {
-        try {
+        try
+        {
             Object out = emptyConst.newInstance();
             fillPacket(out, data);
             return out;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -219,14 +147,18 @@ public enum PacketOutType {
     public void fillPacket(Object packet, Object... data)
     {
         ArrayList<Field> fields = Lists.newArrayList(fs);
-        for (Object d : data) {
-            for (int f = 0; f < fields.size(); f++) {
-                try {
+        for (Object d : data)
+        {
+            for (int f = 0; f < fields.size(); f++)
+            {
+                try
+                {
                     Field ff = fields.get(f);
                     ff.set(packet, d);
                     fields.remove(f--);
                     break;
-                } catch (Throwable e) {
+                } catch (Throwable e)
+                {
                     SU.error(SU.cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -241,11 +173,13 @@ public enum PacketOutType {
      */
     public WrappedPacket wrap(Object nmsPacket)
     {
-        try {
+        try
+        {
             WrappedPacket wp = wrapper.newInstance();
             wp.loadVanillaPacket(nmsPacket);
             return wp;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.log(SU.pl(), "§4[§cPacketAPI§4] §eError on wrapping §c" + name() + "§e out packet.");
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;

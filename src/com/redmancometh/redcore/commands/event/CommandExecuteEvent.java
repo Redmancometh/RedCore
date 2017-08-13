@@ -3,7 +3,8 @@ package com.redmancometh.redcore.commands.event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 
-public class CommandExecuteEvent extends CommandEvent {
+public class CommandExecuteEvent extends CommandEvent
+{
     private static final HandlerList hl = new HandlerList();
 
     public CommandExecuteEvent(CommandSender sender, String command)

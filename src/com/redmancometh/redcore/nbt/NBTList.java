@@ -1,12 +1,16 @@
 package com.redmancometh.redcore.nbt;
 
 import io.netty.buffer.ByteBuf;
-import org.apache.commons.lang.*;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class NBTList extends NBTTag {
+public class NBTList extends NBTTag
+{
     public static Class nmsClass;
     static Field listField;
     static Field listType;
@@ -21,23 +25,48 @@ public class NBTList extends NBTTag {
         loadFromNMS(tag);
     }
 
+    public NBTList addAll(Collection col)
+    {
+        for (Object o : col)
+        {
+            if (o == null) continue;
+            list.add(NBTTag.make(o));
+        }
+        return this;
+    }
+
+    public NBTList addAll(Object... col)
+    {
+        for (Object o : col)
+        {
+            if (o == null) continue;
+            list.add(NBTTag.make(o));
+        }
+        return this;
+    }
+
     @Override
     public void loadFromNMS(Object tag)
     {
-        try {
-            for (Object o : (List) listField.get(tag)) {
+        try
+        {
+            for (Object o : (List) listField.get(tag))
+            {
                 String cln = o.getClass().getSimpleName();
-                if (cln.equals("NBTTagCompound")) {
+                if (cln.equals("NBTTagCompound"))
+                {
                     list.add(new NBTCompound(o));
                     continue;
                 }
-                if (cln.equals("NBTTagList")) {
+                if (cln.equals("NBTTagList"))
+                {
                     list.add(new NBTList(o));
                     continue;
                 }
                 list.add(new NBTPrimitive(o));
             }
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }
@@ -45,7 +74,8 @@ public class NBTList extends NBTTag {
     @Override
     public void write(ByteBuf buf)
     {
-        if (list.isEmpty()) {
+        if (list.isEmpty())
+        {
             buf.writeByte(0);
             buf.writeInt(0);
             return;
@@ -56,39 +86,25 @@ public class NBTList extends NBTTag {
             nbtTag.write(buf);
     }
 
-    public NBTList addAll(Collection col)
-    {
-        for (Object o : col) {
-            if (o == null) continue;
-            list.add(NBTTag.make(o));
-        }
-        return this;
-    }
-
-    public NBTList addAll(Object... col)
-    {
-        for (Object o : col) {
-            if (o == null) continue;
-            list.add(NBTTag.make(o));
-        }
-        return this;
-    }
-
     @Override
     public Object toNMS()
     {
-        try {
+        try
+        {
             Object o = nmsClass.newInstance();
             ArrayList<Object> l = new ArrayList<Object>();
-            for (NBTTag t : list) {
+            for (NBTTag t : list)
+            {
                 l.add(t.toNMS());
             }
             listField.set(o, l);
-            if (!l.isEmpty()) {
+            if (!l.isEmpty())
+            {
                 listType.set(o, Byte.valueOf((byte) ArrayUtils.indexOf(NBTApi.types, l.get(0).getClass())));
             }
             return o;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }

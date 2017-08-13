@@ -8,7 +8,8 @@ import com.redmancometh.redcore.spigotutils.BlockUtils;
 /**
  * Created by GyuriX, on 2017. 02. 05..
  */
-public class PacketPlayOutBlockChange extends WrappedPacket {
+public class PacketPlayOutBlockChange extends WrappedPacket
+{
     public byte blockData;
     public int blockId;
     public BlockLocation loc;

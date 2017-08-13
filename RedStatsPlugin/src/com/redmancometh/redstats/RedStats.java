@@ -1,24 +1,27 @@
 package com.redmancometh.redstats;
 
-import com.redmancometh.redcore.*;
+import com.redmancometh.redcore.RedPlugin;
+import com.redmancometh.redcore.RedPlugins;
 import com.redmancometh.redstats.stats.StatManager;
 import com.redmancometh.redstats.stats.listeners.StatListeners;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RedStats extends JavaPlugin implements RedPlugin {
+public class RedStats extends JavaPlugin implements RedPlugin
+{
     private List<Class> classList = new CopyOnWriteArrayList();
     private SessionFactory factory;
     private StatManager statManager;
 
     @Override
-    public SessionFactory getInternalFactory()
+    public List<Class> getMappedClasses()
     {
-        return factory;
+        return classList;
     }
 
     @Override
@@ -28,9 +31,9 @@ public class RedStats extends JavaPlugin implements RedPlugin {
     }
 
     @Override
-    public List<Class> getMappedClasses()
+    public SessionFactory getInternalFactory()
     {
-        return classList;
+        return factory;
     }
 
     @Override

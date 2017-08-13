@@ -11,7 +11,8 @@ import java.lang.reflect.Field;
 /**
  * Created by GyuriX, on 2017. 03. 29..
  */
-public class PacketPlayOutMapChunk extends WrappedPacket {
+public class PacketPlayOutMapChunk extends WrappedPacket
+{
     public ChunkMap chunkMap;
     public int chunkX;
     public int chunkZ;
@@ -33,7 +34,8 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
         return PacketOutType.MapChunk.newPacket(chunkX, chunkZ, chunkMap.toNMS(), groundUpContinuous);
     }
 
-    public static class ChunkMap implements WrappedData {
+    public static class ChunkMap implements WrappedData
+    {
         public static final Class nmsChunkMap = Reflection.getNMSClass("PacketPlayOutMapChunk$ChunkMap");
         private static final Field byteArrayF = Reflection.getFirstFieldOfType(nmsChunkMap, byte[].class);
         private static final Field intF = Reflection.getFirstFieldOfType(nmsChunkMap, int.class);
@@ -47,10 +49,12 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
 
         public ChunkMap(Object o)
         {
-            try {
+            try
+            {
                 primaryBitMask = intF.getInt(o);
                 data = (byte[]) byteArrayF.get(o);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -58,11 +62,13 @@ public class PacketPlayOutMapChunk extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object out = nmsChunkMap.newInstance();
                 byteArrayF.set(out, data);
                 intF.set(out, primaryBitMask);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;

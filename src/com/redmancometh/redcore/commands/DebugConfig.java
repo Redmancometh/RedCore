@@ -6,7 +6,8 @@ import com.redmancometh.redcore.config.ConfigManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DebugConfig extends ServerCommand {
+public class DebugConfig extends ServerCommand
+{
 
     public DebugConfig(String command, BiConsumer<CommandSender, String[]> action, JavaPlugin registering)
     {

@@ -3,7 +3,9 @@ package com.redmancometh.redcore.spigotutils;
 import com.redmancometh.redcore.config.StringSerializable;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -13,7 +15,8 @@ import static java.lang.Integer.MIN_VALUE;
 /**
  * Created by GyuriX on 2016.05.15..
  */
-public class CuboidArea implements StringSerializable, Cloneable {
+public class CuboidArea implements StringSerializable, Cloneable
+{
     public BlockLocation pos1, pos2;
     public String world;
 
@@ -23,21 +26,26 @@ public class CuboidArea implements StringSerializable, Cloneable {
 
     public CuboidArea(String in)
     {
-        try {
+        try
+        {
             String[] d = in.split(" ", 7);
-            if (d.length == 1) {
+            if (d.length == 1)
+            {
                 world = d[0];
                 return;
-            } else if (d.length == 6) {
+            } else if (d.length == 6)
+            {
                 pos1 = new BlockLocation(Integer.valueOf(d[0]), Integer.valueOf(d[1]), Integer.valueOf(d[2]));
                 pos2 = new BlockLocation(Integer.valueOf(d[3]), Integer.valueOf(d[4]), Integer.valueOf(d[5]));
-            } else {
+            } else
+            {
                 world = d[0];
                 pos1 = new BlockLocation(Integer.valueOf(d[1]), Integer.valueOf(d[2]), Integer.valueOf(d[3]));
                 pos2 = new BlockLocation(Integer.valueOf(d[4]), Integer.valueOf(d[5]), Integer.valueOf(d[6]));
             }
             fix();
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }
@@ -45,17 +53,20 @@ public class CuboidArea implements StringSerializable, Cloneable {
     public void fix()
     {
         int tmp;
-        if (pos1.x > pos2.x) {
+        if (pos1.x > pos2.x)
+        {
             tmp = pos1.x;
             pos1.x = pos2.x;
             pos2.x = tmp;
         }
-        if (pos1.y > pos2.y) {
+        if (pos1.y > pos2.y)
+        {
             tmp = pos1.y;
             pos1.y = pos2.y;
             pos2.y = tmp;
         }
-        if (pos1.z > pos2.z) {
+        if (pos1.z > pos2.z)
+        {
             tmp = pos1.z;
             pos1.z = pos2.z;
             pos2.z = tmp;
@@ -65,8 +76,7 @@ public class CuboidArea implements StringSerializable, Cloneable {
     public CuboidArea(Selection sel, boolean saveWorld)
     {
         this(sel);
-        if (saveWorld)
-            world = sel.getWorld().getName();
+        if (saveWorld) world = sel.getWorld().getName();
     }
 
     public CuboidArea(Selection sel)
@@ -121,8 +131,7 @@ public class CuboidArea implements StringSerializable, Cloneable {
 
     public boolean contains(Block loc)
     {
-        return loc.getX() >= pos1.x && loc.getY() >= pos1.y && loc.getZ() >= pos1.z
-                && loc.getX() <= pos2.x && loc.getY() <= pos2.y && loc.getZ() <= pos2.z;
+        return loc.getX() >= pos1.x && loc.getY() >= pos1.y && loc.getZ() >= pos1.z && loc.getX() <= pos2.x && loc.getY() <= pos2.y && loc.getZ() <= pos2.z;
     }
 
     public boolean contains(LocationData loc)
@@ -132,8 +141,7 @@ public class CuboidArea implements StringSerializable, Cloneable {
 
     public boolean contains(BlockLocation loc)
     {
-        return loc.x >= pos1.x && loc.y >= pos1.y && loc.z >= pos1.z
-                && loc.x <= pos2.x && loc.y <= pos2.y && loc.z <= pos2.z;
+        return loc.x >= pos1.x && loc.y >= pos1.y && loc.z >= pos1.z && loc.x <= pos2.x && loc.y <= pos2.y && loc.z <= pos2.z;
     }
 
     public boolean isBorder(int x, int z)
@@ -163,22 +171,24 @@ public class CuboidArea implements StringSerializable, Cloneable {
 
     public void resetOutlineWithBlock(Player plr)
     {
-        if (world != null && !plr.getWorld().getName().equals(world))
-            return;
+        if (world != null && !plr.getWorld().getName().equals(world)) return;
         World w = plr.getWorld();
-        for (int x = pos1.x + 1; x < pos2.x; x++) {
+        for (int x = pos1.x + 1; x < pos2.x; x++)
+        {
             resetOutlineBlock(w.getBlockAt(x, pos1.y, pos1.z), plr);
             resetOutlineBlock(w.getBlockAt(x, pos1.y, pos2.z), plr);
             resetOutlineBlock(w.getBlockAt(x, pos2.y, pos1.z), plr);
             resetOutlineBlock(w.getBlockAt(x, pos2.y, pos2.z), plr);
         }
-        for (int y = pos1.y + 1; y < pos2.y; y++) {
+        for (int y = pos1.y + 1; y < pos2.y; y++)
+        {
             resetOutlineBlock(w.getBlockAt(pos1.x, y, pos1.z), plr);
             resetOutlineBlock(w.getBlockAt(pos1.x, y, pos2.z), plr);
             resetOutlineBlock(w.getBlockAt(pos2.x, y, pos1.z), plr);
             resetOutlineBlock(w.getBlockAt(pos2.x, y, pos2.z), plr);
         }
-        for (int z = pos1.z; z <= pos2.z; z++) {
+        for (int z = pos1.z; z <= pos2.z; z++)
+        {
             resetOutlineBlock(w.getBlockAt(pos1.x, pos1.y, z), plr);
             resetOutlineBlock(w.getBlockAt(pos1.x, pos2.y, z), plr);
             resetOutlineBlock(w.getBlockAt(pos2.x, pos1.y, z), plr);
@@ -193,22 +203,24 @@ public class CuboidArea implements StringSerializable, Cloneable {
 
     public void showOutlineWithBlock(Player plr, BlockData bd)
     {
-        if (world != null && !plr.getWorld().getName().equals(world))
-            return;
+        if (world != null && !plr.getWorld().getName().equals(world)) return;
         World w = plr.getWorld();
-        for (int x = pos1.x + 1; x < pos2.x; x++) {
+        for (int x = pos1.x + 1; x < pos2.x; x++)
+        {
             plr.sendBlockChange(new Location(w, x, pos1.y, pos1.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, x, pos1.y, pos2.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, x, pos2.y, pos1.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, x, pos2.y, pos2.z), bd.id, (byte) bd.data);
         }
-        for (int y = pos1.y + 1; y < pos2.y; y++) {
+        for (int y = pos1.y + 1; y < pos2.y; y++)
+        {
             plr.sendBlockChange(new Location(w, pos1.x, y, pos1.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, pos1.x, y, pos2.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, pos2.x, y, pos1.z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, pos2.x, y, pos2.z), bd.id, (byte) bd.data);
         }
-        for (int z = pos1.z; z <= pos2.z; z++) {
+        for (int z = pos1.z; z <= pos2.z; z++)
+        {
             plr.sendBlockChange(new Location(w, pos1.x, pos1.y, z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, pos1.x, pos2.y, z), bd.id, (byte) bd.data);
             plr.sendBlockChange(new Location(w, pos2.x, pos1.y, z), bd.id, (byte) bd.data);

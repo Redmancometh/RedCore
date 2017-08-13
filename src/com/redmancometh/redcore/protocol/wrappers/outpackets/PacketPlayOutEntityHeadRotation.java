@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityHeadRotation extends WrappedPacket {
+public class PacketPlayOutEntityHeadRotation extends WrappedPacket
+{
     public int entityId;
     public byte rotation;
 

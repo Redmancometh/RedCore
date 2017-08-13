@@ -7,11 +7,19 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class SpecialFuture<T> {
+public class SpecialFuture<T>
+{
     private static ScheduledExecutorService pool = Executors.newScheduledThreadPool(7);
     private List<Consumer<T>> asyncTasks = new CopyOnWriteArrayList<>();
     private AtomicReference<T> cache = new AtomicReference<>();
@@ -31,75 +39,80 @@ public class SpecialFuture<T> {
 
     }
 
-    public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u)
-    {
-        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-        pool.schedule(() ->
-        {
-            r.run();
-            sf.supply(() -> void.class);
-        }, t, u);
-        return sf;
-    }
-
     public static SpecialFuture<?> delayAsync(Runnable r, long ticks)
     {
         SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () ->
-        {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> {
             runAsync(r);
             sf.supply(() -> void.class);
         }, ticks);
         return sf;
     }
 
+    public static SpecialFuture<?> runAsync(Runnable r)
+    {
+        return supplyAsync(() -> {
+            r.run();
+            return void.class;
+        });
+    }
+
     private void supply(Supplier<T> s)
     {
-        Future<?> handler = pool.submit(() ->
-        {
-            try {
+        Future<?> handler = pool.submit(() -> {
+            try
+            {
                 T t = s.get();
                 cache.set(t);
-                for (Consumer<T> task : asyncTasks) {
+                for (Consumer<T> task : asyncTasks)
+                {
                     pool.submit(() -> task.accept(t));
                 }
-                for (Consumer<T> task : tasks) {
-                    sync.scheduleSyncDelayedTask(plugin, () ->
-                    {
-                        try {
+                for (Consumer<T> task : tasks)
+                {
+                    sync.scheduleSyncDelayedTask(plugin, () -> {
+                        try
+                        {
                             task.accept(t);
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                             Bukkit.getLogger().severe("SpecialFuture encountered an error while executing a task!");
                             e.printStackTrace();
                         }
                     });
                 }
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 exception.set(e);
-                sync.scheduleSyncDelayedTask(plugin, () ->
-                {
-                    if (exHandlers.size() == 0) {
+                sync.scheduleSyncDelayedTask(plugin, () -> {
+                    if (exHandlers.size() == 0)
+                    {
                         e.printStackTrace();
                         return;
                     }
-                    for (Consumer<Exception> ce : exHandlers) {
+                    for (Consumer<Exception> ce : exHandlers)
+                    {
                         ce.accept(e);
                     }
                 });
             }
         });
-        pool.schedule(new Runnable() {
+        pool.schedule(new Runnable()
+        {
             public void run()
             {
-                if (!handler.isDone()) {
+                if (!handler.isDone())
+                {
                     handler.cancel(true);
                     RuntimeException ex = new RuntimeException("Your task is taking way too fucking long. Fix it.");
                     exception.set(ex);
-                    if (exHandlers.size() == 0) {
+                    if (exHandlers.size() == 0)
+                    {
                         ex.printStackTrace();
                         return;
                     }
-                    for (Consumer<Exception> ce : exHandlers) {
+                    for (Consumer<Exception> ce : exHandlers)
+                    {
                         ce.accept(ex);
                     }
                 }
@@ -107,11 +120,15 @@ public class SpecialFuture<T> {
         }, 10000, TimeUnit.MILLISECONDS);
     }
 
+    public static <T> SpecialFuture<T> supplyAsync(Supplier<T> s)
+    {
+        return new SpecialFuture<>(s);
+    }
+
     public static SpecialFuture<?> delaySync(Runnable r, long ticks)
     {
         SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () ->
-        {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getPlugin(RedCore.class), () -> {
             r.run();
             sf.supply(() -> void.class);
         }, ticks);
@@ -121,9 +138,18 @@ public class SpecialFuture<T> {
     public static SpecialFuture<?> delaySync(Runnable r, long t, TimeUnit u)
     {
         SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-        delayAsync(() ->
-        {
+        delayAsync(() -> {
             runSync(r);
+            sf.supply(() -> void.class);
+        }, t, u);
+        return sf;
+    }
+
+    public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u)
+    {
+        SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
+        pool.schedule(() -> {
+            r.run();
             sf.supply(() -> void.class);
         }, t, u);
         return sf;
@@ -131,8 +157,7 @@ public class SpecialFuture<T> {
 
     public static SpecialFuture<?> runSync(Runnable r)
     {
-        return runAsync(() ->
-        {
+        return runAsync(() -> {
         }).thenRun(r);
     }
 
@@ -140,30 +165,6 @@ public class SpecialFuture<T> {
     {
         thenAccept(c -> r.run());
         return this;
-    }
-
-    public static SpecialFuture<?> runAsync(Runnable r)
-    {
-        return supplyAsync(() ->
-        {
-            r.run();
-            return void.class;
-        });
-    }
-
-    public SpecialFuture<T> thenAccept(Consumer<T> c)
-    {
-        if (cache.get() == null) {
-            tasks.add(c);
-            return this;
-        }
-        c.accept(cache.get());
-        return this;
-    }
-
-    public static <T> SpecialFuture<T> supplyAsync(Supplier<T> s)
-    {
-        return new SpecialFuture<>(s);
     }
 
     /**
@@ -174,33 +175,51 @@ public class SpecialFuture<T> {
     public T get()
     {
         T t = cache.get();
-        if (t != null) {
+        if (t != null)
+        {
             return t;
         }
         BlockingQueue<T> queue = new ArrayBlockingQueue<>(1);
         thenAccept(queue::add);
-        try {
+        try
+        {
             t = queue.poll(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
-        if (t == null) {
+        if (t == null)
+        {
             throw new RuntimeException("Blocking task timed out!");
         }
         return t;
     }
 
+    public SpecialFuture<T> thenAccept(Consumer<T> c)
+    {
+        if (cache.get() == null)
+        {
+            asyncTasks.add(c);
+            return this;
+        }
+        c.accept(cache.get());
+        return this;
+    }
+
     public SpecialFuture<T> handleException(Consumer<Exception> handler)
     {
-        if (cache.get() != null) {
+        if (cache.get() != null)
+        {
             return this;
         }
         Exception ex = exception.get();
-        if (ex != null) {
+        if (ex != null)
+        {
             handler.accept(ex);
             return this;
         }
-        if (ex == null) {
+        if (ex == null)
+        {
             exHandlers.add(handler);
         }
         return this;
@@ -208,7 +227,8 @@ public class SpecialFuture<T> {
 
     public SpecialFuture<T> thenAcceptAsync(Consumer<T> c)
     {
-        if (cache.get() == null) {
+        if (cache.get() == null)
+        {
             asyncTasks.add(c);
             return this;
         }
@@ -218,23 +238,23 @@ public class SpecialFuture<T> {
 
     public <U> SpecialFuture<U> thenApply(Function<T, U> func)
     {
-        return SpecialFuture.supplyAsync(() ->
-        {
+        return SpecialFuture.supplyAsync(() -> {
             BlockingQueue<U> queue = new ArrayBlockingQueue<>(1);
-            SpecialFuture.this.thenAccept((t) ->
-            {
+            SpecialFuture.this.thenAccept((t) -> {
                 queue.add(func.apply(t));
             });
             U u = null;
-            try {
+            try
+            {
                 u = queue.poll(10, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 e.printStackTrace();
             }
-            if (u == null) {
+            if (u == null)
+            {
                 RuntimeException ex = new RuntimeException("Function could not apply because the previous future timed out! Check above for errors");
-                sync.scheduleSyncDelayedTask(plugin, () ->
-                {
+                sync.scheduleSyncDelayedTask(plugin, () -> {
                     ex.printStackTrace();
                 });
                 throw ex;

@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayInSettings extends WrappedPacket {
+public class PacketPlayInSettings extends WrappedPacket
+{
     public boolean chatColors;
     public ChatVisibility chatVisibility;
     public String locale;
@@ -30,14 +31,14 @@ public class PacketPlayInSettings extends WrappedPacket {
         return PacketInType.Settings.newPacket(locale, viewDistance, chatVisibility.toVanillaChatVisibility(), chatColors, skinParts);
     }
 
-    public enum ChatVisibility {
-        FULL,
-        SYSTEM,
-        HIDDEN;
+    public enum ChatVisibility
+    {
+        FULL, SYSTEM, HIDDEN;
 
         private static final Method valueOf;
 
-        static {
+        static
+        {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("EntityHuman$EnumChatVisibility"), "valueOf", String.class);
         }
 
@@ -47,9 +48,11 @@ public class PacketPlayInSettings extends WrappedPacket {
 
         public Object toVanillaChatVisibility()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

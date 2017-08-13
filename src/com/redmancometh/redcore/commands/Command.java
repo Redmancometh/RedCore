@@ -1,43 +1,51 @@
 package com.redmancometh.redcore.commands;
 
-import com.redmancometh.redcore.api.*;
+import com.redmancometh.redcore.api.ChatAPI;
+import com.redmancometh.redcore.api.TitleAPI;
+import com.redmancometh.redcore.api.VariableAPI;
 import com.redmancometh.redcore.config.StringSerializable;
-import com.redmancometh.redcore.spigotutils.*;
-import org.bukkit.*;
+import com.redmancometh.redcore.spigotutils.ItemUtils;
+import com.redmancometh.redcore.spigotutils.SU;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Note;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import static com.redmancometh.redcore.api.BungeeAPI.executeBungeeCommands;
-import static com.redmancometh.redcore.api.BungeeAPI.executeServerCommands;
 import static com.redmancometh.redcore.spigotutils.SU.pl;
 
-public class Command implements StringSerializable {
+public class Command implements StringSerializable
+{
     public static HashMap<String, CustomCommandHandler> customCommands = new HashMap();
 
-    static {
+    static
+    {
         customCommands.put("ABM", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 ChatAPI.sendJsonMsg(ChatAPI.ChatMessageType.ACTION_BAR, text, plr);
-            } else {
+            } else
+            {
                 cs.sendMessage("§cABM:§f " + text);
-            }
-            return true;
-        });
-        customCommands.put("BUNGEE", (cs, text, args) -> {
-            if (cs instanceof Entity) {
-                Entity plr = (Entity) cs;
-                executeBungeeCommands(new String[]{text}, plr.getName());
             }
             return true;
         });
         customCommands.put("CHANCE", (cs, text, args) -> SU.rand.nextDouble() < Double.valueOf(text));
         customCommands.put("CLOSEINV", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 ((Player) cs).closeInventory();
                 return true;
             }
@@ -48,7 +56,8 @@ public class Command implements StringSerializable {
             return true;
         });
         customCommands.put("DAMAGE", (cs, text, args) -> {
-            if (cs instanceof LivingEntity) {
+            if (cs instanceof LivingEntity)
+            {
                 LivingEntity plr = (LivingEntity) cs;
                 plr.damage(Double.valueOf(text));
                 return true;
@@ -56,25 +65,26 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("ECON", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 return SU.econ.depositPlayer(plr, Double.valueOf(text)).transactionSuccess();
             }
             return false;
         });
         customCommands.put("ECONSET", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 double dif = Double.valueOf(text) - SU.econ.getBalance(plr);
-                if (dif > 0)
-                    return SU.econ.depositPlayer(plr, dif).transactionSuccess();
-                else if (dif < 0)
-                    return SU.econ.withdrawPlayer(plr, -dif).transactionSuccess();
+                if (dif > 0) return SU.econ.depositPlayer(plr, dif).transactionSuccess();
+                else if (dif < 0) return SU.econ.withdrawPlayer(plr, -dif).transactionSuccess();
             }
             return false;
         });
         customCommands.put("EXPLOSION", (cs, text, args) -> {
-            if (cs instanceof Entity) {
+            if (cs instanceof Entity)
+            {
                 Entity plr = (Entity) cs;
                 Location loc = plr.getLocation();
                 plr.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), Float.valueOf(text), false, false);
@@ -85,12 +95,14 @@ public class Command implements StringSerializable {
             String[] data = text.split(" ");
             Location loc = null;
             int firstId = 1;
-            if (!data[0].equals("*")) {
+            if (!data[0].equals("*"))
+            {
                 firstId = 4;
                 loc = new Location(Bukkit.getWorld(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
             }
             int length = data.length;
-            for (int id = firstId; id < length; id++) {
+            for (int id = firstId; id < length; id++)
+            {
                 String[] d = data[id].split(":");
                 Instrument instrument = Instrument.valueOf(d[0]);
                 Note note = new Note(Integer.valueOf(d[1]));
@@ -102,24 +114,25 @@ public class Command implements StringSerializable {
         customCommands.put("GPARTICLE", (cs, text, args) -> {
             String[] data = text.split(" ");
             Location loc = new Location(Bukkit.getWorld(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
-            loc.getWorld().spigot().playEffect(loc, Effect.valueOf(data[4]), Integer.valueOf(data[5]), Integer.valueOf(data[6]),
-                    Float.valueOf(data[7]), Float.valueOf(data[8]), Float.valueOf(data[9]), Float.valueOf(data[10]),
-                    Integer.valueOf(data[11]), Integer.valueOf(data[12]));
+            loc.getWorld().spigot().playEffect(loc, Effect.valueOf(data[4]), Integer.valueOf(data[5]), Integer.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]), Float.valueOf(data[9]), Float.valueOf(data[10]), Integer.valueOf(data[11]), Integer.valueOf(data[12]));
             return true;
         });
         customCommands.put("GSOUND", (cs, text, args) -> {
             String[] data = text.split(" ", 7);
-            if (data.length == 6) {
+            if (data.length == 6)
+            {
                 Location loc = new Location(Bukkit.getWorld(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
                 loc.getWorld().playSound(loc, Sound.valueOf(data[4]), Float.valueOf(data[5]), Float.valueOf(data[6]));
-            } else if (data.length == 3) {
+            } else if (data.length == 3)
+            {
                 Location loc = ((Entity) cs).getLocation();
                 loc.getWorld().playSound(loc, Sound.valueOf(data[0]), Float.valueOf(data[1]), Float.valueOf(data[2]));
             }
             return true;
         });
         customCommands.put("HP", (cs, text, args) -> {
-            if (cs instanceof LivingEntity) {
+            if (cs instanceof LivingEntity)
+            {
                 LivingEntity plr = (LivingEntity) cs;
                 plr.setHealth(Math.min(Double.valueOf(text), plr.getMaxHealth()));
                 return true;
@@ -127,7 +140,8 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("KICK", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 ((Player) cs).kickPlayer(text);
                 return true;
             }
@@ -138,7 +152,8 @@ public class Command implements StringSerializable {
             return true;
         });
         customCommands.put("MAXHP", (cs, text, args) -> {
-            if (cs instanceof LivingEntity) {
+            if (cs instanceof LivingEntity)
+            {
                 LivingEntity plr = (LivingEntity) cs;
                 plr.setMaxHealth(Double.valueOf(text));
                 return true;
@@ -146,17 +161,20 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("MSG", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 ChatAPI.sendJsonMsg(ChatAPI.ChatMessageType.SYSTEM, text, plr);
-            } else {
+            } else
+            {
                 cs.sendMessage(text);
             }
             return true;
         });
         customCommands.put("NOCMD", (cs, text, args) -> true);
         customCommands.put("NORMAL", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 plr.chat(text);
                 return true;
@@ -164,17 +182,20 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("NOTE", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 String[] data = text.split(" ");
                 Location loc = plr.getLocation();
                 int firstId = 1;
-                if (!data[0].equals("*")) {
+                if (!data[0].equals("*"))
+                {
                     firstId = 4;
                     loc = new Location(Bukkit.getWorld(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]), Double.valueOf(data[3]));
                 }
                 int length = data.length;
-                for (int id = firstId; id < length; id++) {
+                for (int id = firstId; id < length; id++)
+                {
                     String[] d = data[id].split(":");
                     Instrument instrument = Instrument.valueOf(d[0]);
                     Note note = new Note(Integer.valueOf(d[1]));
@@ -185,7 +206,8 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("OP", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 boolean wasOp = plr.isOp();
                 plr.setOp(true);
@@ -196,13 +218,12 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("PARTICLE", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 String[] data = text.split(" ");
                 Location loc = new Location(plr.getWorld(), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]));
-                plr.spigot().playEffect(loc, Effect.valueOf(data[3]), Integer.valueOf(data[4]), Integer.valueOf(data[5]),
-                        Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]), Float.valueOf(data[9]),
-                        Integer.valueOf(data[10]), Integer.valueOf(data[11]));
+                plr.spigot().playEffect(loc, Effect.valueOf(data[3]), Integer.valueOf(data[4]), Integer.valueOf(data[5]), Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]), Float.valueOf(data[9]), Integer.valueOf(data[10]), Integer.valueOf(data[11]));
                 return true;
             }
             return false;
@@ -211,11 +232,14 @@ public class Command implements StringSerializable {
         customCommands.put("PERMREM", (cs, text, args) -> cs instanceof Player && SU.perm.playerRemove((Player) cs, text));
 
         customCommands.put("POTION", (cs, text, args) -> {
-            if (cs instanceof LivingEntity) {
+            if (cs instanceof LivingEntity)
+            {
                 LivingEntity ent = (LivingEntity) cs;
                 ArrayList<PotionEffect> effects = new ArrayList<>();
-                for (String s : text.split(" ")) {
-                    try {
+                for (String s : text.split(" "))
+                {
+                    try
+                    {
                         String[] d = s.split(":");
                         PotionEffectType type = PotionEffectType.getByName(d[0]);
                         boolean particles = !(d[d.length - 1].equals("NP") || d[d.length - 2].equals("NP"));
@@ -224,7 +248,8 @@ public class Command implements StringSerializable {
                         int duration = Integer.valueOf(d[d.length - c]);
                         int level = d.length == c + 2 ? 0 : Integer.valueOf(d[1]);
                         effects.add(new PotionEffect(type, duration, level, ambient, particles));
-                    } catch (Throwable e) {
+                    } catch (Throwable e)
+                    {
                         e.printStackTrace();
                     }
                 }
@@ -233,25 +258,9 @@ public class Command implements StringSerializable {
             }
             return false;
         });
-        customCommands.put("SEND", (cs, text, args) -> {
-            if (cs instanceof Player) {
-                Player plr = (Player) cs;
-                BungeeAPI.send(text, plr);
-                return true;
-            }
-            return false;
-        });
-        customCommands.put("SERVER", (cs, text, args) -> {
-            if (cs instanceof Player) {
-                Player plr = (Player) cs;
-                String[] d = text.split(" ", 2);
-                String[] servers = d[0].split("[,;]");
-                executeServerCommands(d[1].split(";"), servers);
-            }
-            return true;
-        });
         customCommands.put("SETITEM", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 PlayerInventory pi = ((Player) cs).getInventory();
                 String[] d = text.split(" ", 2);
                 pi.setItem(Integer.valueOf(d[0]), ItemUtils.stringToItemStack(d[1]));
@@ -260,13 +269,16 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("SOUND", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 String[] data = text.split(" ", 6);
-                if (data.length == 6) {
+                if (data.length == 6)
+                {
                     Location loc = new Location(plr.getWorld(), Double.valueOf(data[0]), Double.valueOf(data[1]), Double.valueOf(data[2]));
                     plr.playSound(loc, data[3], Float.valueOf(data[4]), Float.valueOf(data[5]));
-                } else if (data.length == 3) {
+                } else if (data.length == 3)
+                {
                     plr.playSound(plr.getLocation(), data[0], Float.valueOf(data[1]), Float.valueOf(data[2]));
                 }
                 return true;
@@ -274,16 +286,19 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("SUBTITLE", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 TitleAPI.setSubTitle(text, plr);
-            } else {
+            } else
+            {
                 cs.sendMessage("§bSUBTITLE:§f " + text);
             }
             return true;
         });
         customCommands.put("TS", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 String[] times = text.split(" ", 3);
                 TitleAPI.setShowTime(Integer.valueOf(times[0]), Integer.valueOf(times[1]), Integer.valueOf(times[2]), plr);
@@ -293,16 +308,19 @@ public class Command implements StringSerializable {
         });
 
         customCommands.put("TITLE", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 TitleAPI.setTitle(text, plr);
-            } else {
+            } else
+            {
                 cs.sendMessage("§eTITLE:§f " + text);
             }
             return true;
         });
         customCommands.put("XPLEVEL", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 plr.setLevel(Integer.valueOf(text));
                 return true;
@@ -310,7 +328,8 @@ public class Command implements StringSerializable {
             return false;
         });
         customCommands.put("XP", (cs, text, args) -> {
-            if (cs instanceof Player) {
+            if (cs instanceof Player)
+            {
                 Player plr = (Player) cs;
                 plr.setExp(Math.max(Math.min(Float.valueOf(text), 1), 0));
                 return true;
@@ -325,15 +344,18 @@ public class Command implements StringSerializable {
 
     public Command(String in)
     {
-        if (in.startsWith("{")) {
+        if (in.startsWith("{"))
+        {
             int id = in.indexOf('}');
             delay = Integer.valueOf(in.substring(1, id));
             in = in.substring(id + 1);
         }
         String[] s = in.split(":", 2);
-        if (s.length == 1) {
+        if (s.length == 1)
+        {
             cmd = in;
-        } else {
+        } else
+        {
             cmd = s[1];
             type = s[0];
         }
@@ -341,38 +363,36 @@ public class Command implements StringSerializable {
 
     public static boolean executeAll(CommandSender sender, ArrayList<Command> list, Object... args)
     {
-        if (sender == null || list == null)
-            return false;
+        if (sender == null || list == null) return false;
         for (Command c : list)
-            if (!c.execute(sender, args))
-                return false;
+            if (!c.execute(sender, args)) return false;
         return true;
     }
 
     public boolean execute(CommandSender sender, Object... args)
     {
-        if (sender == null)
-            return false;
-        if (delay < 0)
-            return executeNow(sender, args);
+        if (sender == null) return false;
+        if (delay < 0) return executeNow(sender, args);
         SU.sch.scheduleSyncDelayedTask(pl(), new DelayedCommandExecutor(this, sender, args), delay);
         return true;
     }
 
     public boolean executeNow(CommandSender sender, Object... args)
     {
-        if (sender == null)
-            return false;
+        if (sender == null) return false;
         Player plr = sender instanceof Player ? (Player) sender : null;
         String text = VariableAPI.fillVariables(cmd, plr, args);
-        try {
+        try
+        {
             CustomCommandHandler h = customCommands.get(type);
-            if (h == null) {
+            if (h == null)
+            {
                 sender.sendMessage("§cCommandAPI: §eHandler for command \"§f" + type + "§e\" was not found.");
                 return false;
             }
             return h.handle(sender, text, args);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.cs.sendMessage("§cCommandAPI: §eError on executing command \"§b" + type + ":§f" + text + "§e\" for sender " + (sender == null ? "null" : sender.getName()) + ".");
             SU.error(sender, e, "RedCore", "com.redmancometh");
             return false;
@@ -381,12 +401,11 @@ public class Command implements StringSerializable {
 
     public static boolean executeAll(Iterable<String> plns, ArrayList<Command> list, Object... args)
     {
-        if (plns == null || list == null)
-            return false;
-        for (String pln : plns) {
+        if (plns == null || list == null) return false;
+        for (String pln : plns)
+        {
             Entity p = Bukkit.getPlayerExact(pln);
-            if (p == null)
-                continue;
+            if (p == null) continue;
             for (Command c : list)
                 c.execute(p, args);
         }
@@ -395,12 +414,11 @@ public class Command implements StringSerializable {
 
     public static boolean executeAll(Iterable<? extends Entity> pls, Entity plr, ArrayList<Command> list, Object... args)
     {
-        if (list == null || pls == null)
-            return false;
-        for (Entity p : pls) {
-            if (p != plr)
-                for (Command c : list)
-                    c.execute(p, args);
+        if (list == null || pls == null) return false;
+        for (Entity p : pls)
+        {
+            if (p != plr) for (Command c : list)
+                c.execute(p, args);
         }
         return true;
     }

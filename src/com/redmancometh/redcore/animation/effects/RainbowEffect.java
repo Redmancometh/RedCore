@@ -3,7 +3,8 @@ package com.redmancometh.redcore.animation.effects;
 import com.redmancometh.redcore.animation.CustomEffect;
 import com.redmancometh.redcore.spigotutils.SU;
 
-public class RainbowEffect implements CustomEffect {
+public class RainbowEffect implements CustomEffect
+{
     public boolean random;
     public int state = -1;
 

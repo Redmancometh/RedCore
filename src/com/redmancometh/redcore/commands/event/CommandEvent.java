@@ -1,9 +1,11 @@
 package com.redmancometh.redcore.commands.event;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
-public abstract class CommandEvent extends Event implements Cancellable {
+public abstract class CommandEvent extends Event implements Cancellable
+{
     private boolean cancel;
     private String command;
     private CommandSender sender;

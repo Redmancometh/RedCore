@@ -1,6 +1,10 @@
 package com.redmancometh.redcore.animation;
 
-import com.redmancometh.redcore.animation.effects.*;
+import com.redmancometh.redcore.animation.effects.BlinkEffect;
+import com.redmancometh.redcore.animation.effects.FlameEffect;
+import com.redmancometh.redcore.animation.effects.FramesEffect;
+import com.redmancometh.redcore.animation.effects.RainbowEffect;
+import com.redmancometh.redcore.animation.effects.ScrollerEffect;
 import com.redmancometh.redcore.api.VariableAPI;
 import com.redmancometh.redcore.api.VariableAPI.VariableHandler;
 import com.redmancometh.redcore.spigotutils.SU;
@@ -8,10 +12,14 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-public final class AnimationAPI {
+public final class AnimationAPI
+{
     protected static final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
     public static HashMap<String, Class> effects = new HashMap();
     private static HashMap<Plugin, HashMap<String, HashSet<AnimationRunnable>>> runningAnimations = new HashMap();
@@ -31,8 +39,7 @@ public final class AnimationAPI {
 
     public static AnimationRunnable runAnimation(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener)
     {
-        if (pl == null || a == null || plr == null || listener == null)
-            return null;
+        if (pl == null || a == null || plr == null || listener == null) return null;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.computeIfAbsent(pl, k -> new HashMap<>());
         HashSet<AnimationRunnable> ars = map.computeIfAbsent(plr.getName(), k -> new HashSet<>());
         AnimationRunnable ar = new AnimationRunnable(pl, a, name, plr, listener);
@@ -42,11 +49,9 @@ public final class AnimationAPI {
 
     public static void stopRunningAnimation(AnimationRunnable ar)
     {
-        if (ar == null)
-            return;
+        if (ar == null) return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.get(ar.pl);
-        if (map == null || map.isEmpty())
-            return;
+        if (map == null || map.isEmpty()) return;
         HashSet<AnimationRunnable> ars = map.get(ar.plr.getName());
         ars.remove(ar);
         ar.stop();
@@ -54,25 +59,22 @@ public final class AnimationAPI {
 
     public static void stopRunningAnimations(Player plr)
     {
-        if (plr == null)
-            return;
-        for (HashMap<String, HashSet<AnimationRunnable>> map : runningAnimations.values()) {
+        if (plr == null) return;
+        for (HashMap<String, HashSet<AnimationRunnable>> map : runningAnimations.values())
+        {
             HashSet<AnimationRunnable> ars = map.remove(plr.getName());
-            if (ars != null)
-                for (AnimationRunnable ar : ars)
-                    if (ar.future != null)
-                        ar.future.cancel(true);
+            if (ars != null) for (AnimationRunnable ar : ars)
+                if (ar.future != null) ar.future.cancel(true);
         }
     }
 
     public static void stopRunningAnimations(Plugin pl)
     {
-        if (pl == null)
-            return;
+        if (pl == null) return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.remove(pl);
-        if (map == null || map.isEmpty())
-            return;
-        for (HashSet<AnimationRunnable> ars : map.values()) {
+        if (map == null || map.isEmpty()) return;
+        for (HashSet<AnimationRunnable> ars : map.values())
+        {
             for (AnimationRunnable ar : ars)
                 ar.stop();
         }
@@ -80,18 +82,16 @@ public final class AnimationAPI {
 
     public static void stopRunningAnimations(Plugin pl, Player plr)
     {
-        if (pl == null || plr == null)
-            return;
+        if (pl == null || plr == null) return;
         HashMap<String, HashSet<AnimationRunnable>> map = runningAnimations.get(pl);
-        if (map == null || map.isEmpty())
-            return;
+        if (map == null || map.isEmpty()) return;
         HashSet<AnimationRunnable> ars = map.remove(plr.getName());
-        if (ars != null)
-            for (AnimationRunnable ar : ars)
-                ar.stop();
+        if (ars != null) for (AnimationRunnable ar : ars)
+            ar.stop();
     }
 
-    public static class CustomEffectHandler implements VariableHandler {
+    public static class CustomEffectHandler implements VariableHandler
+    {
         public final String name;
 
         public CustomEffectHandler(String name)
@@ -105,7 +105,8 @@ public final class AnimationAPI {
             AnimationRunnable ar = (AnimationRunnable) oArgs[0];
             String[] d = StringUtils.join(inside, "").split(":", 2);
             CustomEffect effect = ar.effects.get(name).get(d[0]);
-            if (effect != null) {
+            if (effect != null)
+            {
                 String text = d.length <= 1 ? effect.getText() : d[1];
                 return effect.next(VariableAPI.fillVariables(text, plr, oArgs));
             }

@@ -2,9 +2,11 @@ package com.redmancometh.redcore.animation.effects;
 
 import com.redmancometh.redcore.animation.CustomEffect;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
 
-public class ScrollerEffect implements CustomEffect {
+public class ScrollerEffect implements CustomEffect
+{
     public char fill = 32;
     public int max = 80;
     public boolean reversed;
@@ -65,59 +67,74 @@ public class ScrollerEffect implements CustomEffect {
         int inc = speed;
         char colorPrefix = ' ';
         char[] chars = text.toCharArray();
-        for (int i3 = 1; i3 < max; ++i3) {
+        for (int i3 = 1; i3 < max; ++i3)
+        {
             int id2 = (start + max - i3) % max;
             if (chars.length <= id2 || chars[id2] != '\u00a7' || chars.length <= (id2 = (id2 + 1) % max)) continue;
             c = chars[id2];
-            if (c < 'k' || c > 'o') {
+            if (c < 'k' || c > 'o')
+            {
                 colorPrefix = c;
                 break;
             }
             formats.add(Character.valueOf(c));
         }
         int n = i2 = chars.length > (id = (start + max - 1) % max) && chars[id] == '\u00a7' ? 1 : 0;
-        while (i2 < size && chars.length > (id = (start + i2) % max) && chars[id] == '\u00a7') {
+        while (i2 < size && chars.length > (id = (start + i2) % max) && chars[id] == '\u00a7')
+        {
             id = (start + i2 + 1) % max;
-            if (chars.length > id) {
+            if (chars.length > id)
+            {
                 c = chars[id];
-                if (skipColors) {
+                if (skipColors)
+                {
                     inc += 2;
                 }
-                if (c < 'k' || c > 'o') {
+                if (c < 'k' || c > 'o')
+                {
                     formats.clear();
                     colorPrefix = c;
-                } else {
+                } else
+                {
                     formats.add(Character.valueOf(c));
                 }
             }
             i2 += 2;
         }
-        if (colorPrefix != ' ') {
+        if (colorPrefix != ' ')
+        {
             sb.append('\u00a7').append(colorPrefix);
         }
         Iterator i$ = formats.iterator();
-        while (i$.hasNext()) {
+        while (i$.hasNext())
+        {
             c = ((Character) i$.next()).charValue();
             sb.append('\u00a7').append(c);
         }
         id = (start + max - 1) % max;
         int n2 = i = chars.length > id && chars[id] == '\u00a7' ? 1 : 0;
-        while (sb.length() < size) {
+        while (sb.length() < size)
+        {
             id = (start + i) % max;
             sb.append(chars.length > id ? chars[id] : fill);
             ++i;
         }
-        if (sb.charAt(size - 1) == '\u00a7') {
+        if (sb.charAt(size - 1) == '\u00a7')
+        {
             sb.setCharAt(size - 1, fill);
         }
-        if (reversed) {
+        if (reversed)
+        {
             start -= inc;
-            if (start < 0) {
+            if (start < 0)
+            {
                 start = max - inc;
             }
-        } else {
+        } else
+        {
             start += inc;
-            if (start >= max) {
+            if (start >= max)
+            {
                 start = inc - 1;
             }
         }

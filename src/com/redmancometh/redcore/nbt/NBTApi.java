@@ -2,16 +2,19 @@ package com.redmancometh.redcore.nbt;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.spigotutils.SU;
-import io.netty.buffer.*;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import org.bukkit.entity.Entity;
 
 import java.io.DataInputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.redmancometh.redcore.spigotutils.SU.utf8;
 
-public class NBTApi {
+public class NBTApi
+{
     public static HashMap<Class, Integer> typeMap = new HashMap<>();
     public static Class[] types;
     static Method entityFillNBTTag;
@@ -19,7 +22,8 @@ public class NBTApi {
     static Class nmsEntityClass;
     static Method setEntityNBTData;
 
-    static {
+    static
+    {
         types = new Class[12];
         typeMap.put(Byte.class, 1);
         typeMap.put(Short.class, 2);
@@ -36,12 +40,14 @@ public class NBTApi {
 
     public static NBTCompound getNbtData(Entity ent)
     {
-        try {
+        try
+        {
             Object nmsEntity = getEntityHandle.invoke(ent);
             Object tag = NBTCompound.nmsClass.newInstance();
             entityFillNBTTag.invoke(nmsEntity, tag);
             return new NBTCompound(tag);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }
@@ -76,7 +82,8 @@ public class NBTApi {
 
     public static NBTTag readTag(DataInputStream bis, byte type) throws Throwable
     {
-        switch (type) {
+        switch (type)
+        {
             case 1:
                 return new NBTPrimitive(bis.readByte());
             case 2:
@@ -89,7 +96,8 @@ public class NBTApi {
                 return new NBTPrimitive(bis.readFloat());
             case 6:
                 return new NBTPrimitive(bis.readDouble());
-            case 7: {
+            case 7:
+            {
                 int len = bis.readInt();
                 byte[] ar = new byte[len];
                 bis.read(ar);
@@ -97,28 +105,34 @@ public class NBTApi {
             }
             case 8:
                 return new NBTPrimitive(readString(bis));
-            case 9: {
+            case 9:
+            {
                 byte listType = bis.readByte();
                 int len = bis.readInt();
                 NBTList out = new NBTList();
-                if (listType == 0 || len == 0) {
+                if (listType == 0 || len == 0)
+                {
                     return out;
                 }
                 for (int i = 0; i < len; ++i)
                     out.list.add(readTag(bis, listType));
                 return out;
             }
-            case 10: {
+            case 10:
+            {
                 NBTCompound out = new NBTCompound();
-                while (true) {
+                while (true)
+                {
                     byte compType = bis.readByte();
-                    if (compType == 0) {
+                    if (compType == 0)
+                    {
                         return out;
                     }
                     out.map.put(readString(bis), readTag(bis, compType));
                 }
             }
-            case 11: {
+            case 11:
+            {
                 int len = bis.readInt();
                 int[] ar = new int[len];
                 for (int i = 0; i < len; ++i)
@@ -141,10 +155,12 @@ public class NBTApi {
 
     public static void setNbtData(Entity ent, NBTCompound data)
     {
-        try {
+        try
+        {
             Object nmsEntity = getEntityHandle.invoke(ent);
             setEntityNBTData.invoke(nmsEntity, data.toNMS());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

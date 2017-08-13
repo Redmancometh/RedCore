@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutExperience extends WrappedPacket {
+public class PacketPlayOutExperience extends WrappedPacket
+{
     public float bar;
     public int level;
     public int totalExperience;

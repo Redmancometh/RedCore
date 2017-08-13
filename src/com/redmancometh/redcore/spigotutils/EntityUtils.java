@@ -1,34 +1,31 @@
 package com.redmancometh.redcore.spigotutils;
 
-import com.redmancometh.redcore.nbt.*;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.nbt.NBTApi;
+import com.redmancometh.redcore.nbt.NBTCompound;
+import com.redmancometh.redcore.nbt.NBTPrimitive;
+import com.redmancometh.redcore.protocol.utils.DataWatcher;
 import com.redmancometh.redcore.protocol.utils.WorldType;
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static com.redmancometh.redcore.protocol.Reflection.*;
 
 /**
  * Created by GyuriX on 2016. 06. 09..
  */
-public class EntityUtils {
-    public static final Class craftEntity = getOBCClass("entity.CraftEntity"),
-            nmsEntityCL = getNMSClass("Entity"),
-            craftWorldCL = getOBCClass("CraftWorld"),
-            nmsWorldCL = getNMSClass("World"),
-            nmsWorldDataCL = getNMSClass("WorldData");
-    public static final Method setLocationM = getMethod(nmsEntityCL, "setLocation", double.class, double.class, double.class, float.class, float.class),
-            bukkitEntityM = getMethod(nmsEntityCL, "getBukkitEntity");
-    public static Field killerField = getField(getNMSClass("EntityLiving"), "killer"),
-            nmsEntityF = getField(craftEntity, "entity"),
-            nmsWorldF = getField(craftWorldCL, "world"),
-            nmsWorldTypeF = getFirstFieldOfType(nmsWorldDataCL, WorldType.worldTypeCl),
-            nmsWorldDataF = getField(nmsWorldCL, "worldData"),
-            dataWatcherF = getField(nmsEntityCL, "datawatcher"),
-            craftWorldF = getField(nmsWorldCL, "world");
+public class EntityUtils
+{
+    public static final Class craftEntity = getOBCClass("entity.CraftEntity"), nmsEntityCL = getNMSClass("Entity"), craftWorldCL = getOBCClass("CraftWorld"), nmsWorldCL = getNMSClass("World"), nmsWorldDataCL = getNMSClass("WorldData");
+    public static final Method setLocationM = getMethod(nmsEntityCL, "setLocation", double.class, double.class, double.class, float.class, float.class), bukkitEntityM = getMethod(nmsEntityCL, "getBukkitEntity");
+    public static Field killerField = getField(getNMSClass("EntityLiving"), "killer"), nmsEntityF = getField(craftEntity, "entity"), nmsWorldF = getField(craftWorldCL, "world"), nmsWorldTypeF = getFirstFieldOfType(nmsWorldDataCL, WorldType.worldTypeCl), nmsWorldDataF = getField(nmsWorldCL, "worldData"), dataWatcherF = getField(nmsEntityCL, "datawatcher"), craftWorldF = getField(nmsWorldCL, "world");
 
     /**
      * Converts the given NMS entity to a Bukkit entity
@@ -38,9 +35,11 @@ public class EntityUtils {
      */
     public static Entity getBukkitEntity(Object ent)
     {
-        try {
+        try
+        {
             return (Entity) bukkitEntityM.invoke(ent);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -54,9 +53,11 @@ public class EntityUtils {
      */
     public static World getBukkitWorld(Object world)
     {
-        try {
+        try
+        {
             return (World) craftWorldF.get(world);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -70,9 +71,11 @@ public class EntityUtils {
      */
     public static DataWatcher getDataWatcher(Entity ent)
     {
-        try {
+        try
+        {
             return new DataWatcher(dataWatcherF.get(nmsEntityF.get(ent)));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -80,10 +83,10 @@ public class EntityUtils {
 
     public static Entity getEntityDamager(Entity ent)
     {
-        if (ent instanceof Projectile) {
+        if (ent instanceof Projectile)
+        {
             ProjectileSource src = ((Projectile) ent).getShooter();
-            if (src instanceof Entity)
-                return (Entity) src;
+            if (src instanceof Entity) return (Entity) src;
             return null;
         }
         return ent;
@@ -97,9 +100,11 @@ public class EntityUtils {
      */
     public static Object getNMSWorld(World world)
     {
-        try {
+        try
+        {
             return nmsWorldF.get(world);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -107,12 +112,11 @@ public class EntityUtils {
 
     public static Player getPlayerDamager(Entity ent)
     {
-        if (ent instanceof Player)
-            return (Player) ent;
-        if (ent instanceof Projectile) {
+        if (ent instanceof Player) return (Player) ent;
+        if (ent instanceof Projectile)
+        {
             ProjectileSource src = ((Projectile) ent).getShooter();
-            if (src instanceof Player)
-                return (Player) src;
+            if (src instanceof Player) return (Player) src;
         }
         return null;
     }
@@ -125,9 +129,11 @@ public class EntityUtils {
      */
     public static Object getWorldData(World w)
     {
-        try {
+        try
+        {
             return nmsWorldDataF.get(nmsWorldF.get(w));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -141,9 +147,11 @@ public class EntityUtils {
      */
     public static WorldType getWorldType(Object worldData)
     {
-        try {
+        try
+        {
             return WorldType.fromVanillaWorldType(nmsWorldTypeF.get(worldData));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -157,8 +165,7 @@ public class EntityUtils {
      */
     public static boolean hasNoAI(LivingEntity ent)
     {
-        if (ent == null)
-            return false;
+        if (ent == null) return false;
         NBTCompound nbt = NBTApi.getNbtData(ent);
         NBTPrimitive noAI = (NBTPrimitive) nbt.map.get("NoAI");
         return noAI != null && (int) noAI.data == 1;
@@ -172,9 +179,11 @@ public class EntityUtils {
      */
     public static void setDataWatcher(Entity ent, DataWatcher dw)
     {
-        try {
+        try
+        {
             dataWatcherF.set(nmsEntityF.get(ent), dw.toNMS());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
     }
@@ -188,9 +197,11 @@ public class EntityUtils {
     public static void setKiller(LivingEntity ent, Player killer)
     {
         Object nmsEnt = getNMSEntity(ent);
-        try {
+        try
+        {
             killerField.set(nmsEnt, killer == null ? null : getNMSEntity(killer));
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e)
+        {
 
         }
     }
@@ -203,9 +214,11 @@ public class EntityUtils {
      */
     public static Object getNMSEntity(Entity ent)
     {
-        try {
+        try
+        {
             return nmsEntityF.get(ent);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -219,8 +232,7 @@ public class EntityUtils {
      */
     public static void setNoAI(LivingEntity ent, boolean noAi)
     {
-        if (ent == null)
-            return;
+        if (ent == null) return;
         NBTCompound nbt = NBTApi.getNbtData(ent);
         nbt.set("NoAI", noAi ? 1 : 0);
         NBTApi.setNbtData(ent, nbt);
@@ -234,9 +246,11 @@ public class EntityUtils {
      */
     public static void teleport(Entity ent, Location loc)
     {
-        try {
+        try
+        {
             setLocationM.invoke(nmsEntityF.get(ent), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }

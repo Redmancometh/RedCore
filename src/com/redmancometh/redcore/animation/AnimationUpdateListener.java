@@ -3,7 +3,8 @@ package com.redmancometh.redcore.animation;
 /**
  * Interface represanting the listener for the frames of a running animation
  */
-public interface AnimationUpdateListener {
+public interface AnimationUpdateListener
+{
     /**
      * @param ar   - The running AnimationRunnable
      * @param text - The next of the current frame of the animation

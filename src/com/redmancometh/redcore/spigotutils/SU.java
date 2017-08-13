@@ -2,36 +2,64 @@ package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.animation.AnimationAPI;
-import com.redmancometh.redcore.api.*;
+import com.redmancometh.redcore.api.ChatAPI;
+import com.redmancometh.redcore.api.VariableAPI;
 import com.redmancometh.redcore.commands.CustomCommandMap;
 import com.redmancometh.redcore.listener.SUListener;
 import com.redmancometh.redcore.mojang.MojangAPI;
 import com.redmancometh.redcore.nbt.NBTApi;
-import com.redmancometh.redcore.protocol.*;
-import com.redmancometh.redcore.protocol.event.*;
+import com.redmancometh.redcore.protocol.Protocol;
+import com.redmancometh.redcore.protocol.Reflection;
+import com.redmancometh.redcore.protocol.event.PacketInType;
+import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.manager.ProtocolImpl;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.protocol.utils.GameProfile;
+import com.redmancometh.redcore.protocol.utils.WrapperFactory;
 import com.redmancometh.redcore.scoreboard.ScoreboardAPI;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.*;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import javax.script.*;
-import java.io.*;
-import java.lang.reflect.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.io.File;
+import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.redmancometh.redcore.commands.CustomCommandMap.knownCommands;
@@ -40,7 +68,8 @@ import static org.bukkit.Bukkit.getServer;
 /**
  * RedCore utilities class
  */
-public final class SU {
+public final class SU
+{
     public static final Charset utf8 = Charset.forName("UTF-8");
     /**
      * The instance of current Chat provider in Vault
@@ -123,11 +152,7 @@ public final class SU {
      */
     public static String escapeText(String text)
     {
-        return text.replace("\\", "\\\\")
-                .replace("_", "\\_")
-                .replace("|", "\\|")
-                .replace(" ", "_")
-                .replace("\n", "|");
+        return text.replace("\\", "\\\\").replace("_", "\\_").replace("|", "\\|").replace(" ", "_").replace("\n", "|");
     }
 
     /**
@@ -154,10 +179,11 @@ public final class SU {
     public static String fillVariables(String s, Object... vars)
     {
         String last = null;
-        for (Object v : vars) {
-            if (last == null)
-                last = (String) v;
-            else {
+        for (Object v : vars)
+        {
+            if (last == null) last = (String) v;
+            else
+            {
                 s = s.replace('<' + last + '>', String.valueOf(v));
                 last = null;
             }
@@ -177,10 +203,11 @@ public final class SU {
         ArrayList<String> out = new ArrayList<>();
         iterable.forEach((s) -> {
             String last = null;
-            for (Object v : vars) {
-                if (last == null)
-                    last = (String) v;
-                else {
+            for (Object v : vars)
+            {
+                if (last == null) last = (String) v;
+                else
+                {
                     s = s.replace('<' + last + '>', String.valueOf(v));
                     last = null;
                 }
@@ -201,9 +228,9 @@ public final class SU {
     {
         start = start.toLowerCase();
         ArrayList<String> ld = new ArrayList<>();
-        for (String s : data) {
-            if (s.toLowerCase().startsWith(start))
-                ld.add(s);
+        for (String s : data)
+        {
+            if (s.toLowerCase().startsWith(start)) ld.add(s);
         }
         Collections.sort(ld);
         return ld;
@@ -220,9 +247,9 @@ public final class SU {
     {
         start = start.toLowerCase();
         ArrayList<String> ld = new ArrayList<>();
-        for (String s : data) {
-            if (s.toLowerCase().startsWith(start))
-                ld.add(s);
+        for (String s : data)
+        {
+            if (s.toLowerCase().startsWith(start)) ld.add(s);
         }
         Collections.sort(ld);
         return ld;
@@ -236,9 +263,11 @@ public final class SU {
      */
     public static int getPing(Player plr)
     {
-        try {
+        try
+        {
             return pingF.getInt(entityF.get(plr));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
         return -1;
@@ -252,16 +281,15 @@ public final class SU {
      */
     public static Player getPlayer(String name)
     {
-        if (name.length() > 16) {
+        if (name.length() > 16)
+        {
             UUID uuid = UUID.fromString(name);
             Player p = Bukkit.getPlayer(uuid);
-            if (p == null)
-                p = loadPlayer(uuid);
+            if (p == null) p = loadPlayer(uuid);
             return p;
         }
         Player p = Bukkit.getPlayerExact(name);
-        if (p == null)
-            p = loadPlayer(getUUID(name));
+        if (p == null) p = loadPlayer(getUUID(name));
         return p;
     }
 
@@ -273,21 +301,26 @@ public final class SU {
      */
     public static Player loadPlayer(UUID uuid)
     {
-        try {
-            if (uuid == null) {
+        try
+        {
+            if (uuid == null)
+            {
                 return null;
             }
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            if (player == null || !player.hasPlayedBefore()) {
+            if (player == null || !player.hasPlayedBefore())
+            {
                 return null;
             }
 
             Player plr = (Player) getBukkitEntityM.invoke(entityPlayerC.newInstance(mcServer, worldServer, new GameProfile(player.getName(), uuid).toNMS(), playerInterractManagerC.newInstance(worldServer)));
-            if (plr != null) {
+            if (plr != null)
+            {
                 loadDataM.invoke(plr);
                 return plr;
             }
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -302,21 +335,20 @@ public final class SU {
     public static UUID getUUID(String name)
     {
         Player plr = Bukkit.getPlayer(name);
-        if (plr != null)
-            return plr.getUniqueId();
+        if (plr != null) return plr.getUniqueId();
         OfflinePlayer[] offlinePls = Bukkit.getOfflinePlayers();
-        for (OfflinePlayer p : offlinePls) {
-            if (p.getName() != null && p.getName().equals(name))
-                return p.getUniqueId();
+        for (OfflinePlayer p : offlinePls)
+        {
+            if (p.getName() != null && p.getName().equals(name)) return p.getUniqueId();
         }
         name = name.toLowerCase();
-        for (OfflinePlayer p : offlinePls) {
-            if (p.getName() != null && p.getName().toLowerCase().equals(name))
-                return p.getUniqueId();
+        for (OfflinePlayer p : offlinePls)
+        {
+            if (p.getName() != null && p.getName().toLowerCase().equals(name)) return p.getUniqueId();
         }
-        for (OfflinePlayer p : offlinePls) {
-            if (p.getName() != null && p.getName().toLowerCase().contains(name))
-                return p.getUniqueId();
+        for (OfflinePlayer p : offlinePls)
+        {
+            if (p.getName() != null && p.getName().toLowerCase().contains(name)) return p.getUniqueId();
         }
         return getOnlineUUID(name);
     }
@@ -333,37 +365,31 @@ public final class SU {
     public static void error(CommandSender sender, Throwable err, String plugin, String author)
     {
         StringBuilder report = new StringBuilder();
-        report.append("§4§l").append(plugin).append(" - ERROR REPORT - ")
-                .append(err.getClass().getSimpleName());
-        if (err.getMessage() != null)
-            report.append('\n').append(err.getMessage());
+        report.append("§4§l").append(plugin).append(" - ERROR REPORT - ").append(err.getClass().getSimpleName());
+        if (err.getMessage() != null) report.append('\n').append(err.getMessage());
         int i = 0;
         boolean startrep = true;
-        for (StackTraceElement el : err.getStackTrace()) {
+        for (StackTraceElement el : err.getStackTrace())
+        {
             boolean force = el.getClassName() != null && el.getClassName().contains(author);
-            if (force)
-                startrep = false;
+            if (force) startrep = false;
             if (startrep || force)
-                report.append("\n§c #").append(++i)
-                        .append(": §eLINE §a").append(el.getLineNumber())
-                        .append("§e in FILE §6").append(el.getFileName())
-                        .append("§e (§7").append(el.getClassName())
-                        .append("§e.§b").append(el.getMethodName())
-                        .append("§e)");
+                report.append("\n§c #").append(++i).append(": §eLINE §a").append(el.getLineNumber()).append("§e in FILE §6").append(el.getFileName()).append("§e (§7").append(el.getClassName()).append("§e.§b").append(el.getMethodName()).append("§e)");
         }
         String rep = report.toString();
         cs.sendMessage(rep);
-        if (sender != null && sender != cs)
-            sender.sendMessage(rep);
+        if (sender != null && sender != cs) sender.sendMessage(rep);
     }
 
     public static UUID getOnlineUUID(String name)
     {
         name = name.toLowerCase();
         UUID uid = uuidCache.get(name);
-        if (uid == null) {
+        if (uid == null)
+        {
             GameProfile prof = MojangAPI.getProfile(name);
-            if (prof == null) {
+            if (prof == null)
+            {
                 cs.sendMessage("§cInvalid online player name: §e" + name + "§c. Using offline UUID.");
                 return getOfflineUUID(name);
             }
@@ -381,11 +407,9 @@ public final class SU {
     public static Player getPlayer(UUID uid)
     {
         Player plr = Bukkit.getPlayer(uid);
-        if (plr != null)
-            return plr;
+        if (plr != null) return plr;
         OfflinePlayer op = Bukkit.getOfflinePlayer(uid);
-        if (op != null)
-            return loadPlayer(uid);
+        if (op != null) return loadPlayer(uid);
         return null;
     }
 
@@ -397,9 +421,11 @@ public final class SU {
      */
     public static GameProfile getProfile(Player plr)
     {
-        try {
+        try
+        {
             return new GameProfile(plr.getClass().getMethod("getProfile").invoke(plr));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -414,12 +440,11 @@ public final class SU {
     public static UUID getUUIDExact(String name)
     {
         Player plr = Bukkit.getPlayer(name);
-        if (plr != null)
-            return plr.getUniqueId();
+        if (plr != null) return plr.getUniqueId();
         OfflinePlayer[] offlinePls = Bukkit.getOfflinePlayers();
-        for (OfflinePlayer p : offlinePls) {
-            if (p.getName() != null && p.getName().equals(name))
-                return p.getUniqueId();
+        for (OfflinePlayer p : offlinePls)
+        {
+            if (p.getName() != null && p.getName().equals(name)) return p.getUniqueId();
         }
         return MojangAPI.getProfile(name).id;
     }
@@ -433,16 +458,17 @@ public final class SU {
         msg = srv.getMessenger();
         sm = srv.getServicesManager();
         sch = srv.getScheduler();
-        cs.sendMessage(pl.toString());
         js = new ScriptEngineManager().getEngineByName("JavaScript");
         pluginsF = Reflection.getField(pm.getClass(), "plugins");
         lookupNamesF = Reflection.getField(pm.getClass(), "lookupNames");
         registerVariables();
         Reflection.init();
         tp = new ProtocolImpl();
-        try {
+        try
+        {
             tp.init();
-        } catch (Throwable ignored) {
+        } catch (Throwable ignored)
+        {
             schedulePacketAPI = true;
         }
         AnimationAPI.init();
@@ -460,9 +486,11 @@ public final class SU {
     {
         VariableAPI.handlers.put("eval", (plr, inside, oArgs) -> {
             String s = StringUtils.join(inside, "");
-            try {
+            try
+            {
                 return SU.js.eval(s);
-            } catch (ScriptException e) {
+            } catch (ScriptException e)
+            {
                 return "<eval:" + s + '>';
             }
         });
@@ -488,7 +516,8 @@ public final class SU {
             String pref = SU.unescapeText(s[1]);
             String text = s[2];
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < text.length(); i += max) {
+            for (int i = 0; i < text.length(); i += max)
+            {
                 sb.append('\n').append(pref).append(text.substring(i, Math.min(text.length(), i + max)));
             }
             return sb.length() == 0 ? "" : sb.substring(1);
@@ -537,10 +566,7 @@ public final class SU {
 
     public static String unescapeText(String text)
     {
-        return (' ' + text).replaceAll("([^\\\\])_", "$1 ")
-                .replaceAll("([^\\\\])\\|", "$1\n")
-                .replaceAll("([^\\\\])\\\\([_\\|])", "$1$2")
-                .replace("\\\\", "\\").substring(1);
+        return (' ' + text).replaceAll("([^\\\\])_", "$1 ").replaceAll("([^\\\\])\\|", "$1\n").replaceAll("([^\\\\])\\\\([_\\|])", "$1$2").replace("\\\\", "\\").substring(1);
     }
 
     /**
@@ -563,7 +589,8 @@ public final class SU {
     public static ArrayList<String> namesFromUUIDs(Collection<UUID> uuids)
     {
         ArrayList<String> out = new ArrayList<>();
-        for (UUID id : uuids) {
+        for (UUID id : uuids)
+        {
             out.add(getName(id));
         }
         return out;
@@ -578,11 +605,9 @@ public final class SU {
     public static String getName(UUID id)
     {
         Player plr = Bukkit.getPlayer(id);
-        if (plr != null)
-            return plr.getName();
+        if (plr != null) return plr.getName();
         OfflinePlayer op = Bukkit.getOfflinePlayer(id);
-        if (op == null)
-            return MojangAPI.getProfile(id.toString()).name;
+        if (op == null) return MojangAPI.getProfile(id.toString()).name;
         return op.getName();
     }
 
@@ -595,7 +620,8 @@ public final class SU {
     public static ArrayList<UUID> namesToUUIDs(Collection<String> names)
     {
         ArrayList<UUID> out = new ArrayList<>();
-        for (String s : names) {
+        for (String s : names)
+        {
             out.add(getUUID(s));
         }
         return out;
@@ -615,48 +641,57 @@ public final class SU {
         StringBuilder formatChange = new StringBuilder();
         String formatArchive = "";
         boolean color = false;
-        for (char c : in.toCharArray()) {
-            if (color) {
+        for (char c : in.toCharArray())
+        {
+            if (color)
+            {
                 color = false;
-                if (c >= 'k' && c <= 'o') {
+                if (c >= 'k' && c <= 'o')
+                {
                     int max = newFormat.length();
                     boolean add = true;
-                    for (int i = 1; i < max; i += 2) {
-                        if (newFormat.charAt(i) == c) {
+                    for (int i = 1; i < max; i += 2)
+                    {
+                        if (newFormat.charAt(i) == c)
+                        {
                             add = false;
                             break;
                         }
                     }
-                    if (add) {
+                    if (add)
+                    {
                         newFormat.append('§').append(c);
                         formatChange.append('§').append(c);
                     }
                     continue;
                 }
-                if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
-                    c = 'f';
+                if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))) c = 'f';
                 newFormat.setLength(0);
                 newFormat.append('§').append(c);
                 formatChange.setLength(0);
                 formatChange.append('§').append(c);
-            } else if (c == '§')
-                color = true;
-            else if (c == '\u7777') {
+            } else if (c == '§') color = true;
+            else if (c == '\u7777')
+            {
                 formatArchive = newFormat.toString();
-            } else if (c == '\u7778') {
+            } else if (c == '\u7778')
+            {
                 newFormat.setLength(0);
                 newFormat.append(formatArchive);
                 formatChange.setLength(0);
                 formatChange.append(formatArchive);
-            } else {
-                if (!newFormat.toString().equals(oldFormat.toString())) {
+            } else
+            {
+                if (!newFormat.toString().equals(oldFormat.toString()))
+                {
                     out.append(formatChange);
                     formatChange.setLength(0);
                     oldFormat.setLength(0);
                     oldFormat.append(newFormat);
                 }
                 out.append(c);
-                if (c == '\n') {
+                if (c == '\n')
+                {
                     formatChange.insert(0, oldFormat);
                     oldFormat.setLength(0);
                     newFormat.append(formatChange.toString());
@@ -676,26 +711,22 @@ public final class SU {
         pm.registerEvents(new SUListener(), pl);
         SU.pm.registerEvents(SU.tp, pl);
         initOfflinePlayerManager();
-        cs.sendMessage("§2[§aStartup§2]§e Starting §aBungeeAPI§e...");
-        msg.registerOutgoingPluginChannel(pl, "BungeeCord");
-        msg.registerIncomingPluginChannel(pl, "BungeeCord", new BungeeAPI());
         vault = pm.getPlugin("Vault") != null;
-        if (schedulePacketAPI)
-            try {
-                tp.init();
-            } catch (Throwable e) {
-                SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-            }
-        if (vault) {
+        if (schedulePacketAPI) try
+        {
+            tp.init();
+        } catch (Throwable e)
+        {
+            SU.error(cs, e, "RedCore", "com.redmancometh");
+        }
+        if (vault)
+        {
             RegisteredServiceProvider<Permission> rspPerm = srv.getServicesManager().getRegistration(Permission.class);
-            if (rspPerm != null)
-                perm = rspPerm.getProvider();
+            if (rspPerm != null) perm = rspPerm.getProvider();
             RegisteredServiceProvider<Chat> rspChat = srv.getServicesManager().getRegistration(Chat.class);
-            if (rspChat != null)
-                chat = rspChat.getProvider();
+            if (rspChat != null) chat = rspChat.getProvider();
             RegisteredServiceProvider<Economy> rspEcon = srv.getServicesManager().getRegistration(Economy.class);
-            if (rspEcon != null)
-                econ = rspEcon.getProvider();
+            if (rspEcon != null) econ = rspEcon.getProvider();
         }
         new TPSMeter().start();
         cs.sendMessage("§2[§aStartup§2]§a Started RedCore properly.");
@@ -703,7 +734,8 @@ public final class SU {
 
     public static void initOfflinePlayerManager()
     {
-        try {
+        try
+        {
             Class mcServerClass = Reflection.getNMSClass("MinecraftServer");
             Class entityPlayerClass = Reflection.getNMSClass("EntityPlayer");
             Class craftPlayerClass = Reflection.getOBCClass("entity.CraftPlayer");
@@ -719,7 +751,8 @@ public final class SU {
             getBukkitEntityM = entityPlayerClass.getMethod("getBukkitEntity");
             loadDataM = craftPlayerClass.getMethod("loadData");
             saveDataM = craftPlayerClass.getMethod("saveData");
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             log(pl, "§cError in initializing offline player manager.");
             error(cs, e, "RedCore", "com.redmancometh");
         }
@@ -774,9 +807,11 @@ public final class SU {
      */
     public static void savePlayer(Player plr)
     {
-        try {
+        try
+        {
             saveDataM.invoke(plr);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }
@@ -794,20 +829,25 @@ public final class SU {
         File df = pl.getDataFolder();
         ClassLoader cl = pl.getClass().getClassLoader();
         df.mkdir();
-        for (String fn : fileNames) {
-            try {
+        for (String fn : fileNames)
+        {
+            try
+            {
                 File f = new File(df + File.separator + fn);
-                if (!f.exists()) {
-                    if (fn.contains(File.separator)) {
+                if (!f.exists())
+                {
+                    if (fn.contains(File.separator))
+                    {
                         new File(fn.substring(0, fn.lastIndexOf(File.separatorChar))).mkdirs();
                     }
                     InputStream is = cl.getResourceAsStream(fn);
-                    if (is == null) {
+                    if (is == null)
+                    {
                         log.severe("Error, the requested file (" + fn + ") is missing from the plugins jar file.");
-                    } else
-                        Files.copy(is, f.toPath());
+                    } else Files.copy(is, f.toPath());
                 }
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 log.severe("Error, on copying file (" + fn + "): ");
                 e.printStackTrace();
             }
@@ -830,11 +870,10 @@ public final class SU {
     {
         String[] d = text.split("\n");
         String[] out = new String[(d.length + (lines - 1)) / lines];
-        for (int i = 0; i < d.length; i++) {
-            if (i % lines == 0)
-                out[i / lines] = d[i];
-            else
-                out[i / lines] += "\n" + d[i];
+        for (int i = 0; i < d.length; i++)
+        {
+            if (i % lines == 0) out[i / lines] = d[i];
+            else out[i / lines] += "\n" + d[i];
         }
         return out;
     }
@@ -846,11 +885,12 @@ public final class SU {
      */
     public static void unloadPlugin(Plugin p)
     {
-        try {
-            if (!p.isEnabled())
-                return;
+        try
+        {
+            if (!p.isEnabled()) return;
             String pn = p.getName();
-            for (Plugin p2 : pm.getPlugins()) {
+            for (Plugin p2 : pm.getPlugins())
+            {
                 PluginDescriptionFile pdf = p2.getDescription();
                 if (pdf.getDepend() != null && pdf.getDepend().contains(pn) || pdf.getSoftDepend() != null && pdf.getSoftDepend().contains(pn))
                     unloadPlugin(p2);
@@ -858,17 +898,19 @@ public final class SU {
             pm.disablePlugin(p);
             ((List) pluginsF.get(pm)).remove(p);
             ((Map) lookupNamesF.get(pm)).remove(pn);
-            for (Iterator it = knownCommands.entrySet().iterator(); it.hasNext(); ) {
+            for (Iterator it = knownCommands.entrySet().iterator(); it.hasNext(); )
+            {
                 Entry entry = (Entry) it.next();
-                if ((entry.getValue() instanceof PluginCommand)) {
+                if ((entry.getValue() instanceof PluginCommand))
+                {
                     PluginCommand c = (PluginCommand) entry.getValue();
-                    if (c.getPlugin() == p)
-                        it.remove();
+                    if (c.getPlugin() == p) it.remove();
                 }
             }
             ((URLClassLoader) p.getClass().getClassLoader()).close();
             System.gc();
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             error(cs, e, "RedCore", "com.redmancometh");
         }
     }

@@ -4,14 +4,18 @@ import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.WrappedData;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
-import com.redmancometh.redcore.spigotutils.*;
+import com.redmancometh.redcore.spigotutils.BlockUtils;
+import com.redmancometh.redcore.spigotutils.SU;
+import com.redmancometh.redcore.spigotutils.XZ;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 /**
  * Created by GyuriX, on 2017. 02. 05..
  */
-public class PacketPlayOutMultiBlockChange extends WrappedPacket {
+public class PacketPlayOutMultiBlockChange extends WrappedPacket
+{
     public MultiBlockChangeInfo[] infos;
     public XZ xz;
 
@@ -55,7 +59,8 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
         return d;
     }
 
-    public static class MultiBlockChangeInfo implements WrappedData {
+    public static class MultiBlockChangeInfo implements WrappedData
+    {
         private static Class nmsClass = Reflection.getNMSClass("PacketPlayOutMultiBlockChange$MultiBlockChangeInfo");
         private static Constructor nmsConst = Reflection.getConstructor(nmsClass, short.class, Reflection.getNMSClass("IBlockData"));
         private static Field posF = Reflection.getFirstFieldOfType(nmsClass, short.class), blockDataF = Reflection.getFirstFieldOfType(nmsClass, Reflection.getNMSClass("IBlockData"));
@@ -70,12 +75,14 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
 
         public MultiBlockChangeInfo(Object nms)
         {
-            try {
+            try
+            {
                 pos = posF.getShort(nms);
                 Object nmsBl = blockDataF.get(nms);
                 blockId = BlockUtils.getNMSBlockId(nmsBl);
                 blockData = BlockUtils.getNMSBlockData(nmsBl);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -98,9 +105,11 @@ public class PacketPlayOutMultiBlockChange extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 return nmsConst.newInstance(pos, BlockUtils.getNMSBlock(blockId, blockData));
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;

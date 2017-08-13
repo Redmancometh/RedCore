@@ -1,11 +1,13 @@
 package com.redmancometh.redcore.spigotutils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class for converting null objects to 0 values and vice versa
  */
-public class NullUtils {
+public class NullUtils
+{
     public static Boolean from0(boolean data)
     {
         return data == false ? null : data;

@@ -7,8 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayOutWorldBorder
-        extends WrappedPacket {
+public class PacketPlayOutWorldBorder extends WrappedPacket
+{
     public WorldBorderAction action;
     public double centerX;
     public double centerZ;
@@ -40,21 +40,19 @@ public class PacketPlayOutWorldBorder
         return PacketOutType.WorldBorder.newPacket(action.toNMS(), portalTeleportBoundary, centerX, centerZ, newRadius, oldRadius, time, warningTime, warningBlocks);
     }
 
-    public enum WorldBorderAction implements WrappedData {
-        SET_SIZE,
-        LERP_SIZE,
-        SET_CENTER,
-        INITIALIZE,
-        SET_WARNING_TIME,
-        SET_WARNING_BLOCKS;
+    public enum WorldBorderAction implements WrappedData
+    {
+        SET_SIZE, LERP_SIZE, SET_CENTER, INITIALIZE, SET_WARNING_TIME, SET_WARNING_BLOCKS;
 
         private static final Method valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayOutWorldBorder$EnumWorldBorderAction"), "valueOf", String.class);
 
         public Object toNMS()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

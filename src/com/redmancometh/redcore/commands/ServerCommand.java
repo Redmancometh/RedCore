@@ -2,10 +2,12 @@ package com.redmancometh.redcore.commands;
 
 import com.hazelcast.util.function.BiConsumer;
 import org.bukkit.command.Command;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ServerCommand implements CommandExecutor {
+public class ServerCommand implements CommandExecutor
+{
     private BiConsumer<CommandSender, String[]> action;
     private String command;
     private boolean opCommand = false;

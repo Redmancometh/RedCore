@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import static com.redmancometh.redcore.scoreboard.ScoreboardAPI.id;
 
-public class Sidebar extends ScoreboardBar {
+public class Sidebar extends ScoreboardBar
+{
     /**
      * The lines of the Sidebar (0-14)
      */
@@ -22,36 +23,31 @@ public class Sidebar extends ScoreboardBar {
 
     public void hideLine(int line)
     {
-        if (line < 1 || line > 15)
-            return;
+        if (line < 1 || line > 15) return;
         lines.get(line - 1).hide();
     }
 
     public boolean isShown(int line)
     {
-        if (line < 1 || line > 15)
-            return false;
+        if (line < 1 || line > 15) return false;
         return !lines.get(line - 1).hidden;
     }
 
     public void setLine(int line, String text)
     {
-        if (line < 1 || line > 15)
-            return;
+        if (line < 1 || line > 15) return;
         lines.get(line - 1).setText(text);
     }
 
     public void setNumber(int line, int number)
     {
-        if (line < 1 || line > 15)
-            return;
+        if (line < 1 || line > 15) return;
         lines.get(line - 1).setNumber(number);
     }
 
     public void showLine(int line)
     {
-        if (line < 1 || line > 15)
-            return;
+        if (line < 1 || line > 15) return;
         lines.get(line - 1).show();
     }
 }

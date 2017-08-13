@@ -1,7 +1,8 @@
 package com.redmancometh.redcore.map;
 
 import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutMap;
-import com.redmancometh.redcore.spigotutils.*;
+import com.redmancometh.redcore.spigotutils.EntityUtils;
+import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapView;
@@ -15,13 +16,15 @@ import static com.redmancometh.redcore.protocol.Reflection.*;
 /**
  * Created by GyuriX on 2016. 07. 06..
  */
-public class MapData {
+public class MapData
+{
     private static final Object itemWorldMap, worldMap;
     private static final Method mapGenMethod;
     private static final MapView view;
     private static final byte[] viewColors;
 
-    static {
+    static
+    {
         Class cl = getNMSClass("ItemWorldMap");
         Class cl2 = getNMSClass("WorldMap");
         itemWorldMap = newInstance(cl);
@@ -41,8 +44,7 @@ public class MapData {
 
     public void clear(byte color)
     {
-        if (color < 0 && color > -113)
-            color = 0;
+        if (color < 0 && color > -113) color = 0;
         for (int i = 0; i < 16384; i++)
             colors[i] = color;
     }
@@ -54,20 +56,18 @@ public class MapData {
 
     public void setColor(int x, int y, byte color)
     {
-        if (color < 0 && color > -113)
-            color = 0;
-        if (x > -1 && x < 128 && y > -1 && y < 128)
-            colors[x + y * 128] = color;
+        if (color < 0 && color > -113) color = 0;
+        if (x > -1 && x < 128 && y > -1 && y < 128) colors[x + y * 128] = color;
     }
 
     public void setColor(int x, int y, int xLen, int yLen, byte color)
     {
-        if (color < 0 && color > -113)
-            color = 0;
-        for (int cx = 0; cx < xLen; cx++) {
-            for (int cy = 0; cy < yLen; cy++) {
-                if (x + cx > -1 && x + cx < 128 && y + cy > -1 && y + cy < 128)
-                    colors[x + cx + (y + cy) * 128] = color;
+        if (color < 0 && color > -113) color = 0;
+        for (int cx = 0; cx < xLen; cx++)
+        {
+            for (int cy = 0; cy < yLen; cy++)
+            {
+                if (x + cx > -1 && x + cx < 128 && y + cy > -1 && y + cy < 128) colors[x + cx + (y + cy) * 128] = color;
             }
         }
     }
@@ -78,10 +78,12 @@ public class MapData {
         view.setCenterX(centerX);
         view.setCenterZ(centerZ);
         view.setScale(scale);
-        try {
+        try
+        {
             mapGenMethod.invoke(itemWorldMap, EntityUtils.getNMSWorld(world), EntityUtils.getNMSEntity(plr), worldMap);
             System.arraycopy(viewColors, 0, colors, 0, 16384);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
     }

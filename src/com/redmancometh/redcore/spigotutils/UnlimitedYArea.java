@@ -2,7 +2,9 @@ package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.config.StringSerializable;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -13,7 +15,8 @@ import static java.lang.Integer.MIN_VALUE;
 /**
  * Created by GyuriX on 2016.05.15..
  */
-public class UnlimitedYArea implements StringSerializable {
+public class UnlimitedYArea implements StringSerializable
+{
     public int minx = MIN_VALUE, minz = MIN_VALUE, maxx = MIN_VALUE, maxz = MIN_VALUE;
 
     public UnlimitedYArea(String in)
@@ -68,12 +71,14 @@ public class UnlimitedYArea implements StringSerializable {
     public void fix()
     {
         int tmp;
-        if (minx > maxx) {
+        if (minx > maxx)
+        {
             tmp = minx;
             minx = maxx;
             maxx = tmp;
         }
-        if (minz > maxz) {
+        if (minz > maxz)
+        {
             tmp = minz;
             minz = maxz;
             maxz = tmp;
@@ -147,11 +152,13 @@ public class UnlimitedYArea implements StringSerializable {
     public void resetOutlineWithBlock(Player plr)
     {
         World w = plr.getWorld();
-        for (int x = minx; x <= maxx; ++x) {
+        for (int x = minx; x <= maxx; ++x)
+        {
             resetOutlineBlock(getTopY(w, x, minz), plr);
             resetOutlineBlock(getTopY(w, x, maxz), plr);
         }
-        for (int z = minz + 1; z < maxz; ++z) {
+        for (int z = minz + 1; z < maxz; ++z)
+        {
             resetOutlineBlock(getTopY(w, minx, z), plr);
             resetOutlineBlock(getTopY(w, maxx, z), plr);
         }
@@ -165,10 +172,10 @@ public class UnlimitedYArea implements StringSerializable {
     public static Block getTopY(World w, int x, int z)
     {
         Block b = null;
-        for (int y = 255; y > 0; y--) {
+        for (int y = 255; y > 0; y--)
+        {
             b = w.getBlockAt(x, y, z);
-            if (b.getType() != Material.AIR)
-                return b;
+            if (b.getType() != Material.AIR) return b;
         }
         return b;
     }
@@ -176,11 +183,13 @@ public class UnlimitedYArea implements StringSerializable {
     public void showOutlineWithBlock(Player plr, BlockData bd)
     {
         World w = plr.getWorld();
-        for (int x = minx; x <= maxx; ++x) {
+        for (int x = minx; x <= maxx; ++x)
+        {
             plr.sendBlockChange(getTopY(w, x, minz).getLocation(), bd.id, (byte) bd.data);
             plr.sendBlockChange(getTopY(w, x, maxz).getLocation(), bd.id, (byte) bd.data);
         }
-        for (int z = minz + 1; z < maxz; ++z) {
+        for (int z = minz + 1; z < maxz; ++z)
+        {
             plr.sendBlockChange(getTopY(w, minx, z).getLocation(), bd.id, (byte) bd.data);
             plr.sendBlockChange(getTopY(w, maxx, z).getLocation(), bd.id, (byte) bd.data);
         }

@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayOutScoreboardScore extends WrappedPacket {
+public class PacketPlayOutScoreboardScore extends WrappedPacket
+{
     public ScoreAction action;
     public String board;
     public String player;
@@ -41,9 +42,9 @@ public class PacketPlayOutScoreboardScore extends WrappedPacket {
         return PacketOutType.ScoreboardScore.newPacket(player, board, score, action.toNMS());
     }
 
-    public enum ScoreAction implements WrappedData {
-        CHANGE,
-        REMOVE;
+    public enum ScoreAction implements WrappedData
+    {
+        CHANGE, REMOVE;
 
         private static final Method valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayOutScoreboardScore$EnumScoreboardAction"), "valueOf", String.class);
 
@@ -53,9 +54,11 @@ public class PacketPlayOutScoreboardScore extends WrappedPacket {
 
         public Object toNMS()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

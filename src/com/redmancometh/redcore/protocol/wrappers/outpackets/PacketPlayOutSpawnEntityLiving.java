@@ -4,7 +4,8 @@ import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.DataWatcher;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
-import com.redmancometh.redcore.spigotutils.*;
+import com.redmancometh.redcore.spigotutils.LocationData;
+import com.redmancometh.redcore.spigotutils.ServerVersion;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -13,7 +14,8 @@ import java.util.UUID;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
+public class PacketPlayOutSpawnEntityLiving extends WrappedPacket
+{
     public int entityId;
     public UUID entityUUID;
     public DataWatcher meta;
@@ -41,8 +43,7 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
         this.type = type;
         setLocation(loc);
         this.headPitch = headPitch;
-        if (velocity != null)
-            setVelocity(velocity);
+        if (velocity != null) setVelocity(velocity);
         this.meta = meta;
     }
 
@@ -78,16 +79,19 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
         Object[] d = PacketOutType.SpawnEntityLiving.getPacketData(packet);
         entityId = (int) d[0];
         int add = 0;
-        if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_9))
+        {
             entityUUID = (UUID) d[1];
             add = 1;
         }
         type = (int) d[add + 1];
-        if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_9))
+        {
             x = (double) d[add + 2];
             y = (double) d[add + 3];
             z = (double) d[add + 4];
-        } else {
+        } else
+        {
             x = ((int) d[add + 2]) / 32.0;
             y = ((int) d[add + 3]) / 32.0;
             z = ((int) d[add + 4]) / 32.0;
@@ -104,9 +108,6 @@ public class PacketPlayOutSpawnEntityLiving extends WrappedPacket {
     @Override
     public Object getVanillaPacket()
     {
-        return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.SpawnEntityLiving.newPacket(entityId, entityUUID, type, x, y, z, velX, velY, velZ,
-                (byte) (yaw / 360.0f * 256), (byte) (pitch / 360.0f * 256), (byte) (headPitch / 360.0f * 256), meta.toNMS()) :
-                PacketOutType.SpawnEntityLiving.newPacket(entityId, type, (int) x << 5, (int) y << 5, (int) z << 5, velX, velY, velZ,
-                        (byte) (yaw / 360.0f * 256), (byte) (pitch / 360.0f * 256), (byte) (headPitch / 360.0f * 256), meta.toNMS());
+        return Reflection.ver.isAbove(ServerVersion.v1_9) ? PacketOutType.SpawnEntityLiving.newPacket(entityId, entityUUID, type, x, y, z, velX, velY, velZ, (byte) (yaw / 360.0f * 256), (byte) (pitch / 360.0f * 256), (byte) (headPitch / 360.0f * 256), meta.toNMS()) : PacketOutType.SpawnEntityLiving.newPacket(entityId, type, (int) x << 5, (int) y << 5, (int) z << 5, velX, velY, velZ, (byte) (yaw / 360.0f * 256), (byte) (pitch / 360.0f * 256), (byte) (headPitch / 360.0f * 256), meta.toNMS());
     }
 }

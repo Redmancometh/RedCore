@@ -4,20 +4,24 @@ import com.redmancometh.redcore.config.StringSerializable;
 
 import java.util.ArrayList;
 
-public class Frame implements StringSerializable {
+public class Frame implements StringSerializable
+{
     public ArrayList<Long> delays;
     public ArrayList<Long> repeats;
     public String text;
 
     public Frame(String in)
     {
-        if (in.startsWith("{")) {
+        if (in.startsWith("{"))
+        {
             delays = new ArrayList();
             repeats = new ArrayList();
             int id = in.indexOf("}");
-            for (String s : in.substring(1, id).split("(,+| +) *")) {
+            for (String s : in.substring(1, id).split("(,+| +) *"))
+            {
                 String[] d2 = s.split(":", 2);
-                if (d2.length == 2) {
+                if (d2.length == 2)
+                {
                     delays.add(Long.valueOf(d2[1]));
                     repeats.add(Long.valueOf(d2[0]));
                     continue;
@@ -26,7 +30,8 @@ public class Frame implements StringSerializable {
                 repeats.add(1L);
             }
             text = in.substring(id + 1);
-        } else {
+        } else
+        {
             text = in;
         }
     }
@@ -34,17 +39,21 @@ public class Frame implements StringSerializable {
     @Override
     public String toString()
     {
-        if (delays == null || delays.isEmpty()) {
+        if (delays == null || delays.isEmpty())
+        {
             return text;
         }
         StringBuilder out = new StringBuilder();
         out.append('{');
-        for (int i = 0; i < delays.size(); ++i) {
+        for (int i = 0; i < delays.size(); ++i)
+        {
             long repeat = repeats.get(i);
             long delay = delays.get(i);
-            if (repeat == 1) {
+            if (repeat == 1)
+            {
                 out.append(delay);
-            } else {
+            } else
+            {
                 out.append(repeat).append(':').append(delay);
             }
             out.append(",");

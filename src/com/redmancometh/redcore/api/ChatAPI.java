@@ -11,7 +11,8 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-public class ChatAPI {
+public class ChatAPI
+{
     /**
      * Method for converting IChatBaseComponent to raw JSON.
      */
@@ -30,14 +31,17 @@ public class ChatAPI {
      */
     public static void init()
     {
-        try {
+        try
+        {
             icbcClass = Reflection.getNMSClass("IChatBaseComponent");
-            for (Class c : icbcClass.getClasses()) {
+            for (Class c : icbcClass.getClasses())
+            {
                 if (!c.getName().endsWith("ChatSerializer")) continue;
                 toICBC = c.getMethod("a", String.class);
                 fromICBC = c.getMethod("a", icbcClass);
             }
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "SpigotLib", "com.redmancometh");
         }
     }
@@ -51,7 +55,8 @@ public class ChatAPI {
      */
     public static void sendJsonMsg(ChatMessageType type, String msg, Player... pls)
     {
-        if (pls.length == 0) {
+        if (pls.length == 0)
+        {
             sendJsonMsg(type, msg, Bukkit.getOnlinePlayers());
             return;
         }
@@ -130,12 +135,15 @@ public class ChatAPI {
      */
     public static Object toICBC(String json)
     {
-        try {
-            if (json == null) {
+        try
+        {
+            if (json == null)
+            {
                 return null;
             }
             return toICBC.invoke(null, json);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.cs.sendMessage("§cError on converting JSON §f" + json + "§c to IChatBaseComponent.");
             SU.error(SU.cs, e, "SpigotLib", "com.redmancometh");
             return null;
@@ -150,12 +158,15 @@ public class ChatAPI {
      */
     public static String toJson(Object icbc)
     {
-        try {
-            if (icbc == null) {
+        try
+        {
+            if (icbc == null)
+            {
                 return null;
             }
             return (String) fromICBC.invoke(null, icbc);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "SpigotLib", "com.redmancometh");
             return null;
         }
@@ -172,7 +183,8 @@ public class ChatAPI {
         StringBuilder sb = new StringBuilder();
         sb.append("\\u");
         String hex = Integer.toHexString(ch);
-        for (int i = hex.length(); i < 4; ++i) {
+        for (int i = hex.length(); i < 4; ++i)
+        {
             sb.append('0');
         }
         sb.append(hex);
@@ -182,10 +194,9 @@ public class ChatAPI {
     /**
      * Enum of the available ChatMessageTypes
      */
-    public enum ChatMessageType {
-        CHAT,
-        SYSTEM,
-        ACTION_BAR;
+    public enum ChatMessageType
+    {
+        CHAT, SYSTEM, ACTION_BAR;
 
         ChatMessageType()
         {

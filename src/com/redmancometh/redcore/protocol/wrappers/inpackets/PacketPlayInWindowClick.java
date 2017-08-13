@@ -2,12 +2,13 @@ package com.redmancometh.redcore.protocol.wrappers.inpackets;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketInType;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.protocol.utils.InventoryClickType;
+import com.redmancometh.redcore.protocol.utils.ItemStackWrapper;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.ServerVersion;
 
-public class PacketPlayInWindowClick
-        extends WrappedPacket {
+public class PacketPlayInWindowClick extends WrappedPacket
+{
     public short actionNumber;
     public int button;
     public InventoryClickType clickType;

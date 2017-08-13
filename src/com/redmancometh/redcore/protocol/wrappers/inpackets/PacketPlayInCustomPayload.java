@@ -5,7 +5,8 @@ import com.redmancometh.redcore.protocol.event.PacketInType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import io.netty.buffer.ByteBuf;
 
-public class PacketPlayInCustomPayload extends WrappedPacket implements StringSerializable {
+public class PacketPlayInCustomPayload extends WrappedPacket implements StringSerializable
+{
     public String channel;
     public ByteBuf data;
 

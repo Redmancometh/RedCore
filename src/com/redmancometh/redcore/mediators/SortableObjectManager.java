@@ -5,17 +5,25 @@ import com.redmancometh.redcore.databasing.SubDatabase;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObjectManager<T> {
+public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObjectManager<T>
+{
     Map<Class<? extends SortableObjectManager>, Map<String, List<?>>> cache = new ConcurrentHashMap<>();
 
     default <U> List<U> getCache(String name)
     {
         Map<String, List<?>> c = getThisCache();
         List<?> lst = c.get(name);
-        if (lst == null) {
+        if (lst == null)
+        {
             return new ArrayList<>();
         }
         return (List<U>) c;
@@ -24,7 +32,8 @@ public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObj
     default Map<String, List<?>> getThisCache()
     {
         Map<String, List<?>> c = cache.get(getClass());
-        if (c == null) {
+        if (c == null)
+        {
             c = new ConcurrentHashMap<>();
             cache.put(getClass(), c);
         }
@@ -40,7 +49,8 @@ public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObj
     default void registerUpdate(long time)
     {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (String s : getThisCache().keySet()) {
+            for (String s : getThisCache().keySet())
+            {
                 updateCache(s);
             }
         }, time, time, TimeUnit.SECONDS);
@@ -50,7 +60,8 @@ public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObj
     {
         Map<String, List<?>> c = getThisCache();
         List<?> lst = c.get(name);
-        if (lst == null) {
+        if (lst == null)
+        {
             return;
         }
         SubDatabase<UUID, T> sub = getSubDB();

@@ -2,10 +2,14 @@ package com.redmancometh.redcore.spigotutils;
 
 import org.bukkit.Bukkit;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-public class TPSMeter implements Runnable {
+public class TPSMeter implements Runnable
+{
     /**
      * Update the servers tps metrics result in every here configured milliseconds
      */
@@ -42,16 +46,15 @@ public class TPSMeter implements Runnable {
         ticks = 0;
         if (tps < limit)
             SU.cs.sendMessage("§9[§b TPS Meter §9]§e The servers TPS is bellow §c" + tps + "§e, is it lagging or crashed?");
-        if (tps == 0) {
+        if (tps == 0)
+        {
             ++zeroTpsCount;
-            if (zeroTpsCount == reportCrashAfter) {
+            if (zeroTpsCount == reportCrashAfter)
+            {
                 StringBuilder sb = new StringBuilder();
-                sb.append("============== RedCore Crash Reporter ==============\n" +
-                        "Your server has been detected having 0 TPS " + reportCrashAfter + " times a row, which means that with high probability it crashed / frozen down. " +
-                        "This crash report will help for your developers to detect what's causing the crash. This is NOT an error in RedCore, but it's one of it's " +
-                        "features, so only contact gyuriX for fixing the error caused this crash if you have budget for it.\n" +
-                        "\n");
-                TreeMap<Thread, StackTraceElement[]> map = new TreeMap<>(new java.util.Comparator<Thread>() {
+                sb.append("============== RedCore Crash Reporter ==============\n" + "Your server has been detected having 0 TPS " + reportCrashAfter + " times a row, which means that with high probability it crashed / frozen down. " + "This crash report will help for your developers to detect what's causing the crash. This is NOT an error in RedCore, but it's one of it's " + "features, so only contact gyuriX for fixing the error caused this crash if you have budget for it.\n" + "\n");
+                TreeMap<Thread, StackTraceElement[]> map = new TreeMap<>(new java.util.Comparator<Thread>()
+                {
                     @Override
                     public int compare(Thread o1, Thread o2)
                     {
@@ -59,23 +62,19 @@ public class TPSMeter implements Runnable {
                     }
                 });
                 map.putAll(Thread.getAllStackTraces());
-                for (Map.Entry<Thread, StackTraceElement[]> e : map.entrySet()) {
+                for (Map.Entry<Thread, StackTraceElement[]> e : map.entrySet())
+                {
                     sb.append("\n \n \n§e=====@ §bTHREAD ").append(e.getKey().getName()).append("(§fstate=").append(e.getKey().getState()).append(", priority=").append(e.getKey().getPriority()).append("§b)").append(" §e@=====");
                     int i = 0;
-                    for (StackTraceElement el : e.getValue()) {
-                        sb.append("\n§c #").append(++i)
-                                .append(": §eLINE §a").append(el.getLineNumber())
-                                .append("§e in FILE §6").append(el.getFileName())
-                                .append("§e (§7").append(el.getClassName())
-                                .append("§e.§b").append(el.getMethodName())
-                                .append("§e)");
+                    for (StackTraceElement el : e.getValue())
+                    {
+                        sb.append("\n§c #").append(++i).append(": §eLINE §a").append(el.getLineNumber()).append("§e in FILE §6").append(el.getFileName()).append("§e (§7").append(el.getClassName()).append("§e.§b").append(el.getMethodName()).append("§e)");
                     }
                 }
                 sb.append("\n======================================================");
                 SU.cs.sendMessage(sb.toString());
             }
-        } else
-            zeroTpsCount = 0;
+        } else zeroTpsCount = 0;
 
     }
 

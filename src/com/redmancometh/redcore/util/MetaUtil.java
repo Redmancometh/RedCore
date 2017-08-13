@@ -7,7 +7,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.function.Consumer;
 
-public class MetaUtil {
+public class MetaUtil
+{
     public static void addMetaThenRemoveAfter(Player p, String metaName, int seconds)
     {
         p.setMetadata(metaName, new FixedMetadataValue(RedCore.getInstance(), true));
@@ -23,8 +24,7 @@ public class MetaUtil {
     public static void addRemoveThen(Player p, String metaName, long seconds, Consumer<Player> callback)
     {
         p.setMetadata(metaName, new FixedMetadataValue(RedCore.getInstance(), true));
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getInstance(), () ->
-        {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RedCore.getInstance(), () -> {
             callback.accept(p);
             p.removeMetadata(metaName, RedCore.getInstance());
         }, seconds * 20L);

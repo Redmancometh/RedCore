@@ -6,8 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayInResourcePackStatus
-        extends WrappedPacket {
+public class PacketPlayInResourcePackStatus extends WrappedPacket
+{
     public String hash;
     public ResourcePackStatus status;
 
@@ -25,15 +25,14 @@ public class PacketPlayInResourcePackStatus
         return PacketInType.ResourcePackStatus.newPacket(hash, status.toVanillaRPStatus());
     }
 
-    public enum ResourcePackStatus {
-        SUCCESSFULLY_LOADED,
-        DECLINED,
-        FAILED_DOWNLOAD,
-        ACCEPTED;
+    public enum ResourcePackStatus
+    {
+        SUCCESSFULLY_LOADED, DECLINED, FAILED_DOWNLOAD, ACCEPTED;
 
         private static final Method valueOf;
 
-        static {
+        static
+        {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInResourcePackStatus$EnumResourcePackStatus"), "valueOf", String.class);
         }
 
@@ -43,9 +42,11 @@ public class PacketPlayInResourcePackStatus
 
         public Object toVanillaRPStatus()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

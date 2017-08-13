@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public class PacketPlayOutSetSlot extends WrappedPacket {
+public class PacketPlayOutSetSlot extends WrappedPacket
+{
     public ItemStackWrapper item;
     public int slot;
     public int windowId;

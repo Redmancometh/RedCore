@@ -4,7 +4,9 @@ import com.redmancometh.redcore.json.JsonAPI;
 import com.redmancometh.redcore.protocol.utils.GameProfile;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import static com.redmancometh.redcore.mojang.WebApi.get;
 import static com.redmancometh.redcore.mojang.WebApi.post;
@@ -12,20 +14,20 @@ import static com.redmancometh.redcore.mojang.WebApi.post;
 /**
  * Created by GyuriX on 2015.12.27..
  */
-public class MojangAPI {
+public class MojangAPI
+{
     public static ClientSession clientLogin(String userName, String password)
     {
-        try {
-            String s = post("https://authserver.mojang.com/authenticate",
-                    "{\"agent\":{\"name\":\"Minecraft\",\"version\":1}," +
-                            "\"username\":\"" + userName + "\"," +
-                            "\"password\":\"" + password + "\"}");
+        try
+        {
+            String s = post("https://authserver.mojang.com/authenticate", "{\"agent\":{\"name\":\"Minecraft\",\"version\":1}," + "\"username\":\"" + userName + "\"," + "\"password\":\"" + password + "\"}");
             System.out.println(s);
             ClientSession client = JsonAPI.deserialize(s, ClientSession.class);
             client.username = userName;
             client.password = password;
             return client;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -33,9 +35,11 @@ public class MojangAPI {
 
     public static ArrayList<NameData> getNameHistory(UUID id)
     {
-        try {
+        try
+        {
             return (ArrayList<NameData>) JsonAPI.deserialize(get("https://api.mojang.com/user/profiles/" + id.toString().replace("-", "") + "/names"), ArrayList.class, NameData.class);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
         return null;
@@ -43,9 +47,11 @@ public class MojangAPI {
 
     public static GameProfile getProfile(String name)
     {
-        try {
+        try
+        {
             return JsonAPI.deserialize(get("https://api.mojang.com/users/profiles/minecraft/" + name), GameProfile.class);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             return new GameProfile(name, SU.getOfflineUUID(name));
         }
     }
@@ -69,20 +75,22 @@ public class MojangAPI {
     {
         HashMap<String, MojangServerState> out = new HashMap<>();
         String[] d = get("https://status.mojang.com/check").split(",");
-        for (String s : d) {
+        for (String s : d)
+        {
             String[] s2 = s.split(":");
-            out.put(s2[0].substring(s2[0].indexOf("\"") + 1, s2[0].length() - 1),
-                    MojangServerState.valueOf(s2[1].substring(s2[1].indexOf("\"") + 1, s2[1].lastIndexOf("\"")).toUpperCase()));
+            out.put(s2[0].substring(s2[0].indexOf("\"") + 1, s2[0].length() - 1), MojangServerState.valueOf(s2[1].substring(s2[1].indexOf("\"") + 1, s2[1].lastIndexOf("\"")).toUpperCase()));
         }
         return out;
     }
 
 
-    public enum MojangServerState {
+    public enum MojangServerState
+    {
         RED, GREEN, YELLOW
     }
 
-    public static class NameData {
+    public static class NameData
+    {
         public long changedToAt;
         public String name;
 

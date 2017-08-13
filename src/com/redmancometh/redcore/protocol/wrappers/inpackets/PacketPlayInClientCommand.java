@@ -6,8 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayInClientCommand
-        extends WrappedPacket {
+public class PacketPlayInClientCommand extends WrappedPacket
+{
     public ClientCommand command;
 
     @Override
@@ -22,14 +22,14 @@ public class PacketPlayInClientCommand
         return PacketInType.ClientCommand.newPacket(command.toVanillaClientCommand());
     }
 
-    public enum ClientCommand {
-        PERFORM_RESPAWN,
-        REQUEST_STATS,
-        OPEN_INVENTORY_ACHIEVEMENT;
+    public enum ClientCommand
+    {
+        PERFORM_RESPAWN, REQUEST_STATS, OPEN_INVENTORY_ACHIEVEMENT;
 
         private static final Method valueOf;
 
-        static {
+        static
+        {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInClientCommand$EnumClientCommand"), "valueOf", String.class);
         }
 
@@ -39,9 +39,11 @@ public class PacketPlayInClientCommand
 
         public Object toVanillaClientCommand()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

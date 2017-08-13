@@ -3,16 +3,19 @@ package com.redmancometh.redcore.protocol.utils;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
-public class Rotation implements WrappedData {
+public class Rotation implements WrappedData
+{
     private static final Class cl = Reflection.getNMSClass("Vector3f");
     private static final Constructor con = Reflection.getConstructor(cl, float.class, float.class, float.class);
     private static final Field xf;
     private static final Field yf;
     private static final Field zf;
 
-    static {
+    static
+    {
         xf = Reflection.getField(cl, "x");
         yf = Reflection.getField(cl, "y");
         zf = Reflection.getField(cl, "z");
@@ -36,11 +39,13 @@ public class Rotation implements WrappedData {
 
     public Rotation(Object vanillaVector)
     {
-        try {
+        try
+        {
             x = (Float) xf.get(vanillaVector);
             y = (Float) yf.get(vanillaVector);
             z = (Float) zf.get(vanillaVector);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
     }
@@ -48,9 +53,11 @@ public class Rotation implements WrappedData {
     @Override
     public Object toNMS()
     {
-        try {
+        try
+        {
             return con.newInstance(x, y, z);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }

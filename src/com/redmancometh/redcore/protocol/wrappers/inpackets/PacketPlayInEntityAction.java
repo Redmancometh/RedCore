@@ -7,8 +7,8 @@ import com.redmancometh.redcore.spigotutils.SU;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayInEntityAction
-        extends WrappedPacket {
+public class PacketPlayInEntityAction extends WrappedPacket
+{
     public PlayerAction action;
     public int entityId;
     public int jumpBoost;
@@ -28,18 +28,14 @@ public class PacketPlayInEntityAction
         return PacketInType.EntityAction.newPacket(entityId, action.toVanillaPlayerAction(), jumpBoost);
     }
 
-    public enum PlayerAction {
-        START_SNEAKING,
-        STOP_SNEAKING,
-        STOP_SLEEPING,
-        START_SPRINTING,
-        STOP_SPRINTING,
-        RIDING_JUMP,
-        OPEN_INVENTORY;
+    public enum PlayerAction
+    {
+        START_SNEAKING, STOP_SNEAKING, STOP_SLEEPING, START_SPRINTING, STOP_SPRINTING, RIDING_JUMP, OPEN_INVENTORY;
 
         private static final Method valueOf;
 
-        static {
+        static
+        {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInEntityAction$EnumPlayerAction"), "valueOf", String.class);
         }
 
@@ -49,9 +45,11 @@ public class PacketPlayInEntityAction
 
         public Object toVanillaPlayerAction()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
                 return null;
             }

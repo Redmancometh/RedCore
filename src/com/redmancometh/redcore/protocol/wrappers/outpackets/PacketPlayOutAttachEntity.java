@@ -8,7 +8,8 @@ import com.redmancometh.redcore.spigotutils.ServerVersion;
 /**
  * Created by GyuriX, on 2017. 02. 05..
  */
-public class PacketPlayOutAttachEntity extends WrappedPacket {
+public class PacketPlayOutAttachEntity extends WrappedPacket
+{
     public int entity1, entity2;
 
     public PacketPlayOutAttachEntity()

@@ -3,8 +3,8 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayOutWindowData
-        extends WrappedPacket {
+public class PacketPlayOutWindowData extends WrappedPacket
+{
     public int property;
     public int value;
     public int windowId;

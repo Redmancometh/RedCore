@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.util;
 
-public class Pair<T, T1> {
+public class Pair<T, T1>
+{
     private T key;
     private T1 value;
 

@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutSpawnEntityWeather extends WrappedPacket {
+public class PacketPlayOutSpawnEntityWeather extends WrappedPacket
+{
     public int entityId;
     /**
      * 1 - thunderbolt

@@ -5,7 +5,8 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayOutTileEntityData extends WrappedPacket {
+public class PacketPlayOutTileEntityData extends WrappedPacket
+{
     public int action;
     public BlockLocation block;
     public NBTCompound nbt;

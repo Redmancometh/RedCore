@@ -3,10 +3,13 @@ package com.redmancometh.redcore.databasing;
 import lombok.Getter;
 import org.hibernate.SessionFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class MasterDatabase implements Iterable<SubDatabase> {
+public class MasterDatabase implements Iterable<SubDatabase>
+{
     @Getter
     private Map<Class, SubDatabase> subDBMap = new HashMap();
 
@@ -29,8 +32,6 @@ public class MasterDatabase implements Iterable<SubDatabase> {
 
     public void registerDatabase(Class ofType, SessionFactory factory)
     {
-        System.out.println("REGISTERED FOR: " + ofType);
-        System.out.println("WITH FACTORY: " + factory);
         this.subDBMap.put(ofType, new SubDatabase(ofType, factory));
     }
 

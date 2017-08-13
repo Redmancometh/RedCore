@@ -1,10 +1,15 @@
 package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.protocol.Reflection;
-import com.redmancometh.redcore.scoreboard.*;
-import org.bukkit.*;
+import com.redmancometh.redcore.scoreboard.NametagBar;
+import com.redmancometh.redcore.scoreboard.ScoreboardAPI;
+import com.redmancometh.redcore.scoreboard.Sidebar;
+import com.redmancometh.redcore.scoreboard.Tabbar;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -14,7 +19,8 @@ import static com.redmancometh.redcore.spigotutils.ServerVersion.v1_9;
 /**
  * Created by GyuriX on 9/6/2016.
  */
-public class PlayerData {
+public class PlayerData
+{
     public static final int maxslot = Reflection.ver.isAbove(v1_9) ? 41 : 40;
     public boolean allowFlight, isFlying;
     public Sidebar board;
@@ -42,11 +48,13 @@ public class PlayerData {
         level = plr.getLevel();
         foodLevel = plr.getFoodLevel();
         PlayerInventory pi = plr.getInventory();
-        for (int i = 0; i < maxslot; i++) {
+        for (int i = 0; i < maxslot; i++)
+        {
             inv.add(pi.getItem(i));
             pi.setItem(i, null);
         }
-        for (PotionEffect pe : plr.getActivePotionEffects()) {
+        for (PotionEffect pe : plr.getActivePotionEffects())
+        {
             pes.add(pe);
             plr.removePotionEffect(pe.getType());
         }

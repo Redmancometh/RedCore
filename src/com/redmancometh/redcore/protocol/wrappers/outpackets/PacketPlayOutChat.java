@@ -12,13 +12,17 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * Created by com.redmancometh on 25/11/2015.
  */
-public class PacketPlayOutChat extends WrappedPacket {
+public class PacketPlayOutChat extends WrappedPacket
+{
     private static Object[] nmsValues;
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             nmsValues = (Object[]) Reflection.getMethod(Reflection.getNMSClass("ChatMessageType"), "values").invoke(null);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
         }
     }
 
@@ -42,10 +46,10 @@ public class PacketPlayOutChat extends WrappedPacket {
     public void loadVanillaPacket(Object obj)
     {
         Object[] data = PacketOutType.Chat.getPacketData(obj);
-        if (data[1] != null) {
+        if (data[1] != null)
+        {
             tag = ChatTag.fromBaseComponents((BaseComponent[]) data[1]);
-        } else
-            tag = JsonAPI.deserialize(ChatAPI.toJson(data[0]), ChatTag.class);
+        } else tag = JsonAPI.deserialize(ChatAPI.toJson(data[0]), ChatTag.class);
         type = (byte) (Reflection.ver.isAbove(ServerVersion.v1_12) ? (byte) (int) ((Enum) data[2]).ordinal() : data[2]);
     }
 

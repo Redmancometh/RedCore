@@ -5,12 +5,14 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.WorldType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.ServerVersion;
-import org.bukkit.*;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public class PacketPlayOutLogin extends WrappedPacket {
+public class PacketPlayOutLogin extends WrappedPacket
+{
     public Difficulty difficulty;
     /**
      * Dimension -1: Nether 0: Overworld 1: End
@@ -34,8 +36,7 @@ public class PacketPlayOutLogin extends WrappedPacket {
         difficulty = Difficulty.valueOf(d[4].toString());
         maxPlayers = (int) d[5];
         levelType = WorldType.fromVanillaWorldType(d[6]);
-        if (Reflection.ver.isAbove(ServerVersion.v1_8))
-            reducedDebugInfo = (boolean) d[7];
+        if (Reflection.ver.isAbove(ServerVersion.v1_8)) reducedDebugInfo = (boolean) d[7];
     }
 
     @Override

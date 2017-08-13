@@ -7,11 +7,13 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.*;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static com.redmancometh.redcore.api.VariableAPI.fillVariables;
 
-public class AnimationRunnable implements Runnable {
+public class AnimationRunnable implements Runnable
+{
     public final Animation a;
     public final String name;
     public final Plugin pl;
@@ -29,7 +31,8 @@ public class AnimationRunnable implements Runnable {
         this.name = name;
         this.plr = plr;
         this.listener = listener;
-        for (Entry<String, HashMap<String, CustomEffect>> e : a.effects.entrySet()) {
+        for (Entry<String, HashMap<String, CustomEffect>> e : a.effects.entrySet())
+        {
             HashMap<String, CustomEffect> map = new HashMap<>();
             effects.put(e.getKey(), map);
             for (Entry<String, CustomEffect> e2 : e.getValue().entrySet())
@@ -43,16 +46,16 @@ public class AnimationRunnable implements Runnable {
     public void run()
     {
         future = null;
-        try {
+        try
+        {
             text = fillVariables(SU.optimizeColorCodes(f.next("")), plr, this);
-            if (!listener.onUpdate(this, text) || f.delay >= Integer.MAX_VALUE)
-                return;
-        } catch (Throwable e) {
+            if (!listener.onUpdate(this, text) || f.delay >= Integer.MAX_VALUE) return;
+        } catch (Throwable e)
+        {
             String main = pl.getDescription().getMain();
             SU.error(SU.cs, e, pl.getName(), main.substring(0, main.lastIndexOf(".")));
         }
-        if (f.delay < 1)
-            f.delay = 1;
+        if (f.delay < 1) f.delay = 1;
         future = AnimationAPI.pool.schedule(this, f.delay, TimeUnit.MILLISECONDS);
     }
 
@@ -63,8 +66,7 @@ public class AnimationRunnable implements Runnable {
 
     public boolean stop()
     {
-        if (future == null)
-            return false;
+        if (future == null) return false;
         future.cancel(true);
         future = null;
         return true;

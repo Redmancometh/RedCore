@@ -2,7 +2,8 @@ package com.redmancometh.redcore.sliceable;
 
 import java.util.function.Consumer;
 
-public class BatchedSlicedList<T> extends SlicedList<T> {
+public class BatchedSlicedList<T> extends SlicedList<T>
+{
 
     private static final long serialVersionUID = -313112658500611493L;
     private int batchSize;

@@ -10,7 +10,8 @@ import java.lang.reflect.Array;
 /**
  * Created by GyuriX, on 2017. 03. 29..
  */
-public class PacketPlayOutMapChunkBulk extends WrappedPacket {
+public class PacketPlayOutMapChunkBulk extends WrappedPacket
+{
     public PacketPlayOutMapChunk.ChunkMap[] chunkMaps;
     public int[] chunkX;
     public int[] chunkZ;

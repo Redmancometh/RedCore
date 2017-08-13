@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public class PacketPlayOutSpawnPosition extends WrappedPacket {
+public class PacketPlayOutSpawnPosition extends WrappedPacket
+{
     public BlockLocation location;
 
     @Override

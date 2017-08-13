@@ -1,11 +1,14 @@
 package com.redmancometh.redcore.animation.effects;
 
-import com.redmancometh.redcore.animation.*;
+import com.redmancometh.redcore.animation.CustomEffect;
+import com.redmancometh.redcore.animation.Frame;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class FramesEffect implements CustomEffect {
+public class FramesEffect implements CustomEffect
+{
     public transient long delay;
     public transient Iterator<Long> delays;
     public transient Frame f;
@@ -46,21 +49,26 @@ public class FramesEffect implements CustomEffect {
     @Override
     public String next(String in)
     {
-        if (repeat == 0) {
-            if (delays == null || !delays.hasNext()) {
+        if (repeat == 0)
+        {
+            if (delays == null || !delays.hasNext())
+            {
                 state = random ? SU.rand.nextInt(frames.size()) : (state + 1) % frames.size();
                 f = frames.get(state);
-                if (f.delays == null) {
+                if (f.delays == null)
+                {
                     delay = frameTime;
                     repeat = 1;
                     delays = null;
-                } else {
+                } else
+                {
                     delays = f.delays.iterator();
                     repeats = f.repeats.iterator();
                     delay = delays.next();
                     repeat = repeats.next();
                 }
-            } else {
+            } else
+            {
                 delay = delays.next();
                 repeat = repeats.next();
             }

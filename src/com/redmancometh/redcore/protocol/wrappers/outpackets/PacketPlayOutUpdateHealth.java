@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by com.redmancometh on 25/11/2015.
  */
-public class PacketPlayOutUpdateHealth extends WrappedPacket {
+public class PacketPlayOutUpdateHealth extends WrappedPacket
+{
     public int food;
     public float health, saturation;
 

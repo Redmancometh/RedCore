@@ -1,7 +1,8 @@
 package com.redmancometh.redcore.protocol.wrappers.outpackets;
 
 import com.redmancometh.redcore.protocol.event.PacketOutType;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.protocol.utils.BlockLocation;
+import com.redmancometh.redcore.protocol.utils.Direction;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.util.UUID;
@@ -9,7 +10,8 @@ import java.util.UUID;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutSpawnEntityPainting extends WrappedPacket {
+public class PacketPlayOutSpawnEntityPainting extends WrappedPacket
+{
     public int entityId;
     public UUID entityUUID;
     public Direction facing;

@@ -4,7 +4,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface QuadFunction<T, U, V, X, R> {
+public interface QuadFunction<T, U, V, X, R>
+{
 
     /**
      * Returns a composed function that first applies this function to

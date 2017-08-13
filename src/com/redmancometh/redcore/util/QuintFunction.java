@@ -4,7 +4,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface QuintFunction<T, U, V, X, Y, R> {
+public interface QuintFunction<T, U, V, X, Y, R>
+{
 
     /**
      * Returns a composed function that first applies this function to

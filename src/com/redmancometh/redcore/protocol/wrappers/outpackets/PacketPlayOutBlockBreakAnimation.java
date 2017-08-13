@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutBlockBreakAnimation extends WrappedPacket {
+public class PacketPlayOutBlockBreakAnimation extends WrappedPacket
+{
     public BlockLocation block;
     /**
      * 0-9, other value = remove effect

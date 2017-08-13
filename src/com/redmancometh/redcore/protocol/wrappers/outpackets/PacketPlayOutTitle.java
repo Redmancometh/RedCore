@@ -16,7 +16,8 @@ import static com.redmancometh.redcore.protocol.Reflection.getNMSClass;
 /**
  * Created by com.redmancometh on 11/17/2016.
  */
-public class PacketPlayOutTitle extends WrappedPacket {
+public class PacketPlayOutTitle extends WrappedPacket
+{
     public TitleAction action;
     public int fadeIn, showTime, fadeOut;
     public ChatTag tag;
@@ -52,20 +53,18 @@ public class PacketPlayOutTitle extends WrappedPacket {
         return PacketOutType.Title.newPacket(action.toNMS(), tag == null ? null : ChatAPI.toICBC(tag.toString()), fadeIn, showTime, fadeOut);
     }
 
-    public enum TitleAction implements WrappedData {
-        TITLE,
-        SUBTITLE,
-        ACTIONBAR,
-        TIMES,
-        CLEAR,
-        RESET;
+    public enum TitleAction implements WrappedData
+    {
+        TITLE, SUBTITLE, ACTIONBAR, TIMES, CLEAR, RESET;
         Method m = getMethod(getNMSClass("PacketPlayOutTitle$EnumTitleAction"), "valueOf", String.class);
 
         public Object toNMS()
         {
-            try {
+            try
+            {
                 return m.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;

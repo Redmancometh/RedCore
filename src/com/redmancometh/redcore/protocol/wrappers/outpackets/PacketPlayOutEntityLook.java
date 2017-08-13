@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityLook extends WrappedPacket {
+public class PacketPlayOutEntityLook extends WrappedPacket
+{
     public int entityId;
     public boolean onGround;
     public byte pitch;

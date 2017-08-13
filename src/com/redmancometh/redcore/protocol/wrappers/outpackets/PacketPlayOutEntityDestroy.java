@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityDestroy extends WrappedPacket {
+public class PacketPlayOutEntityDestroy extends WrappedPacket
+{
     public int[] entityIds;
 
     public PacketPlayOutEntityDestroy()

@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.util;
 
-public class Rational implements Comparable<Rational> {
+public class Rational implements Comparable<Rational>
+{
     private static Rational zero = new Rational(0, 1);
     private int den;
     private int num;
@@ -10,7 +11,8 @@ public class Rational implements Comparable<Rational> {
         int g = gcd(numerator, denominator);
         num = numerator / g;
         den = denominator / g;
-        if (den < 0) {
+        if (den < 0)
+        {
             den = -den;
             num = -num;
         }
@@ -18,22 +20,16 @@ public class Rational implements Comparable<Rational> {
 
     private static int gcd(int m, int n)
     {
-        if (m < 0)
-            m = -m;
-        if (n < 0)
-            n = -n;
-        if (0 == n)
-            return m;
-        else
-            return gcd(n, m % n);
+        if (m < 0) m = -m;
+        if (n < 0) n = -n;
+        if (0 == n) return m;
+        else return gcd(n, m % n);
     }
 
     private static int lcm(int m, int n)
     {
-        if (m < 0)
-            m = -m;
-        if (n < 0)
-            n = -n;
+        if (m < 0) m = -m;
+        if (n < 0) n = -n;
         return m * (n / gcd(m, n));
     }
 
@@ -44,10 +40,8 @@ public class Rational implements Comparable<Rational> {
 
     public Rational abs()
     {
-        if (num >= 0)
-            return this;
-        else
-            return negate();
+        if (num >= 0) return this;
+        else return negate();
     }
 
     public Rational negate()
@@ -87,20 +81,16 @@ public class Rational implements Comparable<Rational> {
 
     public boolean equals(Object y)
     {
-        if (y == null)
-            return false;
-        if (y.getClass() != this.getClass())
-            return false;
+        if (y == null) return false;
+        if (y.getClass() != this.getClass()) return false;
         Rational b = (Rational) y;
         return compareTo(b) == 0;
     }
 
     public String toString()
     {
-        if (den == 1)
-            return num + "";
-        else
-            return num + "/" + den;
+        if (den == 1) return num + "";
+        else return num + "/" + den;
     }
 
     public int compareTo(Rational b)
@@ -108,10 +98,8 @@ public class Rational implements Comparable<Rational> {
         Rational a = this;
         int lhs = a.num * b.den;
         int rhs = a.den * b.num;
-        if (lhs < rhs)
-            return -1;
-        if (lhs > rhs)
-            return +1;
+        if (lhs < rhs) return -1;
+        if (lhs > rhs) return +1;
         return 0;
     }
 
@@ -130,10 +118,8 @@ public class Rational implements Comparable<Rational> {
     {
         Rational a = this;
 
-        if (a.compareTo(zero) == 0)
-            return b;
-        if (b.compareTo(zero) == 0)
-            return a;
+        if (a.compareTo(zero) == 0) return b;
+        if (b.compareTo(zero) == 0) return a;
 
         int f = gcd(a.num, b.num);
         int g = gcd(a.den, b.den);

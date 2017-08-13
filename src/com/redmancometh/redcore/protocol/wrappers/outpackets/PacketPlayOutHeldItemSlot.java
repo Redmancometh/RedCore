@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.08.23..
  */
-public class PacketPlayOutHeldItemSlot extends WrappedPacket {
+public class PacketPlayOutHeldItemSlot extends WrappedPacket
+{
     public int slot;
 
     public PacketPlayOutHeldItemSlot()

@@ -4,12 +4,14 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutExplosion extends WrappedPacket {
+public class PacketPlayOutExplosion extends WrappedPacket
+{
     public ArrayList<BlockLocation> blocks = new ArrayList<>();
     public float pushX;
     public float pushY;
@@ -50,7 +52,8 @@ public class PacketPlayOutExplosion extends WrappedPacket {
     public void fromVanillaBlockLocations(List l)
     {
         blocks = new ArrayList<>();
-        for (Object o : l) {
+        for (Object o : l)
+        {
             blocks.add(new BlockLocation(o));
         }
     }

@@ -1,8 +1,11 @@
 package com.redmancometh.redcore.util;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
-class Itr<E> implements Iterator {
+class Itr<E> implements Iterator
+{
 
     private boolean first = true;
     private QueueNode<E> itr;
@@ -21,9 +24,11 @@ class Itr<E> implements Iterator {
     @Override
     public E next()
     {
-        if (this.first) {
+        if (this.first)
+        {
             this.first = false;
-        } else if (this.hasNext()) {
+        } else if (this.hasNext())
+        {
             this.itr = this.itr.getNextNode();
         }
         return this.itr.getValue();
@@ -36,7 +41,8 @@ class Itr<E> implements Iterator {
     }
 }
 
-public final class LinkedQueue<E> implements Collection<E> {
+public final class LinkedQueue<E> implements Collection<E>
+{
 
     private QueueNode<E> loc;
     private QueueNode<E> node;
@@ -54,9 +60,11 @@ public final class LinkedQueue<E> implements Collection<E> {
 
     public E dequeue()
     {
-        if (this.size == 0) {
+        if (this.size == 0)
+        {
             throw new IllegalStateException("LinkedQueue is empty!");
-        } else {
+        } else
+        {
             E val = this.node.getValue();
             this.remove(val);
             this.size--;
@@ -66,21 +74,26 @@ public final class LinkedQueue<E> implements Collection<E> {
 
     public E getFront()
     {
-        if (this.size == 0) {
+        if (this.size == 0)
+        {
             throw new IllegalStateException("LinkedQueue is empty!");
-        } else {
+        } else
+        {
             return this.node.getValue();
         }
     }
 
     public E getNext()
     {
-        if (this.loc == null) {
+        if (this.loc == null)
+        {
             this.loc = this.node;
-        } else {
+        } else
+        {
             this.loc = this.loc.getNextNode();
         }
-        if (this.loc == null) {
+        if (this.loc == null)
+        {
             this.loc = this.node;
         }
         return this.loc.getValue();
@@ -94,16 +107,20 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean insertBefore(E itemToInsert, E insertBefore)
     {
         QueueNode<E> temp = this.node;
-        while (temp.getNextNode() != null) {
-            if (temp.getValue() == insertBefore) {
+        while (temp.getNextNode() != null)
+        {
+            if (temp.getValue() == insertBefore)
+            {
                 QueueNode<E> insert = new QueueNode<>(temp.getPreviousNode(), itemToInsert, temp);
-                if (temp.getPreviousNode() != null) {
+                if (temp.getPreviousNode() != null)
+                {
                     temp.getPreviousNode().setNextNode(insert);
                 }
                 temp.setPreviousNode(insert);
                 this.size++;
                 return true;
-            } else {
+            } else
+            {
                 temp = temp.getNextNode();
             }
         }
@@ -125,8 +142,10 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean contains(Object o)
     {
         QueueNode<E> next = this.node;
-        while (next != null) {
-            if (next.getValue() == o) {
+        while (next != null)
+        {
+            if (next.getValue() == o)
+            {
                 return true;
             }
             next = next.getNextNode();
@@ -152,9 +171,11 @@ public final class LinkedQueue<E> implements Collection<E> {
     public <T> T[] toArray(T[] a)
     {
         QueueNode<E> next = this.node;
-        try {
+        try
+        {
             return (T[]) this.toArray();
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e)
+        {
             return null;
         }
     }
@@ -162,14 +183,18 @@ public final class LinkedQueue<E> implements Collection<E> {
     @Override
     public boolean add(E newElement)
     {
-        if (size == 0) {
+        if (size == 0)
+        {
             node = new QueueNode<>(null, newElement, null);
             this.size++;
             return true;
-        } else {
+        } else
+        {
             QueueNode<E> temp = this.node;
-            while (temp.getNextNode() != null) {
-                if (temp.getNextNode() != null) {
+            while (temp.getNextNode() != null)
+            {
+                if (temp.getNextNode() != null)
+                {
                     temp = temp.getNextNode();
                 }
             }
@@ -183,20 +208,26 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean remove(Object itemToRemove)
     {
         QueueNode<E> temp = this.node;
-        while (temp.getNextNode() != null) {
-            if (temp.getValue() == itemToRemove) {
-                if (temp.getPreviousNode() == null) {
+        while (temp.getNextNode() != null)
+        {
+            if (temp.getValue() == itemToRemove)
+            {
+                if (temp.getPreviousNode() == null)
+                {
                     temp.getNextNode().setPreviousNode(null);
                     this.node = temp.getNextNode();
-                } else if (temp.getNextNode() == null) {
+                } else if (temp.getNextNode() == null)
+                {
                     temp.getPreviousNode().setNextNode(null);
-                } else {
+                } else
+                {
                     temp.getPreviousNode().setNextNode(temp.getNextNode());
                     temp.getNextNode().setPreviousNode(temp.getPreviousNode());
                 }
                 this.size--;
                 return true;
-            } else {
+            } else
+            {
                 temp = temp.getNextNode();
             }
         }
@@ -207,8 +238,10 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean containsAll(Collection<?> c)
     {
         boolean all = true;
-        for (Object o : c) {
-            if (!this.contains(o)) {
+        for (Object o : c)
+        {
+            if (!this.contains(o))
+            {
                 all = false;
             }
         }
@@ -219,7 +252,8 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean addAll(Collection<? extends E> c)
     {
         boolean all = true;
-        for (E o : c) {
+        for (E o : c)
+        {
             this.add(o);
         }
         return all;
@@ -229,10 +263,13 @@ public final class LinkedQueue<E> implements Collection<E> {
     public boolean removeAll(Collection<?> c)
     {
         boolean all = true;
-        for (Object o : c) {
-            try {
+        for (Object o : c)
+        {
+            try
+            {
                 this.remove(o);
-            } catch (ClassCastException e) {
+            } catch (ClassCastException e)
+            {
                 all = false;
             }
         }
@@ -244,11 +281,15 @@ public final class LinkedQueue<E> implements Collection<E> {
     {
         boolean all = true;
         LinkedQueue<E> nodes = new LinkedQueue();
-        for (Object o : this) {
-            if (!c.contains(o)) {
-                try {
+        for (Object o : this)
+        {
+            if (!c.contains(o))
+            {
+                try
+                {
                     nodes.add((E) o);
-                } catch (ClassCastException e) {
+                } catch (ClassCastException e)
+                {
                     all = false;
                 }
             }
@@ -265,7 +306,8 @@ public final class LinkedQueue<E> implements Collection<E> {
     }
 }
 
-class QueueNode<E> {
+class QueueNode<E>
+{
 
     private QueueNode<E> next;
     private QueueNode<E> previous;

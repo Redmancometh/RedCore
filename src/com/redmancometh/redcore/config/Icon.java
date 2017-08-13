@@ -6,7 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class Icon {
+public class Icon
+{
     private Short dataValue = 0;
     private String displayName;
     private List<String> lore;

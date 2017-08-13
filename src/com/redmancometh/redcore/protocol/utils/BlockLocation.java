@@ -2,13 +2,18 @@ package com.redmancometh.redcore.protocol.utils;
 
 import com.redmancometh.redcore.config.StringSerializable;
 import com.redmancometh.redcore.protocol.Reflection;
-import com.redmancometh.redcore.spigotutils.*;
-import org.bukkit.*;
+import com.redmancometh.redcore.spigotutils.LocationData;
+import com.redmancometh.redcore.spigotutils.SU;
+import com.redmancometh.redcore.spigotutils.ServerVersion;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
-public class BlockLocation implements WrappedData, StringSerializable {
+public class BlockLocation implements WrappedData, StringSerializable
+{
     public static final BlockLocation notDefined = new BlockLocation(0, 0, 0);
     private static final Class baseCl = Reflection.getNMSClass("BaseBlockPosition");
     private static final Class cl = Reflection.getNMSClass("BlockPosition");
@@ -59,11 +64,13 @@ public class BlockLocation implements WrappedData, StringSerializable {
 
     public BlockLocation(Object nmsData)
     {
-        try {
+        try
+        {
             x = (int) getX.invoke(nmsData);
             y = (int) getY.invoke(nmsData);
             z = (int) getZ.invoke(nmsData);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
     }
@@ -87,8 +94,7 @@ public class BlockLocation implements WrappedData, StringSerializable {
     @Override
     public boolean equals(Object obj)
     {
-        if (!(obj instanceof BlockLocation))
-            return false;
+        if (!(obj instanceof BlockLocation)) return false;
         BlockLocation bl = (BlockLocation) obj;
         return bl.x == x && bl.y == y && bl.z == z;
     }
@@ -112,9 +118,11 @@ public class BlockLocation implements WrappedData, StringSerializable {
     @Override
     public Object toNMS()
     {
-        try {
+        try
+        {
             return con.newInstance(x, y, z);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;

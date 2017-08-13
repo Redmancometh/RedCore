@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketStatusOutPong extends WrappedPacket {
+public class PacketStatusOutPong extends WrappedPacket
+{
     public long id;
 
     @Override

@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.chat;
 
-public class ChatClickEvent {
+public class ChatClickEvent
+{
     public ChatClickEventType action;
     public String value;
 

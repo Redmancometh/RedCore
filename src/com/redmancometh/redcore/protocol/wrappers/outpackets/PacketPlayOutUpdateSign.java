@@ -2,7 +2,8 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 
 import com.redmancometh.redcore.api.ChatAPI;
 import com.redmancometh.redcore.chat.ChatTag;
-import com.redmancometh.redcore.nbt.*;
+import com.redmancometh.redcore.nbt.NBTCompound;
+import com.redmancometh.redcore.nbt.NBTPrimitive;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
@@ -11,7 +12,8 @@ import com.redmancometh.redcore.spigotutils.ServerVersion;
 
 import java.lang.reflect.Array;
 
-public class PacketPlayOutUpdateSign extends WrappedPacket {
+public class PacketPlayOutUpdateSign extends WrappedPacket
+{
     public BlockLocation block;
     public ChatTag[] lines;
 
@@ -33,7 +35,8 @@ public class PacketPlayOutUpdateSign extends WrappedPacket {
         block = new BlockLocation(data[1]);
         lines = new ChatTag[4];
         Object[] packetLines = (Object[]) data[2];
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i)
+        {
             lines[i] = ChatTag.fromICBC(packetLines[i]);
         }
     }
@@ -41,7 +44,8 @@ public class PacketPlayOutUpdateSign extends WrappedPacket {
     @Override
     public Object getVanillaPacket()
     {
-        if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_9))
+        {
             NBTCompound nbt = new NBTCompound();
             for (int i = 0; i < 4; ++i)
                 nbt.map.put("Text" + (i + 1), new NBTPrimitive(lines[i].toString()));

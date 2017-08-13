@@ -2,14 +2,22 @@ package com.redmancometh.redcore.mojang;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
-import java.net.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
  */
-public class MultipartUtility {
+public class MultipartUtility
+{
     private static final String LINE_FEED = "\r\n";
     private final String boundary;
     private String charset = "UTF-8";
@@ -35,8 +43,7 @@ public class MultipartUtility {
         con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(method);
         con.setDoOutput(true);
-        con.setRequestProperty("Content-Type",
-                "multipart/form-data; boundary=" + boundary);
+        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         outputStream = new ByteArrayOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);
     }
@@ -52,17 +59,16 @@ public class MultipartUtility {
     {
         String fileName = uploadFile.getName();
         writer.append("--").append(boundary).append(LINE_FEED);
-        writer.append("Content-Disposition: form-data; name=\"").append(fieldName).append("\"; filename=\"").append(fileName).append("\"")
-                .append(LINE_FEED);
-        writer.append("Content-Type: ").append(URLConnection.guessContentTypeFromName(fileName))
-                .append(LINE_FEED);
+        writer.append("Content-Disposition: form-data; name=\"").append(fieldName).append("\"; filename=\"").append(fileName).append("\"").append(LINE_FEED);
+        writer.append("Content-Type: ").append(URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
         writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
         writer.append(LINE_FEED);
 
         FileInputStream inputStream = new FileInputStream(uploadFile);
         byte[] buffer = new byte[4096];
         int bytesRead = -1;
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
+        while ((bytesRead = inputStream.read(buffer)) != -1)
+        {
             outputStream.write(buffer, 0, bytesRead);
         }
         outputStream.flush();
@@ -81,10 +87,8 @@ public class MultipartUtility {
     public void addFormField(String name, String value)
     {
         writer.append("--").append(boundary).append(LINE_FEED);
-        writer.append("Content-Disposition: form-data; name=\"").append(name).append("\"")
-                .append(LINE_FEED);
-        writer.append("Content-Type: text/plain; charset=").append(charset).append(
-                LINE_FEED);
+        writer.append("Content-Disposition: form-data; name=\"").append(name).append("\"").append(LINE_FEED);
+        writer.append("Content-Type: text/plain; charset=").append(charset).append(LINE_FEED);
         writer.append(LINE_FEED);
         writer.append(value).append(LINE_FEED);
     }

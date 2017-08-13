@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class ScoreboardAPI {
+public class ScoreboardAPI
+{
     public static long id = 1;
     public static HashMap<String, PlayerBars> nametags = new HashMap<>();
     public static HashMap<String, PlayerBars> sidebars = new HashMap<>();
@@ -37,18 +38,16 @@ public class ScoreboardAPI {
 
     private static boolean set(Player plr, PlayerBars info, ScoreboardBar to)
     {
-        if (plr == null || info == null)
-            return false;
+        if (plr == null || info == null) return false;
         ScoreboardBar from = info.active;
         info.active = to;
-        if (from == to)
-            return false;
-        if (to == null) {
+        if (from == to) return false;
+        if (to == null)
+        {
             from.unload(plr);
             return true;
         }
-        if (!to.load(plr))
-            to.activate(plr);
+        if (!to.load(plr)) to.activate(plr);
         return true;
     }
 
@@ -64,30 +63,33 @@ public class ScoreboardAPI {
 
     public static String[] specialSplit(String in, char uniqueChar)
     {
-        if ((in = SU.optimizeColorCodes(in)).length() < 17)
-            return new String[]{in, "§" + uniqueChar, ""};
+        if ((in = SU.optimizeColorCodes(in)).length() < 17) return new String[]{in, "§" + uniqueChar, ""};
         String[] out = new String[3];
         out[0] = in.substring(0, 16);
-        if (out[0].endsWith("§")) {
+        if (out[0].endsWith("§"))
+        {
             out[0] = out[0].substring(0, 15);
             in = out[0] + ' ' + in.substring(15);
         }
         StringBuilder formats = new StringBuilder();
         int prev = 32;
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < 16; ++i)
+        {
             char c = in.charAt(i);
-            if (prev == 167) {
-                if (c >= '0' && c <= '9' || c >= 'a' && c <= 'f')
-                    formats.setLength(0);
+            if (prev == 167)
+            {
+                if (c >= '0' && c <= '9' || c >= 'a' && c <= 'f') formats.setLength(0);
                 formats.append('§').append(c);
             }
             prev = c;
         }
         in = SU.setLength(formats + in.substring(16), 54);
-        if (in.length() < 17) {
+        if (in.length() < 17)
+        {
             out[1] = "§" + uniqueChar;
             out[2] = in;
-        } else {
+        } else
+        {
             int id = in.length() - 16;
             out[1] = "§" + uniqueChar + in.substring(0, id);
             out[2] = in.substring(id);

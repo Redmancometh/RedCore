@@ -3,9 +3,11 @@ package com.redmancometh.redcore.animation.effects;
 import com.redmancometh.redcore.animation.CustomEffect;
 import com.redmancometh.redcore.config.StringSerializable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class BlinkEffect implements StringSerializable, CustomEffect {
+public class BlinkEffect implements StringSerializable, CustomEffect
+{
     private boolean active = true;
     private Iterator<Long> data;
     private long remaining;
@@ -14,15 +16,19 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
 
     public BlinkEffect(String in)
     {
-        if (in.startsWith("{")) {
-            for (String s : in.substring(1, in.indexOf("}")).split(" ")) {
-                if (s.equals("A")) {
+        if (in.startsWith("{"))
+        {
+            for (String s : in.substring(1, in.indexOf("}")).split(" "))
+            {
+                if (s.equals("A"))
+                {
                     active = false;
                     continue;
                 }
                 repeat.add(Long.valueOf(s));
             }
-        } else {
+        } else
+        {
             repeat.add(1L);
             text = in;
         }
@@ -47,18 +53,19 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
     }
 
     @Override
-    public String toString()
+    public String next(String in)
     {
-        StringBuilder out = new StringBuilder();
-        out.append("{");
-        if (!active) {
-            out.append("A ");
+        --remaining;
+        if (remaining == 0)
+        {
+            if (!data.hasNext())
+            {
+                data = repeat.iterator();
+            }
+            remaining = data.next();
+            active = !active;
         }
-        for (Long r : repeat) {
-            out.append(r).append(' ');
-        }
-        out.setCharAt(out.length() - 1, '}');
-        return out.append(text).toString();
+        return active ? in : in.replaceAll(".", " ");
     }
 
     @Override
@@ -74,17 +81,20 @@ public class BlinkEffect implements StringSerializable, CustomEffect {
     }
 
     @Override
-    public String next(String in)
+    public String toString()
     {
-        --remaining;
-        if (remaining == 0) {
-            if (!data.hasNext()) {
-                data = repeat.iterator();
-            }
-            remaining = data.next();
-            active = !active;
+        StringBuilder out = new StringBuilder();
+        out.append("{");
+        if (!active)
+        {
+            out.append("A ");
         }
-        return active ? in : in.replaceAll(".", " ");
+        for (Long r : repeat)
+        {
+            out.append(r).append(' ');
+        }
+        out.setCharAt(out.length() - 1, '}');
+        return out.append(text).toString();
     }
 }
 

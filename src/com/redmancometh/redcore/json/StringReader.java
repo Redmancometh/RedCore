@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.json;
 
-public class StringReader {
+public class StringReader
+{
     public int id;
     public char[] str;
 

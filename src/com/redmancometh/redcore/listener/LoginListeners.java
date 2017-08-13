@@ -1,18 +1,21 @@
 package com.redmancometh.redcore.listener;
 
-import com.redmancometh.redcore.*;
+import com.redmancometh.redcore.RedCore;
+import com.redmancometh.redcore.RedPlugins;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class LoginListeners implements Listener {
+public class LoginListeners implements Listener
+{
     @EventHandler
     public void onLogin(PlayerJoinEvent e)
     {
         Player p = e.getPlayer();
         RedPlugins plugins = RedCore.getInstance().getPluginManager();
-        plugins.forEach((redPlugin) ->
-        {
+        plugins.forEach((redPlugin) -> {
             if (redPlugin.loginFetch()) redPlugin.getManager().getRecord(p.getUniqueId());
         });
     }
@@ -22,8 +25,7 @@ public class LoginListeners implements Listener {
     {
         Player p = e.getPlayer();
         RedPlugins plugins = RedCore.getInstance().getPluginManager();
-        plugins.forEach((redPlugin) ->
-        {
+        plugins.forEach((redPlugin) -> {
             if (redPlugin.logoutSave()) redPlugin.getManager().saveAndPurge(p);
         });
     }

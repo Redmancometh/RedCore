@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.mediators;
 
-import com.redmancometh.redcore.*;
+import com.redmancometh.redcore.Defaultable;
+import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.databasing.SubDatabase;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 import com.redmancometh.redcore.util.SpecialFuture;
@@ -8,7 +9,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T> {
+public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManager<T>
+{
     private final Class<T> type;
 
     public ObjectManager(Class<T> type)
@@ -19,11 +21,6 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
     public void delete(T e)
     {
         getSubDB().deleteObject(e);
-    }
-
-    public T getBlocking(UUID key)
-    {
-        return getSubDB().get(key);
     }
 
     /**
@@ -45,6 +42,11 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
     public Class<T> getType()
     {
         return type;
+    }
+
+    public T getBlocking(UUID key)
+    {
+        return getSubDB().get(key);
     }
 
     public SpecialFuture<T> getRecord(UUID uuid)
@@ -75,11 +77,12 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
     public SpecialFuture<T> saveAndPurge(Player p)
     {
         UUID uuid = p.getUniqueId();
-        return getSubDB().getObject(uuid).thenAccept((record) ->
-        {
-            try {
+        return getSubDB().getObject(uuid).thenAccept((record) -> {
+            try
+            {
                 getSubDB().saveAndPurge(record, uuid);
-            } catch (ObjectNotPresentException e) {
+            } catch (ObjectNotPresentException e)
+            {
                 e.printStackTrace();
             }
         });
@@ -87,9 +90,11 @@ public class ObjectManager<T extends Defaultable<?>> implements BaseObjectManage
 
     public SpecialFuture<?> saveAndPurge(T e, UUID uuid)
     {
-        try {
+        try
+        {
             return getSubDB().saveAndPurge(e, uuid);
-        } catch (ObjectNotPresentException ex) {
+        } catch (ObjectNotPresentException ex)
+        {
             ex.printStackTrace();
         }
         return null;

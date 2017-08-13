@@ -2,7 +2,8 @@ package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.utils.Direction;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -16,17 +17,21 @@ import static java.lang.Math.*;
 /**
  * Created by GyuriX on 2016. 07. 13..
  */
-public class BlockUtils {
+public class BlockUtils
+{
     private static final Method getBlockByIdM, getBlockIdM, fromLegacyDataM, toLegacyDataM, getCombinedIdM;
     private static Map<Object, Integer> nmsBlockIDMap;
 
-    static {
+    static
+    {
         Class regIDCl = getNMSClass("RegistryID");
         Class blCl = getNMSClass("Block");
-        try {
+        try
+        {
             if (Reflection.ver.isBellow(ServerVersion.v1_11))
                 nmsBlockIDMap = (Map<Object, Integer>) Reflection.getFieldData(regIDCl, "a", Reflection.getFirstFieldOfType(blCl, regIDCl).get(null));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         getBlockByIdM = getMethod(blCl, "getById", int.class);
@@ -38,9 +43,11 @@ public class BlockUtils {
 
     public static int getCombinedId(Object nmsBlock)
     {
-        try {
+        try
+        {
             return (int) getCombinedIdM.invoke(null, nmsBlock);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
         return 0;
@@ -54,9 +61,11 @@ public class BlockUtils {
 
     public static Object getNMSBlock(int id, byte data)
     {
-        try {
+        try
+        {
             return fromLegacyDataM.invoke(getBlockByIdM.invoke(null, id), (int) data);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -64,15 +73,18 @@ public class BlockUtils {
 
     public static byte getNMSBlockData(Object nmsBlock)
     {
-        try {
+        try
+        {
             Integer id = nmsBlockIDMap.get(nmsBlock);
-            if (id == null) {
+            if (id == null)
+            {
                 SU.cs.sendMessage("§cBlock §e" + nmsBlock + "§c was not found.");
                 return 0;
             }
             Object blockType = getBlockByIdM.invoke(null, id);
             return (byte) (int) toLegacyDataM.invoke(blockType, nmsBlock);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             return 0;
         }
     }
@@ -85,9 +97,11 @@ public class BlockUtils {
 
     public static Object getNMSBlockType(int id)
     {
-        try {
+        try
+        {
             return getBlockByIdM.invoke(null, id);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -95,9 +109,11 @@ public class BlockUtils {
 
     public static int getNMSBlockTypeId(Object nmsBlock)
     {
-        try {
+        try
+        {
             return (int) getBlockIdM.invoke(null, nmsBlock);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return 0;
         }
@@ -107,33 +123,30 @@ public class BlockUtils {
     {
         double x = vec.getX();
         double z = vec.getZ();
-        if (x == 0 && z == 0)
-            return vec.getY() == 0 ? 0 : vec.getY() > 0 ? 90 : -90;
+        if (x == 0 && z == 0) return vec.getY() == 0 ? 0 : vec.getY() > 0 ? 90 : -90;
         return (float) toDegrees(atan(-vec.getY() / sqrt(x * x + z * z)));
     }
 
     public static byte getSignDurability(float yaw)
     {
         yaw -= 168.75f;
-        while (yaw < 0)
-            yaw += 360;
+        while (yaw < 0) yaw += 360;
         return (byte) (yaw / 22.5f);
     }
 
     public static Direction getSimpleDirection(float yaw, float pitch)
     {
-        while (yaw < 45)
-            yaw += 360;
+        while (yaw < 45) yaw += 360;
         yaw -= 45;
         return pitch > 45 ? Direction.DOWN : pitch < -45 ? Direction.UP : Direction.values()[(int) (yaw / 90 + 2)];
     }
 
     public static Location getYMax(World world, int minx, int minz)
     {
-        for (int y = 255; y > 0; y--) {
+        for (int y = 255; y > 0; y--)
+        {
             Block b = world.getBlockAt(minx, y, minz);
-            if (b.getType().isSolid())
-                return b.getLocation();
+            if (b.getType().isSolid()) return b.getLocation();
         }
         return new Location(world, minx, 1, minz);
     }

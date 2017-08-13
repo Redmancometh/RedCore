@@ -1,11 +1,13 @@
 package com.redmancometh.redcore.scoreboard;
 
-import com.redmancometh.redcore.protocol.wrappers.outpackets.*;
+import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutScoreboardObjective;
+import com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutScoreboardScore;
 import com.redmancometh.redcore.scoreboard.team.TeamData;
 import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutScoreboardScore.ScoreAction.CHANGE;
 import static com.redmancometh.redcore.protocol.wrappers.outpackets.PacketPlayOutScoreboardScore.ScoreAction.REMOVE;
@@ -14,7 +16,8 @@ import static com.redmancometh.redcore.scoreboard.ScoreboardDisplayMode.INTEGER;
 /**
  * Created by GyuriX on 2016. 12. 03..
  */
-public class BarData {
+public class BarData
+{
     public final String barname;
     public final HashMap<String, Integer> scores = new HashMap<>();
     public final HashMap<String, TeamData> teams = new HashMap<>();
@@ -60,31 +63,30 @@ public class BarData {
     {
         if (!old.title.equals(title) || old.displayMode != displayMode)
             SU.tp.sendPacket(plr, new PacketPlayOutScoreboardObjective(barname, title, displayMode, 2));
-        for (Map.Entry<String, Integer> e : old.scores.entrySet()) {
+        for (Map.Entry<String, Integer> e : old.scores.entrySet())
+        {
             String pln = e.getKey();
             int oldScore = e.getValue();
             Integer newscore = scores.get(pln);
-            if (newscore == null)
-                SU.tp.sendPacket(plr, new PacketPlayOutScoreboardScore(REMOVE, barname, pln, 0));
+            if (newscore == null) SU.tp.sendPacket(plr, new PacketPlayOutScoreboardScore(REMOVE, barname, pln, 0));
             else if (newscore != oldScore)
                 SU.tp.sendPacket(plr, new PacketPlayOutScoreboardScore(CHANGE, barname, pln, newscore));
         }
-        for (Map.Entry<String, Integer> e : scores.entrySet()) {
+        for (Map.Entry<String, Integer> e : scores.entrySet())
+        {
             String pln = e.getKey();
             if (!old.scores.containsKey(pln))
                 SU.tp.sendPacket(plr, new PacketPlayOutScoreboardScore(CHANGE, barname, pln, e.getValue()));
         }
-        for (Map.Entry<String, TeamData> e : old.teams.entrySet()) {
+        for (Map.Entry<String, TeamData> e : old.teams.entrySet())
+        {
             String teamName = e.getKey();
             TeamData oldTeam = e.getValue();
             TeamData newTeam = teams.get(teamName);
-            if (newTeam == null)
-                SU.tp.sendPacket(plr, oldTeam.getRemovePacket());
-            else
-                newTeam.update(plr, oldTeam);
+            if (newTeam == null) SU.tp.sendPacket(plr, oldTeam.getRemovePacket());
+            else newTeam.update(plr, oldTeam);
         }
         for (TeamData td : teams.values())
-            if (!old.teams.containsKey(td.name))
-                SU.tp.sendPacket(plr, td.getCreatePacket());
+            if (!old.teams.containsKey(td.name)) SU.tp.sendPacket(plr, td.getCreatePacket());
     }
 }

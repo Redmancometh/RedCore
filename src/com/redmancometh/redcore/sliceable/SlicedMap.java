@@ -2,8 +2,10 @@ package com.redmancometh.redcore.sliceable;
 
 import org.apache.commons.collections4.map.LinkedMap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author Redmancometh
@@ -12,7 +14,8 @@ import java.util.function.*;
  * <p>
  * This class provides a one-to-many batch relation.
  */
-public class SlicedMap<K, V> extends LinkedMap<K, V> implements SliceableMap<K, V> {
+public class SlicedMap<K, V> extends LinkedMap<K, V> implements SliceableMap<K, V>
+{
     /**
      *
      */
@@ -44,15 +47,15 @@ public class SlicedMap<K, V> extends LinkedMap<K, V> implements SliceableMap<K, 
     }
 
     @Override
-    public void processAction(K e, V e2)
-    {
-
-    }
-
-    @Override
     public boolean isTailConsumer(int e)
     {
         return tailConsumerMap.get(e);
+    }
+
+    @Override
+    public void processAction(K e, V e2)
+    {
+
     }
 
     public void processForKey(K e)
@@ -62,15 +65,19 @@ public class SlicedMap<K, V> extends LinkedMap<K, V> implements SliceableMap<K, 
 
     public void processItem(int amount)
     {
-        if (amount == 1) {
+        if (amount == 1)
+        {
             action.accept(getValue(currentIndex));
             currentIndex++;
             return;
         }
-        for (int x = currentIndex; x < amount; x++) {
+        for (int x = currentIndex; x < amount; x++)
+        {
             action.accept(getValue(currentIndex));
-            if (currentIndex + 1 > size()) {
-                if (tailConsumer) {
+            if (currentIndex + 1 > size())
+            {
+                if (tailConsumer)
+                {
                     processTasks(amount - x);
                     currentIndex = 0;
                     return;

@@ -4,12 +4,13 @@ import com.redmancometh.redcore.protocol.Reflection;
 
 import java.lang.reflect.Method;
 
-public enum ScoreboardDisplayMode {
-    INTEGER,
-    HEARTS;
+public enum ScoreboardDisplayMode
+{
+    INTEGER, HEARTS;
     private static Method valueOf;
 
-    static {
+    static
+    {
         valueOf = Reflection.getMethod(Reflection.getNMSClass("IScoreboardCriteria$EnumScoreboardHealthDisplay"), "valueOf", String.class);
     }
 
@@ -19,9 +20,11 @@ public enum ScoreboardDisplayMode {
 
     public Object toNMS()
     {
-        try {
+        try
+        {
             return valueOf.invoke(null, name());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             return null;
         }
     }

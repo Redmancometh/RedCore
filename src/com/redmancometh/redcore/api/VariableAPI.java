@@ -4,9 +4,13 @@ import com.redmancometh.redcore.spigotutils.SU;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-public class VariableAPI {
+public class VariableAPI
+{
     public static final ArrayList<Object> emptyList = new ArrayList<>();
     public static final HashMap<String, VariableHandler> handlers = new HashMap();
     private static final HashSet<String> errorVars = new HashSet<>();
@@ -17,10 +21,13 @@ public class VariableAPI {
         int l = msg.length();
         int sid = from;
         ArrayList<Object> out = new ArrayList<>();
-        for (int i = from; i < l; ++i) {
+        for (int i = from; i < l; ++i)
+        {
             char c = msg.charAt(i);
-            if (c == '<') {
-                if (sid < i) {
+            if (c == '<')
+            {
+                if (sid < i)
+                {
                     out.add(msg.substring(sid, i));
                 }
                 ArrayList<Object> d = fill(msg, i + 1, plr, oArgs);
@@ -31,13 +38,15 @@ public class VariableAPI {
                 continue;
             }
             if (c != '>') continue;
-            if (sid < i) {
+            if (sid < i)
+            {
                 out.add(msg.substring(sid, i));
             }
             out.add(0, i);
             return out;
         }
-        if (sid < msg.length()) {
+        if (sid < msg.length())
+        {
             out.add(msg.substring(sid, msg.length()));
         }
         out.add(0, msg.length() - 1);
@@ -48,13 +57,16 @@ public class VariableAPI {
     {
         StringBuilder sb = new StringBuilder();
         int l = inside.size();
-        for (int c = 0; c < l; ++c) {
+        for (int c = 0; c < l; ++c)
+        {
             String os = String.valueOf(inside.get(c));
             int id = os.indexOf(58);
-            if (id != -1) {
+            if (id != -1)
+            {
                 sb.append(os.substring(0, id));
                 ArrayList<Object> list = new ArrayList<>(inside.subList(c + 1, l));
-                if (id != os.length() - 1) {
+                if (id != os.length() - 1)
+                {
                     list.add(0, os.substring(id + 1));
                 }
                 return handle(sb.toString(), plr, list, oArgs);
@@ -75,15 +87,18 @@ public class VariableAPI {
     private static Object handle(String var, Player plr, ArrayList<Object> inside, Object[] oArgs)
     {
         VariableHandler vh = handlers.get(var);
-        if (vh == null) {
-            if (missingHandlers.add(var))
-                SU.log(SU.pl(), "§cMissing handler for variable §f" + var + "§c!");
+        if (vh == null)
+        {
+            if (missingHandlers.add(var)) SU.log(SU.pl(), "§cMissing handler for variable §f" + var + "§c!");
             return "<" + var + ">";
         }
-        try {
+        try
+        {
             return vh.getValue(plr, inside, oArgs);
-        } catch (Throwable e) {
-            if (errorVars.add(var)) {
+        } catch (Throwable e)
+        {
+            if (errorVars.add(var))
+            {
                 SU.log(SU.pl(), "§cError on calculating variable §f" + var + "§c!");
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
@@ -91,7 +106,8 @@ public class VariableAPI {
         }
     }
 
-    public interface VariableHandler {
+    public interface VariableHandler
+    {
         Object getValue(Player plr, ArrayList<Object> args, Object[] eArgs);
     }
 

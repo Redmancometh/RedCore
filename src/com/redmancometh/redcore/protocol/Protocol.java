@@ -1,15 +1,22 @@
 package com.redmancometh.redcore.protocol;
 
 import com.google.common.collect.Lists;
-import com.redmancometh.redcore.protocol.event.*;
+import com.redmancometh.redcore.protocol.event.PacketInEvent;
+import com.redmancometh.redcore.protocol.event.PacketInType;
+import com.redmancometh.redcore.protocol.event.PacketOutEvent;
+import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class Protocol implements Listener {
+public abstract class Protocol implements Listener
+{
     private static final HashMap<PacketInListener, PacketInType> inListenerTypes = new HashMap<>();
     private static final HashMap<PacketInType, ArrayList<PacketInListener>> inListeners = new HashMap<>();
     private static final HashMap<PacketOutListener, PacketOutType> outListenerTypes = new HashMap<>();
@@ -26,20 +33,23 @@ public abstract class Protocol implements Listener {
     public static void dispatchPacketInEvent(PacketInEvent event)
     {
         String pn = event.getPacket().getClass().getSimpleName();
-        if (event.getType() == null) {
+        if (event.getType() == null)
+        {
             SU.cs.sendMessage(pa + "Missing in packet type:§c " + pn + "§e.");
             return;
         }
         ArrayList<PacketInListener> ll = inListeners.get(event.getType());
-        if (ll != null)
-            for (PacketInListener l : ll) {
-                try {
-                    l.onPacketIN(event);
-                } catch (Throwable e) {
-                    SU.cs.sendMessage(pa + "Error on dispatching PacketInEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
-                    SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-                }
+        if (ll != null) for (PacketInListener l : ll)
+        {
+            try
+            {
+                l.onPacketIN(event);
+            } catch (Throwable e)
+            {
+                SU.cs.sendMessage(pa + "Error on dispatching PacketInEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
+                SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
+        }
     }
 
     /**
@@ -50,20 +60,23 @@ public abstract class Protocol implements Listener {
     public static void dispatchPacketOutEvent(PacketOutEvent event)
     {
         String pn = event.getPacket().getClass().getSimpleName();
-        if (event.getType() == null) {
+        if (event.getType() == null)
+        {
             SU.cs.sendMessage(pa + "Missing out packet type:§c " + pn + "§e.");
             return;
         }
         ArrayList<PacketOutListener> ll = outListeners.get(event.getType());
-        if (ll != null)
-            for (PacketOutListener l : ll) {
-                try {
-                    l.onPacketOUT(event);
-                } catch (Throwable e) {
-                    SU.cs.sendMessage(pa + "Error on dispatching PacketOutEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
-                    SU.error(SU.cs, e, "RedCore", "com.redmancometh");
-                }
+        if (ll != null) for (PacketOutListener l : ll)
+        {
+            try
+            {
+                l.onPacketOUT(event);
+            } catch (Throwable e)
+            {
+                SU.cs.sendMessage(pa + "Error on dispatching PacketOutEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
+                SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
+        }
     }
 
     /**
@@ -106,7 +119,8 @@ public abstract class Protocol implements Listener {
     public void receivePacket(Player player, Object packet)
     {
         Object channel = getChannel(player);
-        if (channel == null || packet == null) {
+        if (channel == null || packet == null)
+        {
             SU.error(SU.cs, new RuntimeException("§cFailed to receive packet " + packet + " from player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
             return;
         }
@@ -141,16 +155,12 @@ public abstract class Protocol implements Listener {
         if (inListenerTypes.containsKey(listener))
             throw new RuntimeException("The given listener is already registered.");
         ArrayList<PacketInListener> pil = inListeners.get(packetType);
-        if (pil == null)
-            inListeners.put(packetType, Lists.newArrayList(listener));
-        else
-            pil.add(listener);
+        if (pil == null) inListeners.put(packetType, Lists.newArrayList(listener));
+        else pil.add(listener);
         inListenerTypes.put(listener, packetType);
         pil = pluginInListeners.get(plugin);
-        if (pil == null)
-            pluginInListeners.put(plugin, Lists.newArrayList(listener));
-        else
-            pil.add(listener);
+        if (pil == null) pluginInListeners.put(plugin, Lists.newArrayList(listener));
+        else pil.add(listener);
     }
 
     /**
@@ -165,16 +175,12 @@ public abstract class Protocol implements Listener {
         if (outListenerTypes.containsKey(listener))
             throw new RuntimeException("The given listener is already registered.");
         ArrayList<PacketOutListener> pol = outListeners.get(packetType);
-        if (pol == null)
-            outListeners.put(packetType, Lists.newArrayList(listener));
-        else
-            pol.add(listener);
+        if (pol == null) outListeners.put(packetType, Lists.newArrayList(listener));
+        else pol.add(listener);
         outListenerTypes.put(listener, packetType);
         pol = pluginOutListeners.get(plugin);
-        if (pol == null)
-            pluginOutListeners.put(plugin, Lists.newArrayList(listener));
-        else
-            pol.add(listener);
+        if (pol == null) pluginOutListeners.put(plugin, Lists.newArrayList(listener));
+        else pol.add(listener);
     }
 
     public abstract void registerServerChannelHook() throws Throwable;
@@ -188,7 +194,8 @@ public abstract class Protocol implements Listener {
     public void sendPacket(Player player, Object packet)
     {
         Object channel = getChannel(player);
-        if (channel == null || packet == null) {
+        if (channel == null || packet == null)
+        {
             SU.error(SU.cs, new RuntimeException("§cFailed to send packet " + packet + " to player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
             return;
         }
@@ -224,8 +231,7 @@ public abstract class Protocol implements Listener {
     public void unregisterIncomingListener(Plugin pl)
     {
         ArrayList<PacketInListener> pol = pluginInListeners.remove(pl);
-        if (pol == null)
-            return;
+        if (pol == null) return;
         for (PacketInListener l : pol)
             inListeners.remove(inListenerTypes.remove(l));
     }
@@ -248,8 +254,7 @@ public abstract class Protocol implements Listener {
     public void unregisterOutgoingListener(Plugin pl)
     {
         ArrayList<PacketOutListener> pol = pluginOutListeners.remove(pl);
-        if (pol == null)
-            return;
+        if (pol == null) return;
         for (PacketOutListener l : pol)
             outListeners.remove(outListenerTypes.remove(l));
     }
@@ -257,14 +262,16 @@ public abstract class Protocol implements Listener {
     /**
      * Interface used for listening to incoming packets
      */
-    public interface PacketInListener {
+    public interface PacketInListener
+    {
         void onPacketIN(PacketInEvent e);
     }
 
     /**
      * Interface used for listening to outgoing packets
      */
-    public interface PacketOutListener {
+    public interface PacketOutListener
+    {
         void onPacketOUT(PacketOutEvent e);
     }
 }

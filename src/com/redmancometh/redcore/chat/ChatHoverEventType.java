@@ -5,12 +5,15 @@ import java.util.HashMap;
 /**
  * Created by com.redmancometh on 22/11/2015.
  */
-public enum ChatHoverEventType {
+public enum ChatHoverEventType
+{
     show_text('T'), show_item('I'), show_achievement('A'), show_entity('E');
     static final HashMap<Character, ChatHoverEventType> byId = new HashMap<>();
 
-    static {
-        for (ChatHoverEventType t : values()) {
+    static
+    {
+        for (ChatHoverEventType t : values())
+        {
             byId.put(t.id, t);
         }
     }

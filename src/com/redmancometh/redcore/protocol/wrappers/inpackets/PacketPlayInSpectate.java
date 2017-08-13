@@ -5,8 +5,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.util.UUID;
 
-public class PacketPlayInSpectate
-        extends WrappedPacket {
+public class PacketPlayInSpectate extends WrappedPacket
+{
     private UUID entityUUID;
 
     @Override

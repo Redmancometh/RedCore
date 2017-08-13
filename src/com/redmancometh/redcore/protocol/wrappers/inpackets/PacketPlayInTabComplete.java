@@ -6,8 +6,8 @@ import com.redmancometh.redcore.protocol.utils.BlockLocation;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.ServerVersion;
 
-public class PacketPlayInTabComplete
-        extends WrappedPacket {
+public class PacketPlayInTabComplete extends WrappedPacket
+{
     public boolean assumeCommand;
     public BlockLocation block;
     public String text;
@@ -17,11 +17,11 @@ public class PacketPlayInTabComplete
     {
         Object[] data = PacketInType.TabComplete.getPacketData(packet);
         text = (String) data[0];
-        if (Reflection.ver.isAbove(ServerVersion.v1_10)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_10))
+        {
             assumeCommand = (boolean) data[1];
             block = data[2] == null ? null : new BlockLocation(data[2]);
-        } else
-            block = data[1] == null ? null : new BlockLocation(data[1]);
+        } else block = data[1] == null ? null : new BlockLocation(data[1]);
     }
 
     @Override

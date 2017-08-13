@@ -5,7 +5,8 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-public class PostTabCompleteEvent extends CommandEvent {
+public class PostTabCompleteEvent extends CommandEvent
+{
     private static final HandlerList hl = new HandlerList();
     private List<String> result;
 

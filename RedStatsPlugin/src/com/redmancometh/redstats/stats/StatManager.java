@@ -9,7 +9,8 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class StatManager {
+public class StatManager
+{
     public void incrementStat(Player p, StatType type)
     {
         incrementStat(p, type, 1);
@@ -43,11 +44,12 @@ public class StatManager {
     public void saveAndPurge(Player p)
     {
         UUID uuid = p.getUniqueId();
-        getSubDB().getObject(uuid).thenAccept((record) ->
-        {
-            try {
+        getSubDB().getObject(uuid).thenAccept((record) -> {
+            try
+            {
                 getSubDB().saveAndPurge(record);
-            } catch (ObjectNotPresentException e) {
+            } catch (ObjectNotPresentException e)
+            {
                 e.printStackTrace();
             }
         });

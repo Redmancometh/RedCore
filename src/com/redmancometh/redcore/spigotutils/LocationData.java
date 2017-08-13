@@ -2,11 +2,18 @@ package com.redmancometh.redcore.spigotutils;
 
 import com.redmancometh.redcore.config.StringSerializable;
 import com.redmancometh.redcore.protocol.utils.BlockLocation;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-public class LocationData implements StringSerializable {
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+
+@Embeddable
+public class LocationData implements StringSerializable, Serializable
+{
     public float pitch;
     public String world;
     public double x;
@@ -17,7 +24,8 @@ public class LocationData implements StringSerializable {
     public LocationData(String in)
     {
         String[] d = in.split(" ");
-        switch (d.length) {
+        switch (d.length)
+        {
             case 3:
                 x = Double.valueOf(d[0]);
                 y = Double.valueOf(d[1]);
@@ -33,16 +41,16 @@ public class LocationData implements StringSerializable {
                 x = Double.valueOf(d[0]);
                 y = Double.valueOf(d[1]);
                 z = Double.valueOf(d[2]);
-                yaw = Float.valueOf(d[3]).floatValue();
-                pitch = Float.valueOf(d[4]).floatValue();
+                yaw = Float.valueOf(d[3]);
+                pitch = Float.valueOf(d[4]);
                 return;
             case 6:
                 world = d[0];
                 x = Double.valueOf(d[1]);
                 y = Double.valueOf(d[2]);
                 z = Double.valueOf(d[3]);
-                yaw = Float.valueOf(d[4]).floatValue();
-                pitch = Float.valueOf(d[5]).floatValue();
+                yaw = Float.valueOf(d[4]);
+                pitch = Float.valueOf(d[5]);
                 return;
         }
     }
@@ -122,12 +130,14 @@ public class LocationData implements StringSerializable {
         return this;
     }
 
-    public Block getBlock()
+    public boolean equals(Object obj)
     {
-        if (!isAvailable()) {
-            return null;
+        if (obj == null || !(obj instanceof LocationData))
+        {
+            return false;
         }
-        return Bukkit.getWorld(world).getBlockAt((int) (x < 0 ? x - 0.999 : x), (int) y, (int) (z < 0 ? z - 0.999 : z));
+        LocationData ld = (LocationData) obj;
+        return (world == null && ld.world == null || world != null && ld.world != null && world.equals(ld.world)) && x == ld.x && y == ld.y && z == ld.z && yaw == ld.yaw && pitch == ld.pitch;
     }
 
     public boolean isAvailable()
@@ -150,21 +160,17 @@ public class LocationData implements StringSerializable {
         return vector;
     }
 
-    public LocationData setDirection(Vector vector)
+    @Override
+    public String toString()
     {
-        double x = vector.getX();
-        double z = vector.getZ();
-        if (x == 0.0 && z == 0.0) {
-            pitch = vector.getY() > 0.0 ? -90 : 90;
-            return this;
+        StringBuilder out = new StringBuilder();
+        if (world != null)
+        {
+            out.append(' ').append(world);
         }
-        double theta = Math.atan2(-x, z);
-        yaw = (float) Math.toDegrees((theta + 6.283185307179586) % 6.283185307179586);
-        double x2 = x * x;
-        double z2 = z * z;
-        double xz = Math.sqrt(x2 + z2);
-        pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
-        return this;
+        out.append(' ').append(x).append(' ').append(y).append(' ').append(z);
+        if (yaw != 0.0f || pitch != 0.0f) out.append(' ').append(yaw).append(' ').append(pitch);
+        return out.substring(1);
     }
 
     public Location getLocation()
@@ -193,13 +199,13 @@ public class LocationData implements StringSerializable {
         return hash;
     }
 
-    public boolean equals(Object obj)
+    public Block getBlock()
     {
-        if (obj == null || !(obj instanceof LocationData)) {
-            return false;
+        if (!isAvailable())
+        {
+            return null;
         }
-        LocationData ld = (LocationData) obj;
-        return (world == null && ld.world == null || world != null && ld.world != null && world.equals(ld.world)) && x == ld.x && y == ld.y && z == ld.z && yaw == ld.yaw && pitch == ld.pitch;
+        return Bukkit.getWorld(world).getBlockAt((int) (x < 0 ? x - 0.999 : x), (int) y, (int) (z < 0 ? z - 0.999 : z));
     }
 
     public LocationData clone()
@@ -207,17 +213,22 @@ public class LocationData implements StringSerializable {
         return new LocationData(this);
     }
 
-    @Override
-    public String toString()
+    public LocationData setDirection(Vector vector)
     {
-        StringBuilder out = new StringBuilder();
-        if (world != null) {
-            out.append(' ').append(world);
+        double x = vector.getX();
+        double z = vector.getZ();
+        if (x == 0.0 && z == 0.0)
+        {
+            pitch = vector.getY() > 0.0 ? -90 : 90;
+            return this;
         }
-        out.append(' ').append(x).append(' ').append(y).append(' ').append(z);
-        if (yaw != 0.0f || pitch != 0.0f)
-            out.append(' ').append(yaw).append(' ').append(pitch);
-        return out.substring(1);
+        double theta = Math.atan2(-x, z);
+        yaw = (float) Math.toDegrees((theta + 6.283185307179586) % 6.283185307179586);
+        double x2 = x * x;
+        double z2 = z * z;
+        double xz = Math.sqrt(x2 + z2);
+        pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
+        return this;
     }
 
     public LocationData multiple(LocationData ld)

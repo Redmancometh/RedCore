@@ -3,7 +3,8 @@ package com.redmancometh.redcore.sliceable;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class SlicedList<T> extends ArrayList<T> implements Sliceable<T> {
+public class SlicedList<T> extends ArrayList<T> implements Sliceable<T>
+{
 
     private static final long serialVersionUID = -5221471063452246214L;
     private Consumer<T> action;
@@ -30,15 +31,19 @@ public class SlicedList<T> extends ArrayList<T> implements Sliceable<T> {
 
     public void processTasks(int amount)
     {
-        if (amount == 1) {
+        if (amount == 1)
+        {
             action.accept(get(currentIndex));
             currentIndex++;
             return;
         }
-        for (int x = currentIndex; x < amount; x++) {
+        for (int x = currentIndex; x < amount; x++)
+        {
             action.accept(get(currentIndex));
-            if (currentIndex + 1 > size()) {
-                if (tailConsumer) {
+            if (currentIndex + 1 > size())
+            {
+                if (tailConsumer)
+                {
                     processTasks(amount - x);
                     currentIndex = 0;
                     return;

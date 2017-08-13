@@ -2,15 +2,19 @@ package com.redmancometh.redcore.sliceable;
 
 import org.apache.commons.collections4.map.LinkedMap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author Redmancometh
  * This provides a one-to-many time slicing system
  * You can either iterate through values directly, or you can slice a key's valueset up
  */
-public class SlicedMultiMap<K, V> extends LinkedMap<K, List<V>> implements SliceableMap<K, List<V>> {
+public class SlicedMultiMap<K, V> extends LinkedMap<K, List<V>> implements SliceableMap<K, List<V>>
+{
 
     private static final long serialVersionUID = 1L;
     private int currentIndex = 0;
@@ -36,15 +40,15 @@ public class SlicedMultiMap<K, V> extends LinkedMap<K, List<V>> implements Slice
         return indexMap.get(e);
     }
 
-    public boolean isTailConsumer(int e)
-    {
-        return tailConsumerMap.get(e);
-    }
-
     @Override
     public BiConsumer<K, List<V>> getKVAction()
     {
         return kvConsumer;
+    }
+
+    public boolean isTailConsumer(int e)
+    {
+        return tailConsumerMap.get(e);
     }
 
     @Override
@@ -61,18 +65,22 @@ public class SlicedMultiMap<K, V> extends LinkedMap<K, List<V>> implements Slice
     @Override
     public void processTasks(int amount)
     {
-        if (amount == 1) {
+        if (amount == 1)
+        {
             LinkEntry<K, List<V>> entry = getEntry(currentIndex);
             processAction(entry.getKey(), entry.getValue());
             currentIndex++;
             if (!(currentIndex < size())) currentIndex = 0;
             return;
         }
-        for (int x = currentIndex; x < amount; x++) {
+        for (int x = currentIndex; x < amount; x++)
+        {
             LinkEntry<K, List<V>> entry = getEntry(currentIndex);
             processAction(entry.getKey(), entry.getValue());
-            if (currentIndex + 1 > size()) {
-                if (tailConsumer || isTailConsumer(currentIndex)) {
+            if (currentIndex + 1 > size())
+            {
+                if (tailConsumer || isTailConsumer(currentIndex))
+                {
                     processTasks(amount - x);
                     currentIndex = 0;
                     return;

@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutRemoveEntityEffect extends WrappedPacket {
+public class PacketPlayOutRemoveEntityEffect extends WrappedPacket
+{
     /**
      * 1  - Speed 2  - Slowness 3  - Haste 4  - Mining Fatigue 5  - Strength 6  - Instant Health 7  - Instant Damage 8
      * - Jump Boost 9  - Nausea 10 - Regeneration 11 - Resistance 12 - Fire Resistance 13 - Water Breathing 14 -

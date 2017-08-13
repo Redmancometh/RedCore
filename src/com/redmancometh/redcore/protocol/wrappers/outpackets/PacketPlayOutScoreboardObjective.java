@@ -4,7 +4,8 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.scoreboard.ScoreboardDisplayMode;
 
-public class PacketPlayOutScoreboardObjective extends WrappedPacket {
+public class PacketPlayOutScoreboardObjective extends WrappedPacket
+{
     /**
      * Possible values:
      * 0 - create the scoreboard

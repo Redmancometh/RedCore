@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class NulledObjectManager extends ObjectManager {
+public class NulledObjectManager extends ObjectManager
+{
 
     public NulledObjectManager()
     {
@@ -16,16 +17,14 @@ public class NulledObjectManager extends ObjectManager {
     @Override
     public SpecialFuture<?> getRecord(UUID uuid)
     {
-        return SpecialFuture.runAsync(() ->
-        {
+        return SpecialFuture.runAsync(() -> {
         });
     }
 
     @Override
     public SpecialFuture save(Player p)
     {
-        return new SpecialFuture(() ->
-        {
+        return new SpecialFuture(() -> {
             return null;
         });
     }
@@ -33,8 +32,7 @@ public class NulledObjectManager extends ObjectManager {
     @Override
     public SpecialFuture saveAndPurge(Player p)
     {
-        return new SpecialFuture(() ->
-        {
+        return new SpecialFuture(() -> {
             return null;
         });
     }

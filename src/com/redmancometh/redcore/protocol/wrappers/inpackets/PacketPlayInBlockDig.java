@@ -2,12 +2,14 @@ package com.redmancometh.redcore.protocol.wrappers.inpackets;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketInType;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.protocol.utils.BlockLocation;
+import com.redmancometh.redcore.protocol.utils.Direction;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayInBlockDig extends WrappedPacket {
+public class PacketPlayInBlockDig extends WrappedPacket
+{
     public BlockLocation block;
     public DigType digType;
     public Direction direction;
@@ -27,17 +29,14 @@ public class PacketPlayInBlockDig extends WrappedPacket {
         return PacketInType.BlockDig.newPacket(block.toNMS(), direction == null ? null : direction.toNMS(), digType.toVanillaDigType());
     }
 
-    public enum DigType {
-        START_DESTROY_BLOCK,
-        ABORT_DESTROY_BLOCK,
-        STOP_DESTROY_BLOCK,
-        DROP_ALL_ITEMS,
-        DROP_ITEM,
-        RELEASE_USE_ITEM;
+    public enum DigType
+    {
+        START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM;
 
         private static final Method valueOf;
 
-        static {
+        static
+        {
             valueOf = Reflection.getMethod(Reflection.getNMSClass("PacketPlayInBlockDig$EnumPlayerDigType"), "valueOf", String.class);
         }
 
@@ -47,9 +46,11 @@ public class PacketPlayInBlockDig extends WrappedPacket {
 
         public Object toVanillaDigType()
         {
-            try {
+            try
+            {
                 return valueOf.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

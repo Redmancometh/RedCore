@@ -3,16 +3,19 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
-import io.netty.buffer.*;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 import static com.redmancometh.redcore.protocol.Reflection.*;
 
 /**
  * Created by com.redmancometh on 25/03/2017.
  */
-public class PacketPlayOutCustomPayload extends WrappedPacket {
+public class PacketPlayOutCustomPayload extends WrappedPacket
+{
     private static final Constructor con = getConstructor(getNMSClass("PacketDataSerializer"), ByteBuf.class);
     private static final Field f = getField(getNMSClass("PacketDataSerializer"), "a");
     public String channel;
@@ -34,9 +37,11 @@ public class PacketPlayOutCustomPayload extends WrappedPacket {
     {
         Object[] data = PacketOutType.CustomPayload.getPacketData(obj);
         channel = (String) data[0];
-        try {
+        try
+        {
             this.data = ((ByteBuf) f.get(data[1])).array();
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
     }
@@ -44,9 +49,11 @@ public class PacketPlayOutCustomPayload extends WrappedPacket {
     @Override
     public Object getVanillaPacket()
     {
-        try {
+        try
+        {
             return PacketOutType.CustomPayload.newPacket(channel, con.newInstance(ByteBufAllocator.DEFAULT.buffer().writeBytes(data)));
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;

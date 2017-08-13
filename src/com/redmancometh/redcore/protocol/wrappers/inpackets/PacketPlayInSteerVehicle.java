@@ -3,8 +3,8 @@ package com.redmancometh.redcore.protocol.wrappers.inpackets;
 import com.redmancometh.redcore.protocol.event.PacketInType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayInSteerVehicle
-        extends WrappedPacket {
+public class PacketPlayInSteerVehicle extends WrappedPacket
+{
     public float forward;
     public boolean jump;
     public float sideways;

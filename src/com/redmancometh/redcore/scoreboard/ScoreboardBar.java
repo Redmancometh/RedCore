@@ -5,11 +5,14 @@ import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import static com.redmancometh.redcore.scoreboard.ScoreboardDisplayMode.INTEGER;
 
-public abstract class ScoreboardBar {
+public abstract class ScoreboardBar
+{
     public final HashMap<String, BarData> active = new HashMap<>();
     public final BarData currentData;
     public final HashMap<String, BarData> loaded = new HashMap<>();
@@ -39,17 +42,14 @@ public abstract class ScoreboardBar {
      */
     public boolean activate(Player plr)
     {
-        if (active.containsKey(plr.getName()))
-            return false;
+        if (active.containsKey(plr.getName())) return false;
         BarData bd = loaded.get(plr.getName());
-        if (bd == null)
-            return false;
+        if (bd == null) return false;
         BarData newBd = currentData.clone();
         newBd.update(plr, bd);
         loaded.put(plr.getName(), newBd);
         active.put(plr.getName(), newBd);
-        if (currentData.visible)
-            SU.tp.sendPacket(plr, showPacket);
+        if (currentData.visible) SU.tp.sendPacket(plr, showPacket);
         return true;
     }
 
@@ -72,8 +72,7 @@ public abstract class ScoreboardBar {
      */
     public boolean drop(Player plr)
     {
-        if (loaded.remove(plr.getName()) == null)
-            return false;
+        if (loaded.remove(plr.getName()) == null) return false;
         active.remove(plr.getName());
         return true;
     }
@@ -89,15 +88,20 @@ public abstract class ScoreboardBar {
     }
 
     /**
-     * Sets the display mode of this Scoreboard, it has no effect on sidebar.
+     * Attempts to load this ScoreboardBar for the given player
      *
-     * @param mode - The new displaymode
+     * @param plr - Target Player
+     * @return True if this ScoreboardBar hasn't been loaded for the player before
      */
-    public void setDisplayMode(ScoreboardDisplayMode mode)
+    public boolean load(Player plr)
     {
-        if (currentData.displayMode == mode)
-            return;
-        currentData.displayMode = mode;
+        if (loaded.containsKey(plr.getName())) return false;
+        BarData bd = currentData.clone();
+        bd.load(plr);
+        loaded.put(plr.getName(), bd);
+        if (currentData.visible) SU.tp.sendPacket(plr, showPacket);
+        active.put(plr.getName(), bd);
+        return true;
     }
 
     /**
@@ -111,6 +115,17 @@ public abstract class ScoreboardBar {
     }
 
     /**
+     * Sets the display mode of this Scoreboard, it has no effect on sidebar.
+     *
+     * @param mode - The new displaymode
+     */
+    public void setDisplayMode(ScoreboardDisplayMode mode)
+    {
+        if (currentData.displayMode == mode) return;
+        currentData.displayMode = mode;
+    }
+
+    /**
      * Sets the title of this scoreboard bar.
      *
      * @param newtitle - The new title
@@ -118,28 +133,9 @@ public abstract class ScoreboardBar {
     public void setTitle(String newtitle)
     {
         newtitle = SU.setLength(newtitle, 32);
-        if (currentData.title.equals(newtitle))
-            return;
+        if (currentData.title.equals(newtitle)) return;
         currentData.title = newtitle;
         update();
-    }
-
-    public void update()
-    {
-        Iterator<Map.Entry<String, BarData>> it = active.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, BarData> e = it.next();
-            BarData newBd = currentData.clone();
-            Player plr = Bukkit.getPlayer(e.getKey());
-            if (plr == null)
-                it.remove();
-            newBd.update(plr, e.getValue());
-            if (!e.getValue().visible && newBd.visible)
-                SU.tp.sendPacket(plr, showPacket);
-            if (e.getValue().visible && !newBd.visible)
-                SU.tp.sendPacket(plr, hidePacket);
-            e.setValue(newBd);
-        }
     }
 
     /**
@@ -174,6 +170,22 @@ public abstract class ScoreboardBar {
         return currentData.visible;
     }
 
+    public void update()
+    {
+        Iterator<Map.Entry<String, BarData>> it = active.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, BarData> e = it.next();
+            BarData newBd = currentData.clone();
+            Player plr = Bukkit.getPlayer(e.getKey());
+            if (plr == null) it.remove();
+            newBd.update(plr, e.getValue());
+            if (!e.getValue().visible && newBd.visible) SU.tp.sendPacket(plr, showPacket);
+            if (e.getValue().visible && !newBd.visible) SU.tp.sendPacket(plr, hidePacket);
+            e.setValue(newBd);
+        }
+    }
+
     /**
      * Toggles the visibility of this scoreboard bar
      *
@@ -181,29 +193,11 @@ public abstract class ScoreboardBar {
      */
     public void setVisible(boolean visible)
     {
-        if (visible != currentData.visible) {
+        if (visible != currentData.visible)
+        {
             currentData.visible = visible;
             update();
         }
-    }
-
-    /**
-     * Attempts to load this ScoreboardBar for the given player
-     *
-     * @param plr - Target Player
-     * @return True if this ScoreboardBar hasn't been loaded for the player before
-     */
-    public boolean load(Player plr)
-    {
-        if (loaded.containsKey(plr.getName()))
-            return false;
-        BarData bd = currentData.clone();
-        bd.load(plr);
-        loaded.put(plr.getName(), bd);
-        if (currentData.visible)
-            SU.tp.sendPacket(plr, showPacket);
-        active.put(plr.getName(), bd);
-        return true;
     }
 
     /**
@@ -215,8 +209,7 @@ public abstract class ScoreboardBar {
     public boolean unload(Player plr)
     {
         BarData bd = loaded.remove(plr.getName());
-        if (bd == null)
-            return false;
+        if (bd == null) return false;
         active.remove(plr.getName());
         bd.unload(plr);
         return true;

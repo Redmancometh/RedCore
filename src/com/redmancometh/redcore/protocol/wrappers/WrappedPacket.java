@@ -5,7 +5,8 @@ import com.redmancometh.redcore.protocol.utils.WrappedData;
 /**
  * Represents a wrapped (user friendly) form of a Vanilla/NMS packet.
  */
-public abstract class WrappedPacket implements WrappedData {
+public abstract class WrappedPacket implements WrappedData
+{
     /**
      * Loads a Vanilla/NMS packet to this wrapper
      *

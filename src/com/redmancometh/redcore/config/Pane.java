@@ -1,9 +1,11 @@
 package com.redmancometh.redcore.config;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class Pane implements Iterable<Integer> {
+public class Pane implements Iterable<Integer>
+{
     private short color;
     private List<Integer> indexes;
 

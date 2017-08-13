@@ -3,17 +3,20 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 import com.redmancometh.redcore.chat.ChatTag;
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
-import com.redmancometh.redcore.protocol.utils.*;
+import com.redmancometh.redcore.protocol.utils.GameProfile;
+import com.redmancometh.redcore.protocol.utils.WrappedData;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketStatusOutServerInfo extends WrappedPacket {
+public class PacketStatusOutServerInfo extends WrappedPacket
+{
     public ServerInfo info;
 
     public PacketStatusOutServerInfo()
@@ -38,15 +41,19 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         return PacketOutType.StatusOutServerInfo.newPacket(info.toNMS());
     }
 
-    public static class PlayerList implements WrappedData {
+    public static class PlayerList implements WrappedData
+    {
         private static Class nmsClass = Reflection.getNMSClass("ServerPing$ServerPingPlayerSample");
         private static Field[] fields = nmsClass.getDeclaredFields();
 
-        static {
-            try {
+        static
+        {
+            try
+            {
                 for (int i = 0; i < 3; ++i)
                     fields[i].setAccessible(true);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -60,13 +67,16 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
 
         public PlayerList(Object nms)
         {
-            try {
+            try
+            {
                 max = fields[0].getInt(nms);
                 online = fields[1].getInt(nms);
-                for (Object o : (Object[]) fields[2].get(nms)) {
+                for (Object o : (Object[]) fields[2].get(nms))
+                {
                     sample.add(new GameProfile(o));
                 }
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -76,7 +86,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
             PlayerList out = new PlayerList();
             out.max = max;
             out.online = online;
-            for (GameProfile gp : sample) {
+            for (GameProfile gp : sample)
+            {
                 out.sample.add(gp.clone());
             }
             return out;
@@ -85,7 +96,8 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object nms = Reflection.newInstance(nmsClass);
                 fields[0].set(nms, max);
                 fields[1].set(nms, online);
@@ -94,14 +106,16 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
                     nmsGPs[i] = sample.get(i).toNMS();
                 fields[2].set(nms, nmsGPs);
                 return nms;
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;
         }
     }
 
-    public static class ServerData implements WrappedData {
+    public static class ServerData implements WrappedData
+    {
         private static Class nmsClass = Reflection.getNMSClass("ServerPing$ServerData");
         private static Field nameField = Reflection.getFirstFieldOfType(nmsClass, String.class);
         private static Field protocolField = Reflection.getFirstFieldOfType(nmsClass, int.class);
@@ -115,10 +129,12 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
 
         public ServerData(Object nms)
         {
-            try {
+            try
+            {
                 name = (String) nameField.get(nms);
                 protocol = protocolField.getInt(nms);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -132,12 +148,14 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object nms = Reflection.newInstance(nmsClass);
                 nameField.set(nms, name);
                 protocolField.setInt(nms, protocol);
                 return nms;
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;
@@ -149,15 +167,19 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         }
     }
 
-    public static class ServerInfo implements WrappedData {
+    public static class ServerInfo implements WrappedData
+    {
         private static Class nmsClass = Reflection.getNMSClass("ServerPing");
         private static Field[] fields = nmsClass.getDeclaredFields();
 
-        static {
-            try {
+        static
+        {
+            try
+            {
                 for (int i = 0; i < 4; ++i)
                     fields[i].setAccessible(true);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -174,12 +196,14 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
 
         public ServerInfo(Object nms)
         {
-            try {
+            try
+            {
                 description = ChatTag.fromICBC(fields[0].get(nms)).toColoredString();
                 players = new PlayerList(fields[1].get(nms));
                 version = new ServerData(fields[2].get(nms));
                 favicon = (String) fields[3].get(nms);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -197,14 +221,16 @@ public class PacketStatusOutServerInfo extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object nms = Reflection.newInstance(nmsClass);
                 fields[0].set(nms, ChatTag.fromColoredText(description).toICBC());
                 fields[1].set(nms, players.toNMS());
                 fields[2].set(nms, version.toNMS());
                 fields[3].set(nms, favicon);
                 return nms;
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return null;

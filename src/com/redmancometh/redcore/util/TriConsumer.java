@@ -3,7 +3,8 @@ package com.redmancometh.redcore.util;
 import java.util.Objects;
 
 @FunctionalInterface
-public interface TriConsumer<T, U, V> {
+public interface TriConsumer<T, U, V>
+{
     default TriConsumer<T, U, V> andThen(TriConsumer<? super T, ? super U, ? super V> after)
     {
         Objects.requireNonNull(after);

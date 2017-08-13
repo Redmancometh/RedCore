@@ -2,17 +2,20 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
-import com.redmancometh.redcore.scoreboard.team.*;
+import com.redmancometh.redcore.scoreboard.team.CollisionRule;
+import com.redmancometh.redcore.scoreboard.team.NameTagVisibility;
 import com.redmancometh.redcore.spigotutils.ServerVersion;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.redmancometh.redcore.protocol.event.PacketOutType.ScoreboardTeam;
 
 /**
  * Created by GyuriX on 11/15/2016.
  */
-public class PacketPlayOutScoreboardTeam extends WrappedPacket {
+public class PacketPlayOutScoreboardTeam extends WrappedPacket
+{
     /**
      * 0: create team
      * 1: remove team
@@ -76,10 +79,12 @@ public class PacketPlayOutScoreboardTeam extends WrappedPacket {
         prefix = (String) d[2];
         suffix = (String) d[3];
         int from = 3;
-        if (Reflection.ver.isAbove(ServerVersion.v1_8)) {
+        if (Reflection.ver.isAbove(ServerVersion.v1_8))
+        {
             String name = (String) d[++from];
             nameTagVisibility = name == null ? null : NameTagVisibility.valueOf(name);
-            if (Reflection.ver.isAbove(ServerVersion.v1_9)) {
+            if (Reflection.ver.isAbove(ServerVersion.v1_9))
+            {
                 name = (String) d[++from];
                 collisionRule = name == null ? null : CollisionRule.valueOf(name);
             }

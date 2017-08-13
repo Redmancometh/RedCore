@@ -3,7 +3,8 @@ package com.redmancometh.redcore.protocol.wrappers.outpackets;
 import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayOutScoreboardDisplayObjective extends WrappedPacket {
+public class PacketPlayOutScoreboardDisplayObjective extends WrappedPacket
+{
     /**
      * Display slot of the scoreboard objective, possible values:
      * 0 - list

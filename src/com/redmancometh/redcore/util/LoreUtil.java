@@ -2,9 +2,11 @@ package com.redmancometh.redcore.util;
 
 import org.bukkit.ChatColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LoreUtil {
+public class LoreUtil
+{
     public static List<String> colorizeLore(List<String> ogLore)
     {
         List<String> newLore = new ArrayList();

@@ -3,8 +3,8 @@ package com.redmancometh.redcore.protocol.wrappers.inpackets;
 import com.redmancometh.redcore.protocol.event.PacketInType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
-public class PacketPlayInCloseWindow
-        extends WrappedPacket {
+public class PacketPlayInCloseWindow extends WrappedPacket
+{
     public int id;
 
     @Override

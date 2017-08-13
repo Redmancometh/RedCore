@@ -2,7 +2,8 @@ package com.redmancometh.redcore.protocol.event;
 
 import org.bukkit.entity.Player;
 
-public class PacketInEvent extends PacketEvent {
+public class PacketInEvent extends PacketEvent
+{
     private final PacketInType type;
 
     public PacketInEvent(Object channel, Player plr, Object packet)
@@ -26,10 +27,12 @@ public class PacketInEvent extends PacketEvent {
     @Override
     public boolean setPacketData(int id, Object o)
     {
-        try {
+        try
+        {
             type.fs.get(id).set(packet, o);
             return true;
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
             return false;
         }

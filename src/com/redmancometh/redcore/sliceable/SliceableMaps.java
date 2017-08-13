@@ -1,5 +1,6 @@
 package com.redmancometh.redcore.sliceable;
 
-public interface SliceableMaps extends Sliceable {
+public interface SliceableMaps extends Sliceable
+{
 
 }

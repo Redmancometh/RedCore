@@ -5,7 +5,8 @@ import com.redmancometh.redcore.databasing.SubDatabase;
 
 import java.util.UUID;
 
-public interface BaseObjectManager<T extends Defaultable<?>> {
+public interface BaseObjectManager<T extends Defaultable<?>>
+{
     SubDatabase<UUID, T> getSubDB();
 
     ObjectManager<T> getThis();

@@ -3,9 +3,11 @@ package com.redmancometh.redcore.commands.event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PreTabCompleteEvent extends CommandEvent {
+public class PreTabCompleteEvent extends CommandEvent
+{
     private static final HandlerList hl = new HandlerList();
     private List<String> result = new ArrayList<>();
 

@@ -1,9 +1,12 @@
 package com.redmancometh.redcore.config;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class MenuTemplate implements Iterable<Pane> {
+public class MenuTemplate implements Iterable<Pane>
+{
     private List<Pane> panes = new ArrayList();
 
     public List<Pane> getPanes()

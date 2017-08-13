@@ -1,10 +1,12 @@
 package com.redmancometh.redcore;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-public class RedPlugins implements Iterable<RedPlugin> {
+public class RedPlugins implements Iterable<RedPlugin>
+{
     private static Map<Class<? extends RedPlugin>, RedPlugin> loadedMap = new ConcurrentHashMap();
 
     public static RedPlugin getInstance(Class<? extends RedPlugin> clazz)
@@ -40,9 +42,11 @@ public class RedPlugins implements Iterable<RedPlugin> {
     public boolean loadPluginFromClass(Class<? extends RedPlugin> clazz)
     {
         if (loadedMap.containsKey(clazz)) return false;
-        try {
+        try
+        {
             loadedMap.put(clazz, clazz.newInstance());
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e)
+        {
             e.printStackTrace();
         }
         return true;

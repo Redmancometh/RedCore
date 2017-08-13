@@ -1,12 +1,18 @@
 package com.redmancometh.redcore.util;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 /**
  * Created by GyuriX, on 2017. 05. 31..
  */
-public class StreamUtils {
+public class StreamUtils
+{
     public static Charset utf8 = Charset.forName("UTF-8");
 
     public static void streamToFile(InputStream is, File f) throws IOException

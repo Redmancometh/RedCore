@@ -1,6 +1,8 @@
 package com.redmancometh.redcore;
 
-import com.google.common.cache.*;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.redmancometh.redcore.mediators.ObjectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,14 +11,17 @@ import org.hibernate.cfg.Configuration;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public interface RedPlugin {
+public interface RedPlugin
+{
     JSONParser parser = new JSONParser();
     //Automatically rebuild the 
-    LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().build(new CacheLoader<String, JSONObject>() {
+    LoadingCache<String, JSONObject> configCache = CacheBuilder.newBuilder().build(new CacheLoader<String, JSONObject>()
+    {
         @Override
         public JSONObject load(String javaPlugin) throws Exception
         {
@@ -28,9 +33,11 @@ public interface RedPlugin {
     {
         File hibernateConfig = new File(plugin.getDataFolder(), "config.json");
         if (!hibernateConfig.exists()) plugin.saveResource("config.json", true);
-        try (FileReader scanner = new FileReader(hibernateConfig)) {
+        try (FileReader scanner = new FileReader(hibernateConfig))
+        {
             return (JSONObject) parser.parse(scanner);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new IllegalStateException("Configuration not initialized properly. Either config.json is missing, corrupted, or ill-formatted");
         }
     }
@@ -49,9 +56,11 @@ public interface RedPlugin {
 
     default JSONObject getConfiguration()
     {
-        try {
+        try
+        {
             return configCache.get(this.getName());
-        } catch (ExecutionException e) {
+        } catch (ExecutionException e)
+        {
             e.printStackTrace();
         }
         return null;
@@ -75,11 +84,10 @@ public interface RedPlugin {
 
     JavaPlugin getBukkitPlugin();
 
-    String getName();
-
     default SessionFactory getSessionFactory()
     {
-        if (getInternalFactory() == null) {
+        if (getInternalFactory() == null)
+        {
             SessionFactory factory = buildSessionFactory(getBukkitPlugin());
             setInternalFactory(factory);
             return factory;
@@ -87,11 +95,14 @@ public interface RedPlugin {
         return getInternalFactory();
     }
 
+    String getName();
+
     void setInternalFactory(SessionFactory factory);
 
     default void initialize()
     {
-        if (!(this instanceof MenuPlugin)) {
+        if (!(this instanceof MenuPlugin))
+        {
             SessionFactory factory = buildSessionFactory(getBukkitPlugin());
             setInternalFactory(factory);
             getMappedClasses().forEach((mappingClass) -> RedCore.getInstance().getMasterDB().registerDatabase(mappingClass, factory));

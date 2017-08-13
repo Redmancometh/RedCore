@@ -9,7 +9,8 @@ import java.lang.reflect.Method;
 /**
  * Created by GyuriX on 2016.02.21..
  */
-public class PacketHandshakingInSetProtocol extends WrappedPacket {
+public class PacketHandshakingInSetProtocol extends WrappedPacket
+{
     public String hostName;
     public EnumProtocol nextState;
     public int port;
@@ -31,7 +32,8 @@ public class PacketHandshakingInSetProtocol extends WrappedPacket {
         return PacketInType.HandshakingInSetProtocol.newPacket(version, hostName, port, nextState.getVanillaEnumProtocol());
     }
 
-    public enum EnumProtocol {
+    public enum EnumProtocol
+    {
         HANDSHAKING(-1), PLAY(0), STATUS(1), LOGIN(2);
         private static Method vanilla = Reflection.getMethod(Reflection.getNMSClass("EnumProtocol"), "valueOf", String.class);
         public int id;
@@ -43,9 +45,11 @@ public class PacketHandshakingInSetProtocol extends WrappedPacket {
 
         public Object getVanillaEnumProtocol()
         {
-            try {
+            try
+            {
                 return vanilla.invoke(null, name());
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 e.printStackTrace();
                 return null;
             }

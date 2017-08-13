@@ -7,7 +7,8 @@ import com.redmancometh.redcore.spigotutils.SU;
 
 import java.lang.reflect.Method;
 
-public class PacketPlayOutWorldParticles extends WrappedPacket {
+public class PacketPlayOutWorldParticles extends WrappedPacket
+{
     private static final Method enumParticleValueOf = Reflection.getMethod(Reflection.getNMSClass("EnumParticle"), "valueOf", String.class);
     public int count;
     public int[] extraData;
@@ -55,9 +56,11 @@ public class PacketPlayOutWorldParticles extends WrappedPacket {
     @Override
     public Object getVanillaPacket()
     {
-        try {
+        try
+        {
             return PacketOutType.WorldParticles.newPacket(enumParticleValueOf.invoke(null, particle), x, y, z, offsetX, offsetY, offsetZ, data, count, longDistance, extraData);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }

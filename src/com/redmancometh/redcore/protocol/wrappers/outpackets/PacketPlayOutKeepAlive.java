@@ -6,7 +6,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public class PacketPlayOutKeepAlive extends WrappedPacket {
+public class PacketPlayOutKeepAlive extends WrappedPacket
+{
     public int id;
 
     public PacketPlayOutKeepAlive()

@@ -4,7 +4,8 @@ import com.redmancometh.redcore.protocol.event.PacketOutType;
 import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 
 
-public class PacketPlayOutTabComplete extends WrappedPacket {
+public class PacketPlayOutTabComplete extends WrappedPacket
+{
     public String[] complete;
 
     public PacketPlayOutTabComplete()

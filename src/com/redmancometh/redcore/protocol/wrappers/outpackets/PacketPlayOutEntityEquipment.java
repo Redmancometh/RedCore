@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public class PacketPlayOutEntityEquipment extends WrappedPacket {
+public class PacketPlayOutEntityEquipment extends WrappedPacket
+{
     public int entityId;
     public ItemStackWrapper item;
     /**

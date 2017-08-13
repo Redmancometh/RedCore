@@ -3,7 +3,8 @@ package com.redmancometh.redcore.commands.event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 
-public class CommandErrorEvent extends CommandEvent {
+public class CommandErrorEvent extends CommandEvent
+{
     private static final HandlerList hl = new HandlerList();
     private final Throwable error;
 

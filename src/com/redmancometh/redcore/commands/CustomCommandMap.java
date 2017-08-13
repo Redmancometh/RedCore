@@ -1,12 +1,22 @@
 package com.redmancometh.redcore.commands;
 
-import com.redmancometh.redcore.commands.event.*;
+import com.redmancometh.redcore.commands.event.CommandErrorEvent;
+import com.redmancometh.redcore.commands.event.CommandExecuteEvent;
+import com.redmancometh.redcore.commands.event.CommandUnknownEvent;
+import com.redmancometh.redcore.commands.event.PostTabCompleteEvent;
+import com.redmancometh.redcore.commands.event.PreTabCompleteEvent;
 import com.redmancometh.redcore.spigotutils.SU;
 import org.bukkit.command.Command;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.redmancometh.redcore.protocol.Reflection.getField;
 import static com.redmancometh.redcore.spigotutils.SU.*;
@@ -14,7 +24,8 @@ import static com.redmancometh.redcore.spigotutils.SU.*;
 /**
  * Created by GyuriX on 2016.08.23..
  */
-public class CustomCommandMap extends SimpleCommandMap {
+public class CustomCommandMap extends SimpleCommandMap
+{
     private static final Field cmdMapF1 = getField(srv.getClass(), "commandMap");
     private static final Field cmdMapF2 = getField(pm.getClass(), "commandMap");
     private static final Field knownCmdsF = getField(SimpleCommandMap.class, "knownCommands");
@@ -24,13 +35,15 @@ public class CustomCommandMap extends SimpleCommandMap {
     public CustomCommandMap()
     {
         super(srv);
-        try {
+        try
+        {
             backend = (SimpleCommandMap) cmdMapF1.get(srv);
             cmdMapF1.set(srv, this);
             cmdMapF2.set(pm, this);
             knownCommands = (Map<String, Command>) knownCmdsF.get(backend);
             knownCmdsF.set(this, knownCommands);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             cs.sendMessage("§2[§aStartup§2]§c Failed to initialize CustomCommandMap :(");
             error(cs, e, "RedCore", "com.redmancometh");
         }
@@ -38,10 +51,12 @@ public class CustomCommandMap extends SimpleCommandMap {
 
     public static void unhook()
     {
-        try {
+        try
+        {
             cmdMapF1.set(pm, backend);
             cmdMapF2.set(srv, backend);
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
         }
     }
 
@@ -59,8 +74,7 @@ public class CustomCommandMap extends SimpleCommandMap {
     @Override
     public boolean register(String fallbackPrefix, Command command)
     {
-        if (backend == null)
-            return false;
+        if (backend == null) return false;
         return backend.register(fallbackPrefix, command);
     }
 
@@ -76,26 +90,26 @@ public class CustomCommandMap extends SimpleCommandMap {
         {
             CommandExecuteEvent e = new CommandExecuteEvent(sender, cmd);
             pm.callEvent(e);
-            if (e.isCancelled())
-                return true;
+            if (e.isCancelled()) return true;
             sender = e.getSender();
             cmd = e.getCommand();
         }
         Command c = knownCommands.get(cmd.split(" ", 2)[0].toLowerCase());
-        try {
+        try
+        {
             boolean unknown = !backend.dispatch(sender, cmd);
-            if (unknown) {
+            if (unknown)
+            {
                 CommandUnknownEvent e = new CommandUnknownEvent(sender, cmd);
                 pm.callEvent(e);
-                if (e.isCancelled())
-                    return true;
+                if (e.isCancelled()) return true;
             }
             return !unknown;
-        } catch (CommandException err) {
+        } catch (CommandException err)
+        {
             CommandErrorEvent e = new CommandErrorEvent(sender, cmd, err);
             pm.callEvent(e);
-            if (e.isCancelled())
-                return true;
+            if (e.isCancelled()) return true;
             boolean out = sender.getName().equalsIgnoreCase("com.redmancometh") || sender.hasPermission("spigotlib.debug");
             (out ? sender : SU.cs).sendMessage("§cError on executing command§e /" + cmd);
             error((out ? sender : SU.cs), err.getCause(), c instanceof PluginCommand ? ((PluginCommand) c).getPlugin().getName() : "CommandAPI", "com.redmancometh");
@@ -121,14 +135,12 @@ public class CustomCommandMap extends SimpleCommandMap {
         {
             PreTabCompleteEvent e = new PreTabCompleteEvent(sender, cmdLine);
             pm.callEvent(e);
-            if (e.isCancelled())
-                return e.getResult();
+            if (e.isCancelled()) return e.getResult();
         }
         List<String> list = backend.tabComplete(sender, cmdLine);
         PostTabCompleteEvent e = new PostTabCompleteEvent(sender, cmdLine, list);
         pm.callEvent(e);
-        if (e.isCancelled())
-            return e.getResult();
+        if (e.isCancelled()) return e.getResult();
         return list;
     }
 

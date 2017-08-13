@@ -7,7 +7,8 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 /**
  * Created by com.redmancometh on 25/11/2015.
  */
-public class PacketPlayOutBed extends WrappedPacket {
+public class PacketPlayOutBed extends WrappedPacket
+{
     public BlockLocation bed;
     public int entityId;
 

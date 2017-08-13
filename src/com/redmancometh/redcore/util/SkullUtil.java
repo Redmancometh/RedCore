@@ -5,7 +5,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class SkullUtil {
+public class SkullUtil
+{
 
     public static ItemStack getSkullItemOfType(EntityType type)
     {

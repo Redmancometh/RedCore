@@ -7,7 +7,8 @@ import org.bukkit.util.Vector;
 /**
  * Created by GyuriX on 2016.03.08..
  */
-public class PacketPlayOutEntityVelocity extends WrappedPacket {
+public class PacketPlayOutEntityVelocity extends WrappedPacket
+{
     public int entityId;
     public int velX;
     public int velY;

@@ -9,9 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-public class RedCore extends JavaPlugin {
+public class RedCore extends JavaPlugin
+{
     private RedPlugins getPlugins;
     private MasterDatabase masterDB;
     private Executor pool = Executors.newFixedThreadPool(8, new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());

@@ -7,12 +7,15 @@ import com.redmancometh.redcore.protocol.wrappers.WrappedPacket;
 import com.redmancometh.redcore.spigotutils.SU;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Created by com.redmancometh on 25/11/2015.
  */
-public class PacketPlayOutUpdateAttributes extends WrappedPacket {
+public class PacketPlayOutUpdateAttributes extends WrappedPacket
+{
     public ArrayList<Attribute> attributes;
     public int entityId;
 
@@ -49,7 +52,8 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
             attributes.add(new Attribute(o));
     }
 
-    public static class Attribute implements WrappedData {
+    public static class Attribute implements WrappedData
+    {
         private static final Class nmsClass = Reflection.getNMSClass("PacketPlayOutUpdateAttributes$AttributeSnapshot");
         private static final Field nameField = Reflection.getFirstFieldOfType(nmsClass, String.class);
         private static final Field modifierField = Reflection.getFirstFieldOfType(nmsClass, Collection.class);
@@ -67,13 +71,15 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
 
         public Attribute(Object nms)
         {
-            try {
+            try
+            {
                 name = (String) nameField.get(nms);
                 value = (double) valueField.get(nms);
                 Collection<Object> nmsModifiers = (Collection<Object>) modifierField.get(nms);
                 for (Object o : nmsModifiers)
                     modifiers.add(new AttributeModifier(o));
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -81,7 +87,8 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object nms = Reflection.newInstance(nmsClass);
                 nameField.set(nms, name);
                 valueField.set(nms, value);
@@ -90,14 +97,16 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
                     nmsModifiers.add(m.toNMS());
                 modifierField.set(nms, nmsModifiers);
                 return nms;
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
                 return null;
             }
         }
     }
 
-    public static class AttributeModifier implements WrappedData {
+    public static class AttributeModifier implements WrappedData
+    {
         private static final Class nmsClass = Reflection.getNMSClass("AttributeModifier");
         private static final Field nameField = Reflection.getFirstFieldOfType(nmsClass, String.class);
         private static final Field amountField = Reflection.getFirstFieldOfType(nmsClass, double.class);
@@ -110,12 +119,14 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
 
         public AttributeModifier(Object nms)
         {
-            try {
+            try
+            {
                 amount = amountField.getDouble(nms);
                 id = (UUID) idField.get(nms);
                 name = (String) nameField.get(nms);
                 operation = operationField.getInt(nms);
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -123,14 +134,16 @@ public class PacketPlayOutUpdateAttributes extends WrappedPacket {
         @Override
         public Object toNMS()
         {
-            try {
+            try
+            {
                 Object nms = Reflection.newInstance(nmsClass);
                 amountField.set(nms, amount);
                 idField.set(nms, id);
                 nameField.set(nms, name);
                 operationField.set(nms, operation);
                 return nms;
-            } catch (Throwable e) {
+            } catch (Throwable e)
+            {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
                 return null;
             }

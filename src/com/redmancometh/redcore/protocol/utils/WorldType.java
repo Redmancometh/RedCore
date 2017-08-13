@@ -2,32 +2,36 @@ package com.redmancometh.redcore.protocol.utils;
 
 import com.redmancometh.redcore.protocol.Reflection;
 import com.redmancometh.redcore.spigotutils.SU;
-import org.bukkit.*;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Created by GyuriX on 2016.02.28..
  */
-public enum WorldType implements WrappedData {
+public enum WorldType implements WrappedData
+{
     DEFAULT, FLAT, LARGEBIOMES, AMPLIFIED, CUSTOMIZED, DEBUG_ALL_BLOCK_STATES, DEFAULT_1_1;
     public static final Method enumDifficultyVO;
-    public static final Class enumGmCl = Reflection.getNMSClass("WorldSettings$EnumGamemode"),
-            enumDifficultyCl = Reflection.getNMSClass("EnumDifficulty"),
-            worldTypeCl = Reflection.getNMSClass("WorldType");
+    public static final Class enumGmCl = Reflection.getNMSClass("WorldSettings$EnumGamemode"), enumDifficultyCl = Reflection.getNMSClass("EnumDifficulty"), worldTypeCl = Reflection.getNMSClass("WorldType");
     public static final Method enumGmVO = Reflection.getMethod(enumGmCl, "valueOf", String.class);
     private static Field name = Reflection.getField(Reflection.getNMSClass("WorldType"), "name");
     private static Method valueOf = Reflection.getMethod(worldTypeCl, "getType", String.class);
 
-    static {
+    static
+    {
         enumDifficultyVO = Reflection.getMethod(enumDifficultyCl, "getById", int.class);
     }
 
     public static WorldType fromVanillaWorldType(Object vanilla)
     {
-        try {
+        try
+        {
             return valueOf(((String) name.get(vanilla)).toUpperCase());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             e.printStackTrace();
         }
         return null;
@@ -35,9 +39,11 @@ public enum WorldType implements WrappedData {
 
     public static Object toVanillaDifficulty(Difficulty mode)
     {
-        try {
+        try
+        {
             return enumDifficultyVO.invoke(null, mode.getValue());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -45,9 +51,11 @@ public enum WorldType implements WrappedData {
 
     public static Object toVanillaGameMode(GameMode mode)
     {
-        try {
+        try
+        {
             return enumGmVO.invoke(null, mode.name());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
         return null;
@@ -55,9 +63,11 @@ public enum WorldType implements WrappedData {
 
     public Object toNMS()
     {
-        try {
+        try
+        {
             return valueOf.invoke(null, name());
-        } catch (Throwable e) {
+        } catch (Throwable e)
+        {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }
