@@ -144,7 +144,7 @@ public class ChatAPI
             return toICBC.invoke(null, json);
         } catch (Throwable e)
         {
-            SU.cs.sendMessage("Â§cError on converting JSON Â§f" + json + "Â§c to IChatBaseComponent.");
+            SU.cs.sendMessage("§cError on converting JSON §f" + json + "§c to IChatBaseComponent.");
             SU.error(SU.cs, e, "SpigotLib", "com.redmancometh");
             return null;
         }

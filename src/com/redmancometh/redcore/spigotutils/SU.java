@@ -660,17 +660,17 @@ public final class SU
                     }
                     if (add)
                     {
-                        newFormat.append('ยง').append(c);
-                        formatChange.append('ยง').append(c);
+                        newFormat.append('ง').append(c);
+                        formatChange.append('ง').append(c);
                     }
                     continue;
                 }
                 if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))) c = 'f';
                 newFormat.setLength(0);
-                newFormat.append('ยง').append(c);
+                newFormat.append('ง').append(c);
                 formatChange.setLength(0);
-                formatChange.append('ยง').append(c);
-            } else if (c == 'ยง') color = true;
+                formatChange.append('ง').append(c);
+            } else if (c == 'ง') color = true;
             else if (c == '\u7777')
             {
                 formatArchive = newFormat.toString();

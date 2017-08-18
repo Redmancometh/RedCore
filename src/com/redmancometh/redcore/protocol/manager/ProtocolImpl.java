@@ -124,7 +124,7 @@ public final class ProtocolImpl extends Protocol
     {
         ArrayList<String> list = new ArrayList<>();
         pipeline.forEach((e) -> list.add(e.getKey()));
-        SU.cs.sendMessage("Â§ePipeline: Â§f" + StringUtils.join(list, ", "));
+        SU.cs.sendMessage("§ePipeline: §f" + StringUtils.join(list, ", "));
     }
 
     @Override
@@ -139,7 +139,7 @@ public final class ProtocolImpl extends Protocol
     {
         if (channel == null || packet == null)
         {
-            SU.error(SU.cs, new RuntimeException("Â§cFailed to send packet " + packet + " to channel " + channel), "RedCore", "com.redmancometh");
+            SU.error(SU.cs, new RuntimeException("§cFailed to send packet " + packet + " to channel " + channel), "RedCore", "com.redmancometh");
             return;
         }
         if (packet instanceof WrappedPacket) packet = ((WrappedPacket) packet).getVanillaPacket();

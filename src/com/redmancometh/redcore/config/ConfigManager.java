@@ -37,10 +37,15 @@ public class ConfigManager<T>
 {
     public static final Gson originalGson = new Gson();
     protected static StringAdapter stringAdapter;
-    public static final Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).registerTypeHierarchyAdapter(PotionEffect.class, new PotionEffectAdapter()).registerTypeHierarchyAdapter(String.class, stringAdapter = new StringAdapter()).registerTypeHierarchyAdapter(ItemWrapper.class, (JsonDeserializer<ItemWrapper>) (el, type, context) -> {
+    public static final Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).registerTypeHierarchyAdapter(PotionEffect.class, new PotionEffectAdapter()).registerTypeHierarchyAdapter(String.class, stringAdapter = new StringAdapter()).registerTypeHierarchyAdapter(ItemWrapper.class, (JsonDeserializer<ItemWrapper>) (
+            el, type, context) ->
+    {
         if (el instanceof JsonPrimitive) return new ItemWrapper(el.getAsString());
         return originalGson.fromJson(el, type);
-    }).registerTypeHierarchyAdapter(StringSerializable.class, (JsonSerializer) (o, type, jsonSerializationContext) -> o == null ? null : new JsonPrimitive(o.toString())).registerTypeHierarchyAdapter(StringSerializable.class, (JsonDeserializer<StringSerializable>) (je, type, cont) -> je.isJsonNull() ? null : (StringSerializable) Reflection.newInstance((Class) type, new Class[]{String.class}, je.getAsString())).registerTypeHierarchyAdapter(LanguageFile.class, new LanguageFile.LanguageFileAdapter()).registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter()).create();
+    }).registerTypeHierarchyAdapter(StringSerializable.class, (JsonSerializer) (o, type,
+            jsonSerializationContext) -> o == null ? null : new JsonPrimitive(o.toString())).registerTypeHierarchyAdapter(StringSerializable.class, (JsonDeserializer<StringSerializable>) (je, type,
+                    cont) -> je.isJsonNull() ? null : (StringSerializable) Reflection.newInstance((Class) type, new Class[]
+    { String.class }, je.getAsString())).registerTypeHierarchyAdapter(LanguageFile.class, new LanguageFile.LanguageFileAdapter()).registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter()).create();
     private Type confClass;
     private File configFile;
     private String configName;
@@ -94,12 +99,14 @@ public class ConfigManager<T>
                 try
                 {
                     Object fieldValue = f.get(object);
-                    SU.cs.sendMessage("Â§e" + f.getName() + "Â§b = Â§f" + gson.toJson(fieldValue, f.getGenericType()) + "\n");
-                } catch (Throwable e)
-                {
-                    SU.cs.sendMessage("Â§cField Â§e" + f.getName() + "Â§c was unable to be retrieved!\n");
+                    SU.cs.sendMessage("§e" + f.getName() + "§b = §f" + gson.toJson(fieldValue, f.getGenericType()) + "\n");
                 }
-            } catch (Throwable e)
+                catch (Throwable e)
+                {
+                    SU.cs.sendMessage("§cField §e" + f.getName() + "§c was unable to be retrieved!\n");
+                }
+            }
+            catch (Throwable e)
             {
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
@@ -112,7 +119,8 @@ public class ConfigManager<T>
         {
             Object config = Reflection.getMethod(plugin.getClass(), "getCfg").invoke(null);
             return (ConfigManager) config;
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             System.out.println("Need a static or instanced getCfg() method attached to this object to use this!");
             System.out.println("Or you fucked up something else.");
@@ -132,9 +140,10 @@ public class ConfigManager<T>
     {
         try (FileInputStream is = new FileInputStream(configFile))
         {
-            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "Â§$1");
+            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "§$1");
             this.currentConfig = gson.fromJson(s, confClass);
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -154,8 +163,9 @@ public class ConfigManager<T>
     {
         try (FileOutputStream os = new FileOutputStream(configFile))
         {
-            StreamUtils.stringToStream(gson.toJson(currentConfig).replaceAll("Â§([0-9a-fk-or])", "&$1"), os);
-        } catch (IOException e)
+            StreamUtils.stringToStream(gson.toJson(currentConfig).replaceAll("§([0-9a-fk-or])", "&$1"), os);
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -290,7 +300,8 @@ public class ConfigManager<T>
             if (d.length == 1)
             {
                 jsonWriter.value(s);
-            } else
+            }
+            else
             {
                 jsonWriter.beginArray();
                 for (String s2 : d)
@@ -307,11 +318,13 @@ public class ConfigManager<T>
             {
                 jsonReader.nextNull();
                 return null;
-            } else if (jt == JsonToken.BEGIN_ARRAY)
+            }
+            else if (jt == JsonToken.BEGIN_ARRAY)
             {
                 jsonReader.beginArray();
                 StringBuilder sb = new StringBuilder();
-                while (jsonReader.peek() != JsonToken.END_ARRAY) sb.append('\n').append(jsonReader.nextString());
+                while (jsonReader.peek() != JsonToken.END_ARRAY)
+                    sb.append('\n').append(jsonReader.nextString());
                 jsonReader.endArray();
                 return sb.length() == 0 ? "" : sb.substring(1);
             }

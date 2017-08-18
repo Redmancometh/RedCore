@@ -140,7 +140,7 @@ public class NBTApi
                 return new NBTPrimitive(ar);
             }
         }
-        throw new RuntimeException("Â§cUnknown NBT tag type - " + type);
+        throw new RuntimeException("§cUnknown NBT tag type - " + type);
     }
 
     public static ByteBuf save(String title, NBTCompound comp)

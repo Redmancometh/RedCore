@@ -106,7 +106,7 @@ public class JsonAPI
                     f.set(obj, deserialize(obj, in, f.getType(), gt instanceof ParameterizedType ? ((ParameterizedType) gt).getActualTypeArguments() : emptyTypeArray));
                 } catch (Throwable e)
                 {
-                    SU.cs.sendMessage("Â§6[Â§eJSONAPIÂ§6] Â§cField Â§f" + fn + "Â§e is declared in json, but it is missing from class Â§e" + cl.getName() + "Â§c.");
+                    SU.cs.sendMessage("§6[§eJSONAPI§6] §cField §f" + fn + "§e is declared in json, but it is missing from class §e" + cl.getName() + "§c.");
                     SU.error(SU.cs, e, "RedCore", "com.redmancometh");
                 }
             }
@@ -172,7 +172,7 @@ public class JsonAPI
             return (T) deserialize(null, sr, cl, params);
         } catch (Throwable e)
         {
-            SU.cs.sendMessage("Â§cFailed to deserialize JSON Â§e" + json + "Â§c to class Â§e" + cl.getName());
+            SU.cs.sendMessage("§cFailed to deserialize JSON §e" + json + "§c to class §e" + cl.getName());
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }
@@ -303,7 +303,7 @@ public class JsonAPI
                 } catch (Throwable e)
                 {
                     e.printStackTrace();
-                    //SU.cs.sendMessage("Â§eJsonAPI:Â§c Error on serializing Â§e" + f.getName() + "Â§c field in Â§e" + o.getClass().getName() + "Â§c class. Current JSON:\nÂ§f" + sb);
+                    //SU.cs.sendMessage("§eJsonAPI:§c Error on serializing §e" + f.getName() + "§c field in §e" + o.getClass().getName() + "§c class. Current JSON:\n§f" + sb);
                 }
             }
             if (sb.charAt(sb.length() - 1) == ',')

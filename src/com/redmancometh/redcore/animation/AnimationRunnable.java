@@ -21,7 +21,7 @@ public class AnimationRunnable implements Runnable
     protected final HashMap<String, HashMap<String, CustomEffect>> effects = new HashMap();
     private final FramesEffect f;
     private final AnimationUpdateListener listener;
-    public String text = "Â§cERROR";
+    public String text = "§cERROR";
     protected ScheduledFuture future;
 
     protected AnimationRunnable(Plugin pl, Animation a, String name, Player plr, AnimationUpdateListener listener)

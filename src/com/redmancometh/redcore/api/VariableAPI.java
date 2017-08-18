@@ -89,7 +89,7 @@ public class VariableAPI
         VariableHandler vh = handlers.get(var);
         if (vh == null)
         {
-            if (missingHandlers.add(var)) SU.log(SU.pl(), "Â§cMissing handler for variable Â§f" + var + "Â§c!");
+            if (missingHandlers.add(var)) SU.log(SU.pl(), "§cMissing handler for variable §f" + var + "§c!");
             return "<" + var + ">";
         }
         try
@@ -99,7 +99,7 @@ public class VariableAPI
         {
             if (errorVars.add(var))
             {
-                SU.log(SU.pl(), "Â§cError on calculating variable Â§f" + var + "Â§c!");
+                SU.log(SU.pl(), "§cError on calculating variable §f" + var + "§c!");
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
             return '<' + var + '>';

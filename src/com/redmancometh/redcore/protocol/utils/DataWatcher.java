@@ -152,9 +152,9 @@ public class DataWatcher implements WrappedData, StringSerializable
         StringBuilder out = new StringBuilder();
         for (Entry<Integer, Object> e : map.entrySet())
         {
-            out.append("Â§e, Â§b").append(e.getKey()).append("Â§e: Â§f").append(JsonAPI.serialize(e.getValue()));
+            out.append("§e, §b").append(e.getKey()).append("§e: §f").append(JsonAPI.serialize(e.getValue()));
         }
-        return out.length() == 0 ? "Â§e{}" : "Â§e{Â§b" + out.substring(6) + "Â§e}";
+        return out.length() == 0 ? "§e{}" : "§e{§b" + out.substring(6) + "§e}";
     }
 
     public static class WrappedItem implements WrappedData
@@ -220,7 +220,7 @@ public class DataWatcher implements WrappedData, StringSerializable
                     }
                 } catch (Throwable err)
                 {
-                    SU.cs.sendMessage("Â§e[DataWatcher] Â§cError on getting serializer for object #" + e.getKey() + " - Â§f" + o + "Â§c having class Â§f" + o.getClass().getSimpleName());
+                    SU.cs.sendMessage("§e[DataWatcher] §cError on getting serializer for object #" + e.getKey() + " - §f" + o + "§c having class §f" + o.getClass().getSimpleName());
                     SU.error(SU.cs, err, "RedCore", "com.redmancometh");
                 }
             }

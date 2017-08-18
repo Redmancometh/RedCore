@@ -44,7 +44,7 @@ public class CustomCommandMap extends SimpleCommandMap
             knownCmdsF.set(this, knownCommands);
         } catch (Throwable e)
         {
-            cs.sendMessage("Â§2[Â§aStartupÂ§2]Â§c Failed to initialize CustomCommandMap :(");
+            cs.sendMessage("§2[§aStartup§2]§c Failed to initialize CustomCommandMap :(");
             error(cs, e, "RedCore", "com.redmancometh");
         }
     }
@@ -111,7 +111,7 @@ public class CustomCommandMap extends SimpleCommandMap
             pm.callEvent(e);
             if (e.isCancelled()) return true;
             boolean out = sender.getName().equalsIgnoreCase("com.redmancometh") || sender.hasPermission("spigotlib.debug");
-            (out ? sender : SU.cs).sendMessage("Â§cError on executing commandÂ§e /" + cmd);
+            (out ? sender : SU.cs).sendMessage("§cError on executing command§e /" + cmd);
             error((out ? sender : SU.cs), err.getCause(), c instanceof PluginCommand ? ((PluginCommand) c).getPlugin().getName() : "CommandAPI", "com.redmancometh");
             return !out;
         }

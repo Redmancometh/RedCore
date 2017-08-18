@@ -50,7 +50,7 @@ public class LanguageFile extends ConfigManager<LanguageFile>
         String slang = getLanguage(plr);
         String str = data.get(lang + "." + key);
         if (str == null && !lang.equals(slang)) str = data.get(slang + "." + key);
-        return str == null ? ("Â§cMissing:Â§e " + lang + "." + key) : SU.fillVariables(str, vars);
+        return str == null ? ("§cMissing:§e " + lang + "." + key) : SU.fillVariables(str, vars);
     }
 
     public static String getLanguage(CommandSender plr)
@@ -62,15 +62,19 @@ public class LanguageFile extends ConfigManager<LanguageFile>
     {
         if (prefix == null) prefix = "";
         if (plr == null || key == null) return;
-        if (plr instanceof Player) ChatAPI.sendJsonMsg(SYSTEM, prefix + get(plr, key, vars), (Player) plr);
-        else plr.sendMessage(ChatTag.stripExtras(prefix + get(plr, key, vars)));
+        if (plr instanceof Player)
+            ChatAPI.sendJsonMsg(SYSTEM, prefix + get(plr, key, vars), (Player) plr);
+        else
+            plr.sendMessage(ChatTag.stripExtras(prefix + get(plr, key, vars)));
     }
 
     public void msg(CommandSender plr, String key, Object... vars)
     {
         if (plr == null || key == null) return;
-        if (plr instanceof Player) ChatAPI.sendJsonMsg(SYSTEM, get(plr, key, vars), (Player) plr);
-        else plr.sendMessage(ChatTag.stripExtras(get(plr, "prefix") + get(plr, key, vars)));
+        if (plr instanceof Player)
+            ChatAPI.sendJsonMsg(SYSTEM, get(plr, key, vars), (Player) plr);
+        else
+            plr.sendMessage(ChatTag.stripExtras(get(plr, "prefix") + get(plr, key, vars)));
 
     }
 
@@ -114,8 +118,10 @@ public class LanguageFile extends ConfigManager<LanguageFile>
                         jsonReader.endObject();
                         if (rootKey.equals("")) return lf;
                         int id = rootKey.lastIndexOf('.');
-                        if (id == -1) rootKey = "";
-                        else rootKey = rootKey.substring(0, id);
+                        if (id == -1)
+                            rootKey = "";
+                        else
+                            rootKey = rootKey.substring(0, id);
                         break;
                     case END_DOCUMENT:
                         return lf;

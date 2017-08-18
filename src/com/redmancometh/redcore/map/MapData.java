@@ -82,7 +82,8 @@ public class MapData
         {
             mapGenMethod.invoke(itemWorldMap, EntityUtils.getNMSWorld(world), EntityUtils.getNMSEntity(plr), worldMap);
             System.arraycopy(viewColors, 0, colors, 0, 16384);
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
