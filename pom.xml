@@ -38,7 +38,7 @@
                                     <include>org.hibernate:*</include>
                                     <include>hibernate-annotations:*</include>
                                     <include>org.apache.commons:commons-collections4:*</include>
-                                    <include>org.hibernate.common:*</include>
+                                    <include>org.hibernate:*</include>
                                     <include>dom4j:*</include>
                                     <include>org.apache:*</include>
                                     <include>org.javassist:*</include>
@@ -53,7 +53,7 @@
                                     <include>com.google.code.gson:*</include>
                                 </includes>
                             </artifactSet>
-                            <outputFile>../../../out/RedCore.jar</outputFile>
+                            <outputFile>${user.home}/arkdev/plugins/RedCore.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -64,13 +64,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <outputDirectory>${user.home}/arkdev/plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
