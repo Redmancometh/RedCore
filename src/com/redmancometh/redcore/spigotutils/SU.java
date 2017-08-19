@@ -365,7 +365,7 @@ public final class SU
     public static void error(CommandSender sender, Throwable err, String plugin, String author)
     {
         StringBuilder report = new StringBuilder();
-        report.append("Â§4Â§l").append(plugin).append(" - ERROR REPORT - ").append(err.getClass().getSimpleName());
+        report.append("§4§l").append(plugin).append(" - ERROR REPORT - ").append(err.getClass().getSimpleName());
         if (err.getMessage() != null) report.append('\n').append(err.getMessage());
         int i = 0;
         boolean startrep = true;
@@ -374,7 +374,7 @@ public final class SU
             boolean force = el.getClassName() != null && el.getClassName().contains(author);
             if (force) startrep = false;
             if (startrep || force)
-                report.append("\nÂ§c #").append(++i).append(": Â§eLINE Â§a").append(el.getLineNumber()).append("Â§e in FILE Â§6").append(el.getFileName()).append("Â§e (Â§7").append(el.getClassName()).append("Â§e.Â§b").append(el.getMethodName()).append("Â§e)");
+                report.append("\n§c #").append(++i).append(": §eLINE §a").append(el.getLineNumber()).append("§e in FILE §6").append(el.getFileName()).append("§e (§7").append(el.getClassName()).append("§e.§b").append(el.getMethodName()).append("§e)");
         }
         String rep = report.toString();
         cs.sendMessage(rep);
@@ -390,7 +390,7 @@ public final class SU
             GameProfile prof = MojangAPI.getProfile(name);
             if (prof == null)
             {
-                cs.sendMessage("Â§cInvalid online player name: Â§e" + name + "Â§c. Using offline UUID.");
+                cs.sendMessage("§cInvalid online player name: §e" + name + "§c. Using offline UUID.");
                 return getOfflineUUID(name);
             }
             uid = prof.id;
@@ -636,8 +636,8 @@ public final class SU
     public static String optimizeColorCodes(String in)
     {
         StringBuilder out = new StringBuilder();
-        StringBuilder oldFormat = new StringBuilder("Â§r");
-        StringBuilder newFormat = new StringBuilder("Â§r");
+        StringBuilder oldFormat = new StringBuilder("§r");
+        StringBuilder newFormat = new StringBuilder("§r");
         StringBuilder formatChange = new StringBuilder();
         String formatArchive = "";
         boolean color = false;
@@ -660,17 +660,17 @@ public final class SU
                     }
                     if (add)
                     {
-                        newFormat.append('Â§').append(c);
-                        formatChange.append('Â§').append(c);
+                        newFormat.append('§').append(c);
+                        formatChange.append('§').append(c);
                     }
                     continue;
                 }
                 if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))) c = 'f';
                 newFormat.setLength(0);
-                newFormat.append('Â§').append(c);
+                newFormat.append('§').append(c);
                 formatChange.setLength(0);
-                formatChange.append('Â§').append(c);
-            } else if (c == 'Â§') color = true;
+                formatChange.append('§').append(c);
+            } else if (c == '§') color = true;
             else if (c == '\u7777')
             {
                 formatArchive = newFormat.toString();
@@ -729,7 +729,7 @@ public final class SU
             if (rspEcon != null) econ = rspEcon.getProvider();
         }
         new TPSMeter().start();
-        cs.sendMessage("Â§2[Â§aStartupÂ§2]Â§a Started RedCore properly.");
+        cs.sendMessage("§2[§aStartup§2]§a Started RedCore properly.");
     }
 
     public static void initOfflinePlayerManager()
@@ -753,7 +753,7 @@ public final class SU
             saveDataM = craftPlayerClass.getMethod("saveData");
         } catch (Throwable e)
         {
-            log(pl, "Â§cError in initializing offline player manager.");
+            log(pl, "§cError in initializing offline player manager.");
             error(cs, e, "RedCore", "com.redmancometh");
         }
     }
