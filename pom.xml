@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.redmancometh</groupId>
 	<artifactId>RedCore</artifactId>
-	<version>2.0.2</version>
+	<version>2.01</version>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -17,7 +17,7 @@
 	</distributionManagement>
 	<build>
 		<finalName>RedCore</finalName>
-		<directory>RedCore</directory>
+		<directory>target</directory>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
