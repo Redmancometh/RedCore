@@ -7,6 +7,8 @@ import com.redmancometh.redcore.Defaultable;
 import com.redmancometh.redcore.RedCore;
 import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
 import com.redmancometh.redcore.util.SpecialFuture;
+
+import org.bukkit.Bukkit;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 /**
  * @param <V> This is the type of object persisted
@@ -50,7 +53,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                     return result;
                 } catch (SecurityException | IllegalArgumentException e)
                 {
-                    e.printStackTrace();
+                    SpecialFuture.runSync(() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
                     throw new RuntimeException(e);
                 }
             });

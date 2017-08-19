@@ -30,29 +30,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <artifactSet>
-                                <includes>
-                                    <include>com.zaxxer:*</include>
-                                    <include>org.slf4j:*</include>
-                                    <include>log4j:*</include>
-                                    <include>org.hibernate:*</include>
-                                    <include>hibernate-annotations:*</include>
-                                    <include>org.apache.commons:commons-collections4:*</include>
-                                    <include>org.hibernate:*</include>
-                                    <include>dom4j:*</include>
-                                    <include>org.apache:*</include>
-                                    <include>org.javassist:*</include>
-                                    <include>javax.transaction:*</include>
-                                    <include>org.jboss.logging:*</include>
-                                    <includes>org.hibernate.javax.persistence:*</includes>
-                                    <includes>com.fasterxml:*</includes>
-                                    <include>javax.servlet:*</include>
-                                    <include>com.sparkjava:*</include>
-                                    <include>org.eclipse.jetty:*</include>
-                                    <include>org.projectlombok:*</include>
-                                    <include>com.google.code.gson:*</include>
-                                </includes>
-                            </artifactSet>
                             <outputFile>${user.home}/arkdev/plugins/RedCore.jar</outputFile>
                         </configuration>
                     </execution>
