@@ -16,7 +16,7 @@
     </distributionManagement>
     <build>
         <finalName>RedCore</finalName>
-        <directory>RedCore</directory>
+        <directory>target</directory>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
