@@ -26,7 +26,7 @@ public interface SortableObjectManager<T extends Defaultable<?>> extends BaseObj
         {
             return new ArrayList<>();
         }
-        return (List<U>) c;
+        return (List<U>) lst;
     }
 
     default Map<String, List<?>> getThisCache()
