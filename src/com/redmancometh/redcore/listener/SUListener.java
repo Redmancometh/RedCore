@@ -51,7 +51,7 @@ public class SUListener implements Listener, CommandExecutor
 
     public static void onDisable()
     {
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Collecting plugins depending on RedCore...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Collecting plugins depending on RedCore...");
         ArrayList<Plugin> depend = new ArrayList<>();
         for (Plugin p : pm.getPlugins())
         {
@@ -59,15 +59,15 @@ public class SUListener implements Listener, CommandExecutor
             if (pdf.getDepend() != null && pdf.getDepend().contains("RedCore") || pdf.getSoftDepend() != null && pdf.getSoftDepend().contains("RedCore"))
                 depend.add(p);
         }
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Unloading plugins depending on RedCore...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Unloading plugins depending on RedCore...");
         for (Plugin p : depend)
         {
-            log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Unloading plugin Â§f" + p.getName() + "Â§e...");
+            log(SU.pl(), "§4[§cShutdown§4]§e Unloading plugin §f" + p.getName() + "§e...");
             unloadPlugin(p);
         }
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Stopping TPSMeter...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping TPSMeter...");
         TPSMeter.meter.cancel(true);
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Stopping PacketAPI...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping PacketAPI...");
         try
         {
             tp.close();
@@ -75,9 +75,9 @@ public class SUListener implements Listener, CommandExecutor
         {
             error(cs, e, "RedCore", "com.redmancometh");
         }
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Stopping AnimationAPI...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping AnimationAPI...");
         AnimationAPI.stopRunningAnimations(SU.pl());
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Stopping ScoreboardAPI...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping ScoreboardAPI...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
             PlayerBars pbs = ScoreboardAPI.sidebars.remove(p.getName());
@@ -90,9 +90,9 @@ public class SUListener implements Listener, CommandExecutor
             for (ScoreboardBar sb : pbs.loaded)
                 sb.unload(p);
         }
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§e Stopping CommandAPI...");
+        log(SU.pl(), "§4[§cShutdown§4]§e Stopping CommandAPI...");
         CustomCommandMap.unhook();
-        log(SU.pl(), "Â§4[Â§cShutdownÂ§4]Â§a The RedCore has shutted down properly.");
+        log(SU.pl(), "§4[§cShutdown§4]§a The RedCore has shutted down properly.");
     }
 
     public boolean onCommand(final CommandSender sender, Command command, String label, String[] args)
@@ -103,7 +103,7 @@ public class SUListener implements Listener, CommandExecutor
             String cmd = args.length == 0 ? "help" : args[0].toLowerCase();
             if (!sender.hasPermission("redcore.command." + cmd))
             {
-                sender.sendMessage("Â§4Â§lAccess Denied.");
+                sender.sendMessage("§4§lAccess Denied.");
                 return true;
             }
             ArrayList<Player> pls = plr == null ? Lists.newArrayList() : newArrayList(plr);
@@ -123,7 +123,7 @@ public class SUListener implements Listener, CommandExecutor
                         Player p = getPlayer(s);
                         if (p == null)
                         {
-                            sender.sendMessage("Â§cPlayer Â§eÂ§l" + s + "Â§c was not found.");
+                            sender.sendMessage("§cPlayer §e§l" + s + "§c was not found.");
                             continue;
                         }
                         pls.add(p);
@@ -136,7 +136,7 @@ public class SUListener implements Listener, CommandExecutor
             switch (cmd)
             {
                 case "help":
-                    sender.sendMessage("Â§6Â§lRedCore - help menu\n" + "Â§bÂ§lâž¯ Â§eÂ§lCONTACT:Â§f on Skype - gyurixdev\n" + "Â§bÂ§lâž¯ Â§eÂ§lSUBCOMMANDS:Â§f\n" + "Â§bÂ§lâž¯ Â§6/slÂ§e [p:players]Â§6Â§l cmdÂ§e <commands>\n" + "Â§bÂ§lâž¯ Â§6/slÂ§e [p:players]Â§6Â§l permÂ§e [perm]\n" + "Â§bÂ§lâž¯ Â§6/slÂ§e [p:players]Â§6Â§l varsÂ§e [text]\n" + "Â§bÂ§lâž¯ Â§6/slÂ§e [p:players]Â§6Â§l velocityÂ§e <x> <y> <z>");
+                    sender.sendMessage("§6§lRedCore - help menu\n" + "§b§lž¯ §e§lCONTACT:§f on Skype - gyurixdev\n" + "§b§lž¯ §e§lSUBCOMMANDS:§f\n" + "§b§lž¯ §6/sl§e [p:players]§6§l cmd§e <commands>\n" + "§b§lž¯ §6/sl§e [p:players]§6§l perm§e [perm]\n" + "§b§lž¯ §6/sl§e [p:players]§6§l vars§e [text]\n" + "§b§lž¯ §6/sl§e [p:players]§6§l velocity§e <x> <y> <z>");
                     return true;
                 case "cmd":
                     for (Player p : pls)
@@ -147,19 +147,19 @@ public class SUListener implements Listener, CommandExecutor
                     return true;
                 case "vars":
                     if (args.length == 0)
-                        sender.sendMessage("Â§eÂ§lAvailable placeholders:Â§f " + StringUtils.join(new TreeSet<>(VariableAPI.handlers.keySet()), ", "));
+                        sender.sendMessage("§e§lAvailable placeholders:§f " + StringUtils.join(new TreeSet<>(VariableAPI.handlers.keySet()), ", "));
                     else sender.sendMessage(fullMsg);
                     return true;
                 case "perm":
                     for (Player p : pls)
-                        sender.sendMessage("Â§ePlayer Â§6Â§l" + p.getName() + (p.hasPermission(args[0]) ? " Â§ahasÂ§f " : " Â§cdoes not haveÂ§b ") + args[0] + "Â§e permission.");
+                        sender.sendMessage("§ePlayer §6§l" + p.getName() + (p.hasPermission(args[0]) ? " §ahas§f " : " §cdoes not have§b ") + args[0] + "§e permission.");
                     return true;
                 case "velocity":
                     Vector v = new Vector(Double.valueOf(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]));
                     for (Player p : pls)
                     {
                         p.setVelocity(v);
-                        sender.sendMessage("Â§eSet velocity of player " + p.getName() + " to Â§6Â§l" + v.getX() + "; " + v.getY() + "; " + v.getZ());
+                        sender.sendMessage("§eSet velocity of player " + p.getName() + " to §6§l" + v.getX() + "; " + v.getY() + "; " + v.getZ());
                     }
                     return true;
             }

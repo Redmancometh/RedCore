@@ -89,11 +89,11 @@ public class ChatTag
                 col = false;
             } else
             {
-                if (c == 'ยง') col = true;
+                if (c == 'ง') col = true;
                 else sb.append(c);
             }
         }
-        if (col) sb.append('ยง');
+        if (col) sb.append('ง');
         ct.text = sb.toString();
         ctl.add(ct);
         return fromSeveralTag(ctl);
@@ -226,12 +226,12 @@ public class ChatTag
     public String getFormatPrefix()
     {
         StringBuilder pref = new StringBuilder();
-        if (color != null) pref.append('ยง').append(color.id);
-        if (obfuscated) pref.append("ยงk");
-        if (bold) pref.append("ยงl");
-        if (strikethrough) pref.append("ยงm");
-        if (underlined) pref.append("ยงn");
-        if (italic) pref.append("ยงo");
+        if (color != null) pref.append('ง').append(color.id);
+        if (obfuscated) pref.append("งk");
+        if (bold) pref.append("งl");
+        if (strikethrough) pref.append("งm");
+        if (underlined) pref.append("งn");
+        if (italic) pref.append("งo");
         return pref.toString();
     }
 

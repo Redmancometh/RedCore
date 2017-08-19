@@ -94,10 +94,10 @@ public class ConfigManager<T>
                 try
                 {
                     Object fieldValue = f.get(object);
-                    SU.cs.sendMessage("Â§e" + f.getName() + "Â§b = Â§f" + gson.toJson(fieldValue, f.getGenericType()) + "\n");
+                    SU.cs.sendMessage("§e" + f.getName() + "§b = §f" + gson.toJson(fieldValue, f.getGenericType()) + "\n");
                 } catch (Throwable e)
                 {
-                    SU.cs.sendMessage("Â§cField Â§e" + f.getName() + "Â§c was unable to be retrieved!\n");
+                    SU.cs.sendMessage("§cField §e" + f.getName() + "§c was unable to be retrieved!\n");
                 }
             } catch (Throwable e)
             {
@@ -132,7 +132,7 @@ public class ConfigManager<T>
     {
         try (FileInputStream is = new FileInputStream(configFile))
         {
-            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "Â§$1");
+            String s = StreamUtils.streamToString(is).replaceAll("&([0-9a-fk-or])", "§$1");
             this.currentConfig = gson.fromJson(s, confClass);
         } catch (IOException e)
         {
@@ -154,7 +154,7 @@ public class ConfigManager<T>
     {
         try (FileOutputStream os = new FileOutputStream(configFile))
         {
-            StreamUtils.stringToStream(gson.toJson(currentConfig).replaceAll("Â§([0-9a-fk-or])", "&$1"), os);
+            StreamUtils.stringToStream(gson.toJson(currentConfig).replaceAll("§([0-9a-fk-or])", "&$1"), os);
         } catch (IOException e)
         {
             e.printStackTrace();

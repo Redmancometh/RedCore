@@ -26,7 +26,7 @@ public class Reflection
 {
     public static final Map<Class, Field[]> allFieldCache = (Map) Collections.synchronizedMap(new WeakHashMap<>());
     public static final ConcurrentHashMap<String, String> nmsRenames = new ConcurrentHashMap();
-    public static final String ra = "Â§4[Â§cReflectionAPIÂ§4] Â§e";
+    public static final String ra = "§4[§cReflectionAPI§4] §e";
     public static final ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
     /**
      * The version of the current server
@@ -138,7 +138,7 @@ public class Reflection
             }
         } catch (Throwable e)
         {
-            SU.cs.sendMessage(ra + "Â§cFailed to handle Â§f" + StringUtils.join(data, "Â§f.") + "Â§c request.");
+            SU.cs.sendMessage(ra + "§cFailed to handle §f" + StringUtils.join(data, "§f.") + "§c request.");
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             return null;
         }
@@ -178,7 +178,7 @@ public class Reflection
             }
             ocl = ocl.getSuperclass();
         }
-        SU.cs.sendMessage(ra + "Â§cFailed to get similiar method to Â§e" + name + "Â§c in class Â§e" + origCl.getName() + "Â§c.");
+        SU.cs.sendMessage(ra + "§cFailed to get similiar method to §e" + name + "§c in class §e" + origCl.getName() + "§c.");
         return null;
     }
 
@@ -211,7 +211,7 @@ public class Reflection
         } catch (Throwable ignored)
         {
         }
-        SU.cs.sendMessage(ra + "Â§cFailed to convert Â§f" + in + "Â§e(Â§f" + in.getClass().getName() + "Â§e)Â§c to class Â§f" + to.getName() + "Â§c.");
+        SU.cs.sendMessage(ra + "§cFailed to convert §f" + in + "§e(§f" + in.getClass().getName() + "§e)§c to class §f" + to.getName() + "§c.");
         return null;
     }
 
@@ -443,7 +443,7 @@ public class Reflection
         } catch (Throwable ignored)
         {
         }
-        SU.cs.sendMessage("Â§2[Â§aStartupÂ§2]Â§e Detected server version:Â§a " + ver + "Â§e (Â§f" + version + "Â§e) - Â§f" + Bukkit.getServer().getVersion());
+        SU.cs.sendMessage("§2[§aStartup§2]§e Detected server version:§a " + ver + "§e (§f" + version + "§e) - §f" + Bukkit.getServer().getVersion());
         if (!version.equals("v1_8_R1"))
         {
             nmsRenames.put("PacketPlayInLook", "PacketPlayInFlying$PacketPlayInLook");

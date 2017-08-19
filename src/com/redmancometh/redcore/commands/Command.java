@@ -38,7 +38,7 @@ public class Command implements StringSerializable
                 ChatAPI.sendJsonMsg(ChatAPI.ChatMessageType.ACTION_BAR, text, plr);
             } else
             {
-                cs.sendMessage("Â§cABM:Â§f " + text);
+                cs.sendMessage("§cABM:§f " + text);
             }
             return true;
         });
@@ -292,7 +292,7 @@ public class Command implements StringSerializable
                 TitleAPI.setSubTitle(text, plr);
             } else
             {
-                cs.sendMessage("Â§bSUBTITLE:Â§f " + text);
+                cs.sendMessage("§bSUBTITLE:§f " + text);
             }
             return true;
         });
@@ -314,7 +314,7 @@ public class Command implements StringSerializable
                 TitleAPI.setTitle(text, plr);
             } else
             {
-                cs.sendMessage("Â§eTITLE:Â§f " + text);
+                cs.sendMessage("§eTITLE:§f " + text);
             }
             return true;
         });
@@ -387,13 +387,13 @@ public class Command implements StringSerializable
             CustomCommandHandler h = customCommands.get(type);
             if (h == null)
             {
-                sender.sendMessage("Â§cCommandAPI: Â§eHandler for command \"Â§f" + type + "Â§e\" was not found.");
+                sender.sendMessage("§cCommandAPI: §eHandler for command \"§f" + type + "§e\" was not found.");
                 return false;
             }
             return h.handle(sender, text, args);
         } catch (Throwable e)
         {
-            SU.cs.sendMessage("Â§cCommandAPI: Â§eError on executing command \"Â§b" + type + ":Â§f" + text + "Â§e\" for sender " + (sender == null ? "null" : sender.getName()) + ".");
+            SU.cs.sendMessage("§cCommandAPI: §eError on executing command \"§b" + type + ":§f" + text + "§e\" for sender " + (sender == null ? "null" : sender.getName()) + ".");
             SU.error(sender, e, "RedCore", "com.redmancometh");
             return false;
         }

@@ -21,7 +21,7 @@ public abstract class Protocol implements Listener
     private static final HashMap<PacketInType, ArrayList<PacketInListener>> inListeners = new HashMap<>();
     private static final HashMap<PacketOutListener, PacketOutType> outListenerTypes = new HashMap<>();
     private static final HashMap<PacketOutType, ArrayList<PacketOutListener>> outListeners = new HashMap<>();
-    private static final String pa = "Â§5[Â§dPacketAPIÂ§5] Â§e";
+    private static final String pa = "§5[§dPacketAPI§5] §e";
     private static final HashMap<Plugin, ArrayList<PacketInListener>> pluginInListeners = new HashMap<>();
     private static final HashMap<Plugin, ArrayList<PacketOutListener>> pluginOutListeners = new HashMap<>();
 
@@ -35,7 +35,7 @@ public abstract class Protocol implements Listener
         String pn = event.getPacket().getClass().getSimpleName();
         if (event.getType() == null)
         {
-            SU.cs.sendMessage(pa + "Missing in packet type:Â§c " + pn + "Â§e.");
+            SU.cs.sendMessage(pa + "Missing in packet type:§c " + pn + "§e.");
             return;
         }
         ArrayList<PacketInListener> ll = inListeners.get(event.getType());
@@ -46,7 +46,7 @@ public abstract class Protocol implements Listener
                 l.onPacketIN(event);
             } catch (Throwable e)
             {
-                SU.cs.sendMessage(pa + "Error on dispatching PacketInEvent for packet type:Â§c " + event.getType() + "Â§e in listener Â§c" + l.getClass().getName() + "Â§e:");
+                SU.cs.sendMessage(pa + "Error on dispatching PacketInEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -62,7 +62,7 @@ public abstract class Protocol implements Listener
         String pn = event.getPacket().getClass().getSimpleName();
         if (event.getType() == null)
         {
-            SU.cs.sendMessage(pa + "Missing out packet type:Â§c " + pn + "Â§e.");
+            SU.cs.sendMessage(pa + "Missing out packet type:§c " + pn + "§e.");
             return;
         }
         ArrayList<PacketOutListener> ll = outListeners.get(event.getType());
@@ -73,7 +73,7 @@ public abstract class Protocol implements Listener
                 l.onPacketOUT(event);
             } catch (Throwable e)
             {
-                SU.cs.sendMessage(pa + "Error on dispatching PacketOutEvent for packet type:Â§c " + event.getType() + "Â§e in listener Â§c" + l.getClass().getName() + "Â§e:");
+                SU.cs.sendMessage(pa + "Error on dispatching PacketOutEvent for packet type:§c " + event.getType() + "§e in listener §c" + l.getClass().getName() + "§e:");
                 SU.error(SU.cs, e, "RedCore", "com.redmancometh");
             }
         }
@@ -121,7 +121,7 @@ public abstract class Protocol implements Listener
         Object channel = getChannel(player);
         if (channel == null || packet == null)
         {
-            SU.error(SU.cs, new RuntimeException("Â§cFailed to receive packet " + packet + " from player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
+            SU.error(SU.cs, new RuntimeException("§cFailed to receive packet " + packet + " from player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
             return;
         }
         receivePacket(channel, packet);
@@ -196,7 +196,7 @@ public abstract class Protocol implements Listener
         Object channel = getChannel(player);
         if (channel == null || packet == null)
         {
-            SU.error(SU.cs, new RuntimeException("Â§cFailed to send packet " + packet + " to player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
+            SU.error(SU.cs, new RuntimeException("§cFailed to send packet " + packet + " to player " + (player == null ? "null" : player.getName())), "RedCore", "com.redmancometh");
             return;
         }
         sendPacket(channel, packet);

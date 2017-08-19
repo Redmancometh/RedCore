@@ -50,7 +50,7 @@ public class LanguageFile extends ConfigManager<LanguageFile>
         String slang = getLanguage(plr);
         String str = data.get(lang + "." + key);
         if (str == null && !lang.equals(slang)) str = data.get(slang + "." + key);
-        return str == null ? ("Â§cMissing:Â§e " + lang + "." + key) : SU.fillVariables(str, vars);
+        return str == null ? ("§cMissing:§e " + lang + "." + key) : SU.fillVariables(str, vars);
     }
 
     public static String getLanguage(CommandSender plr)

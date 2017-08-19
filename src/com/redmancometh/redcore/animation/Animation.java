@@ -24,7 +24,7 @@ public class Animation
                             anim.effects.put(key, e.getValue().deserialize(HashMap.class, String.class, AnimationAPI.effects.get(key)));
                             continue;
                         }
-                        SU.cs.sendMessage("Â§e[AnimationAPI] Â§cUnregistered effect type Â§e" + key + "Â§c can't be active.");
+                        SU.cs.sendMessage("§e[AnimationAPI] §cUnregistered effect type §e" + key + "§c can't be active.");
                         continue;
                     }
                     if (key.equals("frameTime"))
@@ -68,15 +68,15 @@ public class Animation
                 }
             }
             if (!anim.effects.containsKey("frame")) {
-                SU.cs.sendMessage("Â§e[AnimationAPI] Â§cError, the animation doesn't contain ANY frames parts.");
+                SU.cs.sendMessage("§e[AnimationAPI] §cError, the animation doesn't contain ANY frames parts.");
                 return fromData(new ConfigData("ERROR-NO-FRAMES"), cl, args);
             }
             if (!anim.effects.get("frame").containsKey("main")) {
-                SU.cs.sendMessage("Â§e[AnimationAPI] Â§cError, the animation doesn't contain the main frames part.");
+                SU.cs.sendMessage("§e[AnimationAPI] §cError, the animation doesn't contain the main frames part.");
                 return fromData(new ConfigData("ERROR-NO-MAINFRAMEPART"), cl, args);
             }
             if (((FramesEffect) anim.effects.get("frame").get("main")).frames.isEmpty()) {
-                SU.cs.sendMessage("Â§e[AnimationAPI] Â§cError, the animation doesn't contain any frames.");
+                SU.cs.sendMessage("§e[AnimationAPI] §cError, the animation doesn't contain any frames.");
                 return fromData(new ConfigData("ERROR-NO-MAINFRAMES"), cl, args);
             }
             if (ft > 0) {

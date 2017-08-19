@@ -114,7 +114,7 @@ public class NBTPrimitive extends NBTTag
         } catch (Throwable e)
         {
             e.printStackTrace();
-            SU.cs.sendMessage("Â§eError on converting " + data + " " + data.getClass() + " to NMS.");
+            SU.cs.sendMessage("§eError on converting " + data + " " + data.getClass() + " to NMS.");
             return null;
         }
     }

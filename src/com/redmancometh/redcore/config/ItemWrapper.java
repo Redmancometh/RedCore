@@ -222,6 +222,6 @@ public class ItemWrapper implements Cloneable
         {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
-        return ItemUtil.buildItem(Material.REDSTONE, "Â§cFailed to load item", lore);
+        return ItemUtil.buildItem(Material.REDSTONE, "§cFailed to load item", lore);
     }
 }
