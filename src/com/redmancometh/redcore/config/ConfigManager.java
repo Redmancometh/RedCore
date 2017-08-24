@@ -245,7 +245,10 @@ public class ConfigManager<T>
                 return null;
             }
             Material m = Material.getMaterial(jsonReader.nextString().toUpperCase().replace(" ", "_"));
-            if (m == null) m = Material.getMaterial(Integer.parseInt(jsonReader.nextString()));
+            try {
+            	if (m == null) m = Material.getMaterial(Integer.parseInt(jsonReader.nextString()));
+            } catch (NumberFormatException e) {}
+            if (m == null) m = Material.DIRT;
             return m;
         }
     }
