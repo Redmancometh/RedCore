@@ -14,6 +14,10 @@ import java.io.Serializable;
 @Embeddable
 public class LocationData implements StringSerializable, Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     public float pitch;
     public String world;
     public double x;

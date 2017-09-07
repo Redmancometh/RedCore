@@ -4,6 +4,8 @@ import org.bukkit.craftbukkit.libs.com.google.gson.FieldNamingPolicy;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
+import com.massivecraft.factions.entity.BoardColl;
+
 import java.lang.reflect.Modifier;
 import java.util.UUID;
 
