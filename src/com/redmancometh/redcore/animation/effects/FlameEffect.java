@@ -54,7 +54,8 @@ public class FlameEffect implements CustomEffect
             if (strstate + info.counts[i] > 0)
             {
                 int maxid = strstate + info.counts[i];
-                if (maxid > in.length()) break;
+                if (maxid > in.length())
+                    break;
                 else
                 {
                     out.append(in.substring(Math.max(strstate, 0), maxid));
@@ -83,12 +84,14 @@ public class FlameEffect implements CustomEffect
             if (rotate)
             {
                 speed = -speed;
-            } else
+            }
+            else
             {
                 start = -count;
                 return;
             }
-        } else if (rotate && speed < 0 && start <= -count)
+        }
+        else if (rotate && speed < 0 && start <= -count)
         {
             speed = -speed;
         }
@@ -117,7 +120,8 @@ public class FlameEffect implements CustomEffect
                 {
                     pref[i] = d2[0];
                     counts[i] = Integer.valueOf(d2[1]);
-                } catch (Throwable t)
+                }
+                catch (Throwable t)
                 {
                 }
             }
@@ -136,4 +140,3 @@ public class FlameEffect implements CustomEffect
     }
 
 }
-

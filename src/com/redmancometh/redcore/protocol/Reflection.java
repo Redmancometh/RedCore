@@ -63,7 +63,8 @@ public class Reflection
             int modifiers = modifiersField.getInt(f);
             modifiersField.setInt(f, modifiers & -17);
             return f;
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         return null;
@@ -83,7 +84,8 @@ public class Reflection
             Constructor c = cl.getDeclaredConstructor(classes);
             c.setAccessible(true);
             return c;
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         return null;
@@ -136,7 +138,8 @@ public class Reflection
                     classes = EMPTY_CLASS_ARRAY;
                 }
             }
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             SU.cs.sendMessage(ra + "§cFailed to handle §f" + StringUtils.join(data, "§f.") + "§c request.");
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
@@ -150,7 +153,8 @@ public class Reflection
         try
         {
             return setFieldAccessible(clazz.getDeclaredField(name));
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             return null;
         }
@@ -173,8 +177,7 @@ public class Reflection
             {
                 if (m2.getParameterTypes().length != classes.length) continue;
                 String mn = m2.getName().toLowerCase();
-                if (mn.endsWith(name) && (mn.startsWith(name) || mn.startsWith("get") || mn.startsWith("is")))
-                    return m2;
+                if (mn.endsWith(name) && (mn.startsWith(name) || mn.startsWith("get") || mn.startsWith("is"))) return m2;
             }
             ocl = ocl.getSuperclass();
         }
@@ -192,7 +195,8 @@ public class Reflection
             Constructor<T> con = to.getConstructor(String.class);
             con.setAccessible(true);
             return con.newInstance(inS);
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         try
@@ -200,7 +204,8 @@ public class Reflection
             Method m = to.getMethod("valueOf", String.class);
             m.setAccessible(true);
             return (T) m.invoke(null, inS);
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         try
@@ -208,7 +213,8 @@ public class Reflection
             Method m = to.getMethod("fromString", String.class);
             m.setAccessible(true);
             return (T) m.invoke(null, inS);
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         SU.cs.sendMessage(ra + "§cFailed to convert §f" + in + "§e(§f" + in.getClass().getName() + "§e)§c to class §f" + to.getName() + "§c.");
@@ -218,7 +224,6 @@ public class Reflection
     public static Method getMethod(Class cl, String name, Class... args)
     {
         if (cl == null || name == null) return null;
-        String originalClassName = cl.getName();
         if (args.length == 0)
         {
             while (cl != null)
@@ -231,7 +236,8 @@ public class Reflection
                 }
                 cl = cl.getSuperclass();
             }
-        } else
+        }
+        else
         {
             while (cl != null)
             {
@@ -257,7 +263,8 @@ public class Reflection
         try
         {
             return cl.getDeclaredMethod(name);
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             Method[] mtds = cl.getDeclaredMethods();
             for (Method met : mtds)
@@ -271,7 +278,8 @@ public class Reflection
         try
         {
             return cl.getDeclaredMethod(name, args);
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             Method[] mtds = cl.getDeclaredMethods();
             for (Method met : mtds)
@@ -279,11 +287,9 @@ public class Reflection
             for (Method met : mtds)
                 if (classArrayCompareLight(args, met.getParameterTypes()) && met.getName().equals(name)) return met;
             for (Method met : mtds)
-                if (classArrayCompare(args, met.getParameterTypes()) && met.getName().equalsIgnoreCase(name))
-                    return met;
+                if (classArrayCompare(args, met.getParameterTypes()) && met.getName().equalsIgnoreCase(name)) return met;
             for (Method met : mtds)
-                if (classArrayCompareLight(args, met.getParameterTypes()) && met.getName().equalsIgnoreCase(name))
-                    return met;
+                if (classArrayCompareLight(args, met.getParameterTypes()) && met.getName().equalsIgnoreCase(name)) return met;
             return null;
         }
     }
@@ -333,7 +339,8 @@ public class Reflection
         try
         {
             return enumType.getMethod("valueOf", String.class).invoke(null, value);
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             return null;
         }
@@ -349,7 +356,8 @@ public class Reflection
         try
         {
             return setFieldAccessible(clazz.getDeclaredField(name)).get(object);
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             return null;
         }
@@ -363,7 +371,8 @@ public class Reflection
             {
                 if (f.getType().equals(type)) return setFieldAccessible(f);
             }
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
@@ -402,7 +411,8 @@ public class Reflection
             for (int i = 1; i < classNames.length; i++)
                 c = getInnerClass(c, classNames[i]);
             return c;
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         return null;
@@ -415,7 +425,8 @@ public class Reflection
             name = cl.getName() + "$" + name;
             for (Class c : cl.getDeclaredClasses())
                 if (c.getName().equals(name)) return c;
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             e.printStackTrace();
         }
@@ -440,7 +451,8 @@ public class Reflection
         try
         {
             ver = ServerVersion.valueOf(version.substring(0, version.length() - 3));
-        } catch (Throwable ignored)
+        }
+        catch (Throwable ignored)
         {
         }
         SU.cs.sendMessage("§2[§aStartup§2]§e Detected server version:§a " + ver + "§e (§f" + version + "§e) - §f" + Bukkit.getServer().getVersion());
@@ -473,9 +485,11 @@ public class Reflection
             Constructor c = cl.getDeclaredConstructor(classes);
             c.setAccessible(true);
             return c.newInstance(objs);
-        } catch (NoSuchMethodException ignored)
+        }
+        catch (NoSuchMethodException ignored)
         {
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }
@@ -494,11 +508,13 @@ public class Reflection
             try
             {
                 return cl.newInstance();
-            } catch (Throwable err)
+            }
+            catch (Throwable err)
             {
                 return rf.newConstructorForSerialization(cl, Object.class.getDeclaredConstructor()).newInstance();
             }
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             SU.error(SU.cs, e, "RedCore", "com.redmancometh");
         }

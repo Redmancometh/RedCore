@@ -1,6 +1,7 @@
 package com.redmancometh.redcore.commands;
 
-import com.hazelcast.util.function.BiConsumer;
+import java.util.function.BiConsumer;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
