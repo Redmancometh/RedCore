@@ -2,8 +2,6 @@ package com.redmancometh.redcore;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.redmancometh.redcore.databasing.MasterDatabase;
-import com.redmancometh.redcore.listener.SUListener;
-import com.redmancometh.redcore.spigotutils.SU;
 import com.redmancometh.redcore.tasks.SlowPollerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,15 +69,8 @@ public class RedCore extends JavaPlugin
     }
 
     @Override
-    public void onLoad()
-    {
-        SU.init(this);
-    }
-
-    @Override
     public void onDisable()
     {
-        SUListener.onDisable();
         slowPoller.stopTask();
         super.onDisable();
     }
@@ -87,7 +78,6 @@ public class RedCore extends JavaPlugin
     @Override
     public void onEnable()
     {
-        SU.sch.scheduleSyncDelayedTask(this, SU::postInit);
         setPluginManager(new RedPlugins());
         setMasterDB(new MasterDatabase());
         slowPoller = new SlowPollerTask();

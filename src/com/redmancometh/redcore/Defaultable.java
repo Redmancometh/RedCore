@@ -1,10 +1,11 @@
 package com.redmancometh.redcore;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.FieldNamingPolicy;
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 import java.lang.reflect.Modifier;
 import java.util.UUID;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public interface Defaultable<K>
 {
