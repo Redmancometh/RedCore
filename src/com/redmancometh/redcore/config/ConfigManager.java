@@ -129,7 +129,7 @@ public class ConfigManager<T>
         }
     }
 
-    private static class LocationAdapter extends TypeAdapter<Location>
+    public static class LocationAdapter extends TypeAdapter<Location>
     {
 
         @Override
@@ -166,7 +166,7 @@ public class ConfigManager<T>
         }
     }
 
-    private static class EntityTypeAdapter extends TypeAdapter<EntityType>
+    public static class EntityTypeAdapter extends TypeAdapter<EntityType>
     {
         @Override
         public void write(JsonWriter jsonWriter, EntityType material) throws IOException
@@ -191,7 +191,7 @@ public class ConfigManager<T>
         }
     }
 
-    private static class MaterialAdapter extends TypeAdapter<Material>
+    public static class MaterialAdapter extends TypeAdapter<Material>
     {
         @Override
         public void write(JsonWriter jsonWriter, Material material) throws IOException
