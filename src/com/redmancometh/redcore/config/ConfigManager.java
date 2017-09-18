@@ -25,8 +25,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redmancometh.redcore.RedPlugin;
 
+import lombok.Getter;
+
 public class ConfigManager<T>
 {
+    @Getter
     private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter()).create();
 
     private String configName;
@@ -57,7 +60,7 @@ public class ConfigManager<T>
         {
             try (InputStreamReader in = new InputStreamReader(fileIn))
             {
-                this.currentConfig = gson.fromJson(in, confClass);
+                this.currentConfig = getGson().fromJson(in, confClass);
             }
         }
         catch (IOException e)
