@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class LoreUtil
 {
@@ -14,4 +15,15 @@ public class LoreUtil
             newLore.add(x, ChatColor.translateAlternateColorCodes('&', ogLore.get(x)));
         return newLore;
     }
+
+    public static List<String> replaceAll(List<String> input, String toReplace, String replaceWith)
+    {
+        for (final ListIterator<String> i = input.listIterator(); i.hasNext();)
+        {
+            final String element = i.next();
+            i.set(element.replace(toReplace, replaceWith));
+        }
+        return input;
+    }
+
 }

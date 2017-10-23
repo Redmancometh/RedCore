@@ -9,7 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -30,7 +32,14 @@ import lombok.Getter;
 public class ConfigManager<T>
 {
     @Getter
-    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).registerTypeHierarchyAdapter(Material.class, new MaterialAdapter()).registerTypeHierarchyAdapter(Location.class, new LocationAdapter()).registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter()).create();
+    private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
+    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+    .registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
+    .registerTypeHierarchyAdapter(Location.class, new LocationAdapter())
+    .registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter())
+    .registerTypeHierarchyAdapter(Class.class, new ConfigManager.ClassAdapter())
+    .registerTypeHierarchyAdapter(String.class, new StringAdapter())
+    .create();
 
     private String configName;
     private T currentConfig;
@@ -189,6 +198,52 @@ public class ConfigManager<T>
             }
             return EntityType.valueOf(jsonReader.nextString().toUpperCase().replace(" ", "_"));
         }
+    }
+
+    public static class ClassAdapter extends TypeAdapter<Class>
+    {
+        @Override
+        public void write(JsonWriter jsonWriter, Class material) throws IOException
+        {
+            /**
+             * If we ever have to write here something is very, very wrong.
+             * 
+             */
+            throw new NotImplementedException("Tried to write type Class<?> from gson adapter...no write stuff is implemented");
+        }
+
+        @Override
+        public Class<?> read(JsonReader jsonReader) throws IOException
+        {
+            String className = jsonReader.nextString();
+            try
+            {
+                return Class.forName(className);
+            }
+            catch (ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public static class StringAdapter extends TypeAdapter<String>
+    {
+
+        @Override
+        public String read(JsonReader arg0) throws IOException
+        {
+            return ChatColor.translateAlternateColorCodes('&', arg0.nextString());
+        }
+
+        @Override
+        public void write(JsonWriter jsonWriter, String arg1) throws IOException
+        {
+            if (arg1 == null) jsonWriter.nullValue();
+            jsonWriter.value(arg1);
+        }
+
     }
 
     public static class MaterialAdapter extends TypeAdapter<Material>

@@ -1,11 +1,15 @@
 package com.redmancometh.redcore.config;
 
 import com.redmancometh.redcore.util.ItemUtil;
+
+import lombok.Data;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+@Data
 public class Icon
 {
     private Short dataValue = 0;

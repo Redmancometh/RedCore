@@ -14,6 +14,13 @@ public class MenuTemplate implements Iterable<Pane>
         return panes;
     }
 
+    public boolean hasPane(int slot)
+    {
+        for (Pane pane : panes)
+            if (pane.getIndexes().contains(slot)) return true;
+        return false;
+    }
+
     public void setPanes(List<Pane> panes)
     {
         this.panes = panes;
