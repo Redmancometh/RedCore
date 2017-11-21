@@ -1,11 +1,9 @@
 package com.redmancometh.redcore.util;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -156,11 +154,6 @@ public class ItemUtil
     public static String getSpawnerNameForType(EntityType type)
     {
         return nameMap.get(type);
-    }
-
-    public static boolean isArmor(ItemStack item)
-    {
-        return CraftItemStack.asNMSCopy(item).getItem() instanceof ItemArmor;
     }
 
     public static boolean isCookedFood(ItemStack item)
