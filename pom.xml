@@ -59,6 +59,10 @@
 									<include>javax.transaction:*</include>
 									<include>dom4j:*</include>
 									<include>org.hibernate.common:*</include>
+									<include>javassist:javassist</include>
+									<include>cglib:*</include>
+									<include>com.google.inject:*</include>
+									<include>com.google.inject.extensions:*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
@@ -136,8 +140,6 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.mockito</groupId> <artifactId>mockito-all</artifactId> 
-			<version>1.10.19</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
@@ -199,6 +201,21 @@
 			<groupId>com.sk89q.worldedit</groupId>
 			<artifactId>worldedit-bukkit</artifactId>
 			<version>6.1.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-multibindings</artifactId>
+			<version>4.1.0</version>
 		</dependency>
 	</dependencies>
 </project>

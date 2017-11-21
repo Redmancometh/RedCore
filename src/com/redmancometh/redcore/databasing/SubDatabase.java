@@ -40,7 +40,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         @Override
         public SpecialFuture<V> load(K key)
         {
-            return SpecialFuture.supplyAsync(() -> {
+            return SpecialFuture.supplyAsync(() ->
+            {
                 try (Session session = factory.openSession())
                 {
                     if (criteriaClass)
@@ -51,7 +52,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                     V result = session.get(type, key);
                     if (result == null) return defaultObjectBuilder.apply(key);
                     return result;
-                } catch (SecurityException | IllegalArgumentException e)
+                }
+                catch (SecurityException | IllegalArgumentException e)
                 {
                     SpecialFuture.runSync(() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
                     throw new RuntimeException(e);
@@ -65,13 +67,15 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         super();
         this.factory = factory;
         this.type = type;
-        this.defaultObjectBuilder = (key) -> {
+        this.defaultObjectBuilder = (key) ->
+        {
             try
             {
                 V v = type.newInstance();
                 v.setDefaults(key);
                 return v;
-            } catch (InstantiationException | IllegalAccessException e)
+            }
+            catch (InstantiationException | IllegalAccessException e)
             {
                 e.printStackTrace();
             }
@@ -134,7 +138,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         try
         {
             return cache.get(e);
-        } catch (ExecutionException e1)
+        }
+        catch (ExecutionException e1)
         {
             e1.printStackTrace();
         }
@@ -146,7 +151,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         try
         {
             return cache.get(e);
-        } catch (ExecutionException e1)
+        }
+        catch (ExecutionException e1)
         {
             e1.printStackTrace();
         }
@@ -207,7 +213,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
     public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
     {
         if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
-        return CompletableFuture.runAsync(() -> {
+        return CompletableFuture.runAsync(() ->
+        {
             try (Session session = factory.openSession())
             {
                 try
@@ -216,7 +223,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
                     cache.get(e).thenAccept(session::saveOrUpdate);
                     session.getTransaction().commit();
                     session.flush();
-                } catch (Exception e2)
+                }
+                catch (Exception e2)
                 {
                     e2.printStackTrace();
                 }
@@ -234,7 +242,8 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      */
     public SpecialFuture<?> saveObject(V e)
     {
-        return SpecialFuture.runAsync(() -> {
+        return SpecialFuture.runAsync(() ->
+        {
             try (Session session = factory.openSession())
             {
                 session.beginTransaction();
