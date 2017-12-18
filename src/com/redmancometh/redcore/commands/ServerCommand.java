@@ -7,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import lombok.Data;
+
+@Data
 public class ServerCommand implements CommandExecutor
 {
     private BiConsumer<CommandSender, String[]> action;
@@ -24,36 +27,6 @@ public class ServerCommand implements CommandExecutor
         registering.getCommand(command).setExecutor(this);
         this.action = action;
         this.setCommand(command);
-    }
-
-    public BiConsumer<CommandSender, String[]> getAction()
-    {
-        return action;
-    }
-
-    public void setAction(BiConsumer<CommandSender, String[]> action)
-    {
-        this.action = action;
-    }
-
-    public String getCommand()
-    {
-        return command;
-    }
-
-    public void setCommand(String command)
-    {
-        this.command = command;
-    }
-
-    public boolean isOpCommand()
-    {
-        return opCommand;
-    }
-
-    public void setOpCommand(boolean opCommand)
-    {
-        this.opCommand = opCommand;
     }
 
     @Override

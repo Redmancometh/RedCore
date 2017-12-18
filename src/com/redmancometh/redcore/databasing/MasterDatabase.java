@@ -6,12 +6,13 @@ import org.hibernate.SessionFactory;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class MasterDatabase implements Iterable<SubDatabase>
 {
     @Getter
-    private Map<Class, SubDatabase> subDBMap = new HashMap();
+    private Map<Class, SubDatabase> subDBMap = new ConcurrentHashMap();
 
     public SubDatabase getSubDBForType(Class clazz)
     {

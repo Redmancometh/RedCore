@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -246,38 +247,71 @@ public class ItemUtil
         i.setItemMeta(meta);
     }
 
-    public static void takeOne(ItemStack i, Player p)
+    /**
+     * Attempt to take an item from a player taking into account first material, then displayname
+     * if a displayname is used. Then it will check lore if lore is used. 
+     * 
+     * @param item The item you're trying to remove from the inventory in question.
+     * @param inventory The inventory to remove from
+     * @param qty This is the maximum amount of the item to remove
+     * @return Will return 0 if no items could be removed; otherwise this return the quantity of items removed
+     */
+    public static int takeItems(ItemStack item, Inventory inventory, Integer qty)
     {
-        for (ItemStack item : p.getInventory())
+        int removed = 0;
+        if (item == null || item.getType() == Material.AIR) return 0;
+        ListIterator<ItemStack> iter = inventory.iterator();
+        while (iter.hasNext())
         {
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+            ItemStack currentItem = iter.next();
+            if (currentItem != null && currentItem.getType() == item.getType() && compareItems(currentItem, item))
             {
-                String name = item.getItemMeta().getDisplayName();
-                if (name.equals(i.getItemMeta().getDisplayName()))
+                if (currentItem.getAmount() + removed > qty)
                 {
-                    if (item.getAmount() > 1)
-                    {
-                        item.setAmount(item.getAmount() - 1);
-                        return;
-                    }
-                    p.getInventory().removeItem(i);
-                    return;
+                    currentItem.setAmount(currentItem.getAmount() - (qty - removed));
+                    return qty;
                 }
+                removed += currentItem.getAmount();
+                iter.set(new ItemStack(Material.AIR));
             }
-
         }
+        return removed;
     }
 
-    public void takeOne(Player p, ItemStack i)
+    /**
+     * Compare two ItemStacks.
+     * Compares 
+     * @param item
+     * @param target
+     * @return
+     */
+    public static boolean compareItems(ItemStack item, ItemStack target)
     {
-        if (i.getAmount() <= 1)
+        if (item.getType() != target.getType()) return false;
+        if ((!target.hasItemMeta()) || (target.getItemMeta().getDisplayName() == null && target.getItemMeta().getLore() == null)) return true;
+        if (!item.hasItemMeta()) return false;
+        ItemMeta meta = item.getItemMeta();
+        if (target.getItemMeta().hasDisplayName())
         {
-            p.getInventory().removeItem(i);
+            if (!meta.hasDisplayName()) return false;
+            if (!meta.getDisplayName().equals(target.getItemMeta().getDisplayName())) return false;
         }
-        if (i.getAmount() > 1)
+        if (target.getItemMeta().hasLore())
         {
-            i.setAmount(i.getAmount() - 1);
+            if (!meta.hasLore()) return false;
+            if (!target.getItemMeta().getLore().equals(meta.getLore())) return false;
         }
-        p.updateInventory();
+        if (meta.hasLore())
+        {
+            if (!target.getItemMeta().hasLore()) return false;
+            if (!target.getItemMeta().getLore().equals(target.getItemMeta().getLore())) return false;
+        }
+        if (meta.hasDisplayName())
+        {
+            if (!target.getItemMeta().hasDisplayName()) return false;
+            if (!target.getItemMeta().getDisplayName().equals(target.getItemMeta().getDisplayName())) return false;
+        }
+        return true;
     }
+
 }

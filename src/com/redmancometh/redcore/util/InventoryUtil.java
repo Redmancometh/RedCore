@@ -5,6 +5,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryUtil
 {
+    
+    @Deprecated
     public static void takeOne(ItemStack i, Player p)
     {
         for (ItemStack item : p.getInventory())
