@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 
 import java.io.Serializable;
 import java.util.List;
@@ -99,12 +100,13 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return future.get();
     }
 
-    public SpecialFuture<List<V>> topX(int x)
+    public SpecialFuture<List<V>> topX(int x, String onProperty)
     {
         return queryWithCriteria((criteria) ->
         {
-            criteria.setFirstResult(1);
-            criteria.setMaxResults(5);
+            criteria.addOrder(Order.desc(onProperty));
+            criteria.setFirstResult(0);
+            criteria.setMaxResults(50);
         });
     }
 
@@ -121,7 +123,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
             }
             return list;
         });
-
     }
 
     public SessionFactory getFactory()
