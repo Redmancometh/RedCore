@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 
@@ -32,8 +32,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
 {
     private final Class<V> type;
     public Function<K, V> defaultObjectBuilder;
-    private List<Criterion> criteria;
-    private boolean criteriaClass = false;
     private SessionFactory factory;
     LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>()
     {
@@ -44,11 +42,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
             {
                 try (Session session = factory.openSession())
                 {
-                    if (criteriaClass)
-                    {
-                        Criteria c = session.createCriteria(type);
-                        criteria.forEach(c::add);
-                    }
                     V result = session.get(type, key);
                     if (result == null) return defaultObjectBuilder.apply(key);
                     return result;
@@ -106,14 +99,29 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         return future.get();
     }
 
-    public List<Criterion> getCriteria()
+    public SpecialFuture<List<V>> topX(int x)
     {
-        return criteria;
+        return queryWithCriteria((criteria) ->
+        {
+            criteria.setFirstResult(1);
+            criteria.setMaxResults(5);
+        });
     }
 
-    public void setCriteria(List<Criterion> criteria)
+    public SpecialFuture<List<V>> queryWithCriteria(Consumer<Criteria> criteriaCallback)
     {
-        this.criteria = criteria;
+        return SpecialFuture.supplyAsync(() ->
+        {
+            List<V> list;
+            try (Session session = factory.openSession())
+            {
+                Criteria c = session.createCriteria(type);
+                criteriaCallback.accept(c);
+                list = c.list();
+            }
+            return list;
+        });
+
     }
 
     public SessionFactory getFactory()
@@ -165,16 +173,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
         cache.asMap().put(key, SpecialFuture.supplyAsync(() -> value));
     }
 
-    public boolean isCriteriaClass()
-    {
-        return criteriaClass;
-    }
-
-    public void setCriteriaClass(boolean criteriaClass)
-    {
-        this.criteriaClass = criteriaClass;
-    }
-
     public Session newSession()
     {
         return factory.openSession();
@@ -210,6 +208,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable>
      * @return
      * @throws ObjectNotPresentException
      */
+    @Deprecated
     public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException
     {
         if (!cache.asMap().containsKey(e)) throw new ObjectNotPresentException(e.toString(), type);
